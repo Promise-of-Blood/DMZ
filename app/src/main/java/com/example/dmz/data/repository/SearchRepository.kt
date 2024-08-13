@@ -6,22 +6,16 @@ import com.example.dmz.model.VideoModel
 interface SearchRepository {
     suspend fun searchChannel(
         topicId: String?,
-
         maxResults: Int?,
-        type: String? = "channel",
-
-        regionCode: String? = "KR",
+        regionCode: String?,
         order: String?,
     ): List<ChannelModel>
 
     suspend fun searchVideo(
         q: String?,
         topicId: String?,
-
         maxResults: Int?,
-        type: String? = "video",
-
-        regionCode: String? = "KR",
+        regionCode: String?,
         order: String?,
         publishedAfter: String?,
         publishedBefore: String?,

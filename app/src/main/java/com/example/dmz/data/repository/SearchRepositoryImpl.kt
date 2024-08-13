@@ -10,14 +10,12 @@ class SearchRepositoryImpl : SearchRepository {
     override suspend fun searchChannel(
         topicId: String?,
         maxResults: Int?,
-        type: String?,
         regionCode: String?,
         order: String?
     ): List<ChannelModel> {
         return youtubeApi.getChannelList(
             topicId = topicId,
             maxResults = maxResults,
-            type = type,
             regionCode = regionCode,
             order = order,
         ).toChannelList()
@@ -27,7 +25,6 @@ class SearchRepositoryImpl : SearchRepository {
         q: String?,
         topicId: String?,
         maxResults: Int?,
-        type: String?,
         regionCode: String?,
         order: String?,
         publishedAfter: String?,
@@ -37,7 +34,6 @@ class SearchRepositoryImpl : SearchRepository {
             q = q,
             topicId = topicId,
             maxResults = maxResults,
-            type = type,
             regionCode = regionCode,
             order = order,
             publishedAfter = publishedAfter,
