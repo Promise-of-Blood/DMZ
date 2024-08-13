@@ -21,7 +21,6 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
         topicId: String? = null,
         maxResults: Int? = null,
         order: String? = null,
-        type: String? = "channel",
         regionCode: String? = "KR",
     ) {
         viewModelScope.launch {
@@ -30,7 +29,6 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
                     repository.searchChannel(
                         topicId = topicId,
                         maxResults = maxResults,
-                        type = type,
                         regionCode = regionCode,
                         order = order,
                     )
@@ -47,7 +45,6 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
         order: String? = null,
         publishedAfter: String? = null,
         publishedBefore: String? = null,
-        type: String? = "video",
         regionCode: String? = "KR",
     ) {
         viewModelScope.launch {
@@ -59,7 +56,6 @@ class SearchViewModel(private val repository: SearchRepository) : ViewModel() {
                     order = order,
                     publishedAfter = publishedAfter,
                     publishedBefore = publishedBefore,
-                    type = type,
                     regionCode = regionCode,
                 )
             }
