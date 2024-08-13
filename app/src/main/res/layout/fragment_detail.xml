@@ -24,7 +24,7 @@
                 android:id="@+id/iv_detail_video_thumbnail"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
+                android:layout_marginHorizontal="32dp"
                 android:contentDescription="@string/detail_video_thumbnail"
                 android:minHeight="200dp"
                 android:scaleType="centerCrop"
@@ -65,7 +65,8 @@
                 android:layout_height="0dp"
                 android:layout_marginTop="12dp"
                 android:alpha="0.4"
-                android:background="@drawable/shape_corner_radius_12dp"
+                android:layout_marginBottom="-20dp"
+                android:background="@drawable/shape_corner_radius_10dp"
                 app:layout_constraintBottom_toBottomOf="@id/tv_detail_video_like_count_label"
                 app:layout_constraintEnd_toEndOf="@id/tv_detail_video_info"
                 app:layout_constraintStart_toStartOf="@id/tv_detail_video_info"
@@ -90,11 +91,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="16dp"
-                android:layout_marginBottom="8dp"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tv_detail_video_published_date_label"
                 app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
-                app:layout_constraintTop_toTopOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toTopOf="@id/tv_detail_video_published_date_label"
                 tools:text="2024.08.10" />
 
             <TextView
@@ -115,10 +115,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:layout_marginVertical="8dp"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tv_detail_video_view_count_label"
                 app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
-                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_published_date"
+                app:layout_constraintTop_toTopOf="@id/tv_detail_video_view_count_label"
                 tools:text="42만회" />
 
             <TextView
@@ -139,10 +139,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:layout_marginVertical="8dp"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tv_detail_video_comment_count_label"
                 app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
-                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_view_count"
+                app:layout_constraintTop_toTopOf="@id/tv_detail_video_comment_count_label"
                 tools:text="374개" />
 
             <TextView
@@ -152,7 +152,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
                 android:layout_marginVertical="8dp"
-                android:paddingBottom="20dp"
                 android:text="@string/detail_like_count"
                 android:textColor="@color/white"
                 app:layout_constraintStart_toStartOf="@id/iv_detail_video_info_container"
@@ -164,10 +163,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:layout_marginVertical="8dp"
                 android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/tv_detail_video_like_count_label"
                 app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
-                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_comment_count"
+                app:layout_constraintTop_toTopOf="@id/tv_detail_video_like_count_label"
                 tools:text="3천" />
 
             <View
@@ -177,7 +176,7 @@
                 android:layout_marginTop="60dp"
                 android:layout_marginBottom="-10dp"
                 android:alpha="0.4"
-                android:background="@drawable/shape_corner_radius_12dp"
+                android:background="@drawable/shape_corner_radius_10dp"
                 app:layout_constraintBottom_toBottomOf="@id/v_detail_line_ver"
                 app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
                 app:layout_constraintStart_toStartOf="@id/iv_detail_video_info_container"
@@ -288,29 +287,21 @@
                 app:layout_constraintStart_toEndOf="@id/v_detail_line_ver"
                 app:layout_constraintTop_toBottomOf="@id/tv_detail_channel_video_count" />
 
-            <LinearLayout
-                android:id="@+id/iv_detail_bookmark_button"
+            <TextView
+                style="@style/subtitle_p"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:background="@drawable/shape_corner_radius_12dp"
+                android:background="@drawable/shape_corner_radius_10dp"
                 android:backgroundTint="@color/flou_yellow"
                 android:backgroundTintMode="multiply"
                 android:gravity="center|center_vertical"
-                android:orientation="horizontal"
-                android:padding="16dp"
+                android:paddingVertical="16dp"
+                android:text="@string/detail_bookmark_button"
+                android:textColor="@color/flou_yellow"
                 app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
                 app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
-                app:layout_constraintTop_toBottomOf="@id/iv_detail_channel_container">
-
-                <TextView
-                    style="@style/subtitle_b_p"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/detail_bookmark_button"
-                    android:textColor="@color/flou_yellow" />
-
-            </LinearLayout>
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_channel_container" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
