@@ -3,6 +3,8 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlin.parcelize)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -18,11 +20,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-//        buildConfigField(
-//            "String",
-//            "YOUTUBE_API_KEY",
-//            gradleLocalProperties(rootDir, providers).getProperty("YOUTUBE_API_KEY")
-//        )
+        buildConfigField(
+            "String",
+            "YOUTUBE_API_KEY",
+            gradleLocalProperties(rootDir, providers).getProperty("YOUTUBE_API_KEY")
+        )
     }
 
     buildTypes {
@@ -57,4 +59,14 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // retrofit
+    implementation(libs.bundles.retrofit)
+
+    //fragment
+    implementation(libs.androidx.navigation.fragment.ktx)
+
+    //room
+    implementation(libs.room.runtime)
+    ksp(libs.room.compiler)
 }
