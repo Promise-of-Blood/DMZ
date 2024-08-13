@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:background="@color/black"
+    tools:context=".ui.detail.DetailFragment">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingVertical="40dp">
+
+            <ImageView
+                android:id="@+id/iv_detail_video_thumbnail"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:contentDescription="@string/detail_video_thumbnail"
+                android:minHeight="200dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_title"
+                style="@style/headline_b_p"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="32dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_video_thumbnail"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_video_thumbnail"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_video_thumbnail"
+                tools:text="관성 드리프트 누누" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_info"
+                style="@style/subtitle_b_p"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/detail_video_info"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/tv_detail_video_title"
+                app:layout_constraintStart_toStartOf="@id/tv_detail_video_title"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_title" />
+
+            <View
+                android:id="@+id/iv_detail_video_info_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="12dp"
+                android:alpha="0.4"
+                android:background="@drawable/shape_corner_radius_12dp"
+                app:layout_constraintBottom_toBottomOf="@id/tv_detail_video_like_count_label"
+                app:layout_constraintEnd_toEndOf="@id/tv_detail_video_info"
+                app:layout_constraintStart_toStartOf="@id/tv_detail_video_info"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_info" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_published_date_label"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/detail_published_date"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_video_info_container" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_published_date"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="8dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_video_info_container"
+                tools:text="2024.08.10" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_view_count_label"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="8dp"
+                android:text="@string/detail_view_count"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_published_date_label" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_view_count"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="8dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_published_date"
+                tools:text="42만회" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_comment_count_label"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="8dp"
+                android:text="@string/detail_comment_count"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_view_count_label" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_comment_count"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="8dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_view_count"
+                tools:text="374개" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_like_count_label"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="8dp"
+                android:paddingBottom="20dp"
+                android:text="@string/detail_like_count"
+                android:textColor="@color/white"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_comment_count_label" />
+
+            <TextView
+                android:id="@+id/tv_detail_video_like_count"
+                style="@style/body_p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="8dp"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_video_comment_count"
+                tools:text="3천" />
+
+            <View
+                android:id="@+id/iv_detail_channel_container"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="60dp"
+                android:layout_marginBottom="-10dp"
+                android:alpha="0.4"
+                android:background="@drawable/shape_corner_radius_12dp"
+                app:layout_constraintBottom_toBottomOf="@id/v_detail_line_ver"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_video_info_container"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_video_info_container"
+                app:layout_constraintTop_toTopOf="@id/iv_detail_channel_thumbnail" />
+
+            <ImageView
+                android:id="@+id/iv_detail_channel_thumbnail"
+                android:layout_width="120dp"
+                android:layout_height="120dp"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/shape_circle"
+                android:clipToOutline="true"
+                android:contentDescription="@string/detail_channel_thumbnail"
+                android:src="@drawable/ic_launcher_background"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_video_info_container" />
+
+            <TextView
+                android:id="@+id/tv_detail_channel_title"
+                style="@style/subtitle_b_p"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_thumbnail"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_channel_thumbnail"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_channel_thumbnail"
+                tools:text="PAKA" />
+
+            <View
+                android:id="@+id/v_detail_line_hor"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="24dp"
+                android:layout_marginVertical="20dp"
+                android:alpha="0.4"
+                android:background="@color/white"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_channel_title" />
+
+            <TextView
+                android:id="@+id/tv_detail_channel_subscriber_count"
+                style="@style/subtitle_b_p"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/tv_detail_channel_subscriber_count_label"
+                app:layout_constraintEnd_toEndOf="@id/v_detail_line_ver"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
+                app:layout_constraintTop_toBottomOf="@id/v_detail_line_hor"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="75.7만명" />
+
+            <TextView
+                android:id="@+id/tv_detail_channel_subscriber_count_label"
+                style="@style/body_p"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_subscriber_count"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_channel_container"
+                app:layout_constraintEnd_toEndOf="@id/v_detail_line_ver"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_channel_subscriber_count" />
+
+            <View
+                android:id="@+id/v_detail_line_ver"
+                android:layout_width="1dp"
+                android:layout_height="90dp"
+                android:alpha="0.4"
+                android:background="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_channel_container"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
+                app:layout_constraintTop_toBottomOf="@id/v_detail_line_hor" />
+
+            <TextView
+                android:id="@+id/tv_detail_channel_video_count"
+                style="@style/subtitle_b_p"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toTopOf="@id/tv_detail_channel_video_count_label"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
+                app:layout_constraintStart_toEndOf="@id/v_detail_line_ver"
+                app:layout_constraintTop_toBottomOf="@id/v_detail_line_hor"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="885개" />
+
+            <TextView
+                android:id="@+id/tv_detail_channel_video_count_label"
+                style="@style/body_p"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:text="@string/detail_video_count"
+                android:textAlignment="center"
+                android:textColor="@color/white"
+                app:layout_constraintBottom_toBottomOf="@id/iv_detail_channel_container"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
+                app:layout_constraintStart_toEndOf="@id/v_detail_line_ver"
+                app:layout_constraintTop_toBottomOf="@id/tv_detail_channel_video_count" />
+
+            <LinearLayout
+                android:id="@+id/iv_detail_bookmark_button"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:background="@drawable/shape_corner_radius_12dp"
+                android:backgroundTint="@color/flou_yellow"
+                android:backgroundTintMode="multiply"
+                android:gravity="center|center_vertical"
+                android:orientation="horizontal"
+                android:padding="16dp"
+                app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
+                app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
+                app:layout_constraintTop_toBottomOf="@id/iv_detail_channel_container">
+
+                <TextView
+                    style="@style/subtitle_b_p"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/detail_bookmark_button"
+                    android:textColor="@color/flou_yellow" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

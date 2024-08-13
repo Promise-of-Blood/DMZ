@@ -7,4 +7,17 @@
     <string name="my_profile">내 정보</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!-- detail page -->
+    <string name="detail_video_info">영상 정보</string>
+    <string name="detail_published_date">게시 날짜</string>
+    <string name="detail_view_count">조회수</string>
+    <string name="detail_comment_count">댓글</string>
+    <string name="detail_like_count">좋아요</string>
+    <string name="detail_subscriber_count">채널 구독자수</string>
+    <string name="detail_video_count">동영상</string>
+    <string name="detail_bookmark_button">북마크 저장</string>
+    <string name="detail_video_thumbnail">영상 썸네일</string>
+    <string name="detail_channel_thumbnail">채널 썸네일</string>
+
 </resources>
