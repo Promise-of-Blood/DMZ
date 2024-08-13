@@ -12,10 +12,10 @@ data class ChannelModel(
 fun ChannelResponse.toChannelList(): List<ChannelModel> {
     return this.items.map {
         ChannelModel(
-             channelId= it.id.channelId,
-         title= it.snippet.title,
-         description= it.snippet.description,
-         thumbnail = it.snippet.thumbnails.default.url,
+            channelId = it.id.channelId,
+            title = it.snippet.title,
+            description = it.snippet.description,
+            thumbnail = it.snippet.thumbnails.default.url,
         )
     }
 }
