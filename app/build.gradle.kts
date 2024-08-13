@@ -20,11 +20,11 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
-//        buildConfigField(
-//            "String",
-//            "YOUTUBE_API_KEY",
-//            gradleLocalProperties(rootDir, providers).getProperty("YOUTUBE_API_KEY")
-//        )
+        buildConfigField(
+            "String",
+            "YOUTUBE_API_KEY",
+            gradleLocalProperties(rootDir, providers).getProperty("YOUTUBE_API_KEY")
+        )
     }
 
     buildTypes {
