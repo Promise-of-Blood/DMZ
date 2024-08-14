@@ -87,7 +87,7 @@ class MyPageFragment : Fragment() {
                 "김태영",
                 7,
                 "여",
-                "55일"
+                "2024-08-05T01:01:01Z"
             ),
             MyPageListItem.Header("Card collection", false),
             MyPageListItem.CardList(
@@ -103,8 +103,8 @@ class MyPageFragment : Fragment() {
                 "티모로 다 해줬잖아",
                 "https://picsum.photos/200",
                 "Untara",
-                "100,000",
-                "23분 전"
+                "100000",
+                "2024-08-13T01:01:01Z"
             ),
         )
     }
