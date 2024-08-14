@@ -50,7 +50,6 @@ android {
 }
 
 dependencies {
-
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -73,4 +72,10 @@ dependencies {
     // navigation
     implementation (libs.androidx.navigation.fragment)
     implementation (libs.androidx.navigation.ui)
+
+    //ViewPager
+    implementation(libs.androidx.viewpager2)
+
+    //glide
+    implementation(libs.glide)
 }
