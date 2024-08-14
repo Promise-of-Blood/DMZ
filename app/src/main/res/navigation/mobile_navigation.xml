@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/navigation_browse"
-        android:name="com.example.dmz.ui.browse.BrowseFragment"
+        android:name="com.example.dmz.ui.BrowseFragment"
         android:label="@string/browse"
         tools:layout="@layout/fragment_search" />
     <fragment
@@ -29,8 +29,8 @@
 
     <fragment
         android:id="@+id/navigation_my_profile"
-        android:name="com.example.dmz.ui.MyProfileFragment"
+        android:name="com.example.dmz.ui.mypage.MyPageFragment"
         android:label="@string/my_profile"
-        tools:layout="@layout/fragment_my_profile" />
+        tools:layout="@layout/fragment_my_page" />
 
 </navigation>
