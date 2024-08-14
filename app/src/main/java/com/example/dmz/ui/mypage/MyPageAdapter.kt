@@ -1,19 +1,22 @@
 package com.example.dmz.ui.mypage
 
-import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.example.dmz.R
+import com.example.dmz.databinding.ItemMyPageCardListBinding
 import com.example.dmz.databinding.ItemMyPageHeaderBinding
 import com.example.dmz.databinding.ItemMyPageProfileBinding
 import com.example.dmz.databinding.ItemMyPageVideoBinding
+import com.example.dmz.utils.Util.formatDiffDay
+import com.example.dmz.utils.Util.formatDiffTime
+import com.example.dmz.utils.Util.formatNumber
 
 class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<MyPageListItem>() {
@@ -58,9 +61,13 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
                 )
             )
 
-            MyPageViewType.CARD_LIST -> CardHolder(parent.context)
-
-            else -> DefaultHolder(parent.context)
+            else -> CardHolder(
+                ItemMyPageCardListBinding.inflate(
+                    LayoutInflater.from(
+                        parent.context
+                    ), parent, false
+                )
+            )
         }
     }
 
@@ -69,8 +76,7 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
             is MyPageListItem.Header -> MyPageViewType.HEADER.viewType
             is MyPageListItem.Profile -> MyPageViewType.PROFILE.viewType
             is MyPageListItem.Video -> MyPageViewType.VIDEO.viewType
-            is MyPageListItem.CardList -> MyPageViewType.CARD_LIST.viewType
-            else -> MyPageViewType.DEFAULT.viewType
+            else -> MyPageViewType.CARD_LIST.viewType
         }
     }
 
@@ -79,15 +85,12 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
             is HeaderHolder -> holder.bind(getItem(position))
             is ProfileHolder -> holder.bind(getItem(position))
             is VideoHolder -> holder.bind(getItem(position))
-            is CardHolder -> {
+            else -> {
                 val item = getItem(position) as MyPageListItem.CardList
-                holder.bind(item.cards)
+                (holder as CardHolder).bind(item.cards)
             }
-            else -> holder.itemView.visibility = View.GONE
         }
     }
-
-    class DefaultHolder(context: Context): RecyclerView.ViewHolder(TextView(context))
 
     class HeaderHolder(binding: ItemMyPageHeaderBinding) :RecyclerView.ViewHolder(binding.root) {
         private val titleTextView = binding.tvHeaderTitle
@@ -112,13 +115,14 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
             (item as MyPageListItem.Profile).let {
                 Glide.with(itemView.context)
                     .load(it.profileImage)
+                    .centerInside()
                     .transform(RoundedCorners(30))
                     .into(profileImageView)
                 profileImageView.setImageResource(it.profileImage)
                 nameTextView.text = it.name
                 cardCountTextView.text = it.cardCount.toString()
                 genderTextView.text = it.gender
-                joinedDateTextView.text = it.joinedDate
+                joinedDateTextView.text = it.joinedDate.formatDiffDay()
             }
         }
     }
@@ -133,28 +137,22 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
 
         fun bind(item: MyPageListItem) {
             (item as MyPageListItem.Video).let {
-                Glide.with(itemView.context).load(it.thumbnail).into(thumbnailImageView)
+                Glide.with(itemView.context).load(it.thumbnail).centerInside()
+                    .into(thumbnailImageView)
                 titleTextView.text = it.title
-                Glide.with(itemView.context).load(it.channelThumbnail)
+                Glide.with(itemView.context).load(it.channelThumbnail).centerInside()
                     .into(channelThumbnailImageView)
                 channelTitleTextView.text = it.channelTitle
-                viewCountTextView.text = it.viewCount
-                publishedDateTextView.text = it.publishedDate
+                viewCountTextView.text = itemView.context.getString(R.string.my_page_video_view_count, it.viewCount.formatNumber())
+                publishedDateTextView.text = it.publishedDate.formatDiffTime()
             }
         }
     }
 
-    class CardHolder(context: Context) : RecyclerView.ViewHolder(
-        RecyclerView(context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT
-            ).apply { setPadding(0, 10, 0, 10) }
-        }
-    ) {
-        private val horizontalRecyclerView = itemView as RecyclerView
+    class CardHolder(binding: ItemMyPageCardListBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val cardListRecyclerView = binding.rvCardList
 
-        fun bind(item: List<MyPageListItem.Card>) = with(horizontalRecyclerView) {
+        fun bind(item: List<MyPageListItem.Card>) = with(cardListRecyclerView) {
             val cardAdapter = CardAdapter().apply { submitList(item) }
             adapter = cardAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
