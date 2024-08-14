@@ -13,7 +13,7 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/navigation_search"
-        android:name="com.example.dmz.ui.SearchFragment"
+        android:name="com.example.dmz.ui.search.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search" />
     <fragment

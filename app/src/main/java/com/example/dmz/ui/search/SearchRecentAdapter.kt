@@ -1,4 +1,4 @@
-package com.example.dmz.ui
+package com.example.dmz.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -17,7 +17,7 @@ class SearchRecentAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): SearchRecentAdapter.SearchHolder {
+    ): SearchHolder {
         val itemLayoutBinding = DataBindingUtil.inflate<ItemRecentSearchBinding>(
             LayoutInflater.from(parent.context), R.layout.item_recent_search, parent, false
         )

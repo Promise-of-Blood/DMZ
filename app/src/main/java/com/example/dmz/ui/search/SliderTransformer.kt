@@ -1,4 +1,4 @@
-package com.example.dmz.ui
+package com.example.dmz.ui.search
 
 import android.view.View
 import androidx.core.view.ViewCompat
