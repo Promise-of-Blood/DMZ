@@ -5,6 +5,8 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
 import com.example.dmz.model.listOfSearch
 
@@ -22,7 +24,6 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-
         setViewPager()
 
         return binding.root

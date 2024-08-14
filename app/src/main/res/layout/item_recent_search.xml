@@ -16,15 +16,15 @@
         android:background="@color/black">
 
         <androidx.cardview.widget.CardView
-            android:layout_width="0dp"
-            android:layout_height="0dp"
+            android:layout_width="300dp"
+            android:layout_height="350dp"
             android:backgroundTint="@color/flou_yellow"
-            app:cardCornerRadius="20dp"
-
-            app:layout_constraintDimensionRatio="2:2"
+            app:cardCornerRadius="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+
+
 
             <TextView
                 android:layout_width="match_parent"
@@ -48,7 +48,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{search.query}"
+                android:text="@{search.color}"
                 android:textSize="12sp"
                 android:fontFamily="@font/elicedigitalbaeum"
                 android:layout_marginTop="120dp"
