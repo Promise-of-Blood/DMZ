@@ -12,4 +12,20 @@
     <string name="set_region">국가 설정</string>
     <string name="set_sort">정렬 설정</string>
     <string name="set_date">날짜 설정</string>
+
+    <!-- detail page -->
+    <string name="detail_video_info">영상 정보</string>
+    <string name="detail_published_date">게시 날짜</string>
+    <string name="detail_view_count">조회수</string>
+    <string name="detail_comment_count">댓글</string>
+    <string name="detail_like_count">좋아요</string>
+    <string name="detail_subscriber_count">채널 구독자수</string>
+    <string name="detail_video_count">동영상</string>
+    <string name="detail_bookmark_button">북마크 저장</string>
+    <string name="detail_num_of_counts">%s개</string>
+    <string name="detail_num_of_times">%s회</string>
+    <string name="detail_num_of_people">%s명</string>
+    <string name="detail_video_thumbnail">영상 썸네일</string>
+    <string name="detail_channel_thumbnail">채널 썸네일</string>
+
 </resources>
