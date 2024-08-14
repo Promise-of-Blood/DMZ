@@ -22,7 +22,7 @@ fun VideoDetailResponse.toVideoDetail(): VideoDetailModel {
             channelId = it.items[0].snippet.channelId,
             publishedAt = it.items[0].snippet.publishedAt.formatDate(),
             title = it.items[0].snippet.title,
-            thumbnail = it.items[0].snippet.thumbnails.default.url,
+            thumbnail = it.items[0].snippet.thumbnails.high.url,
             commentCount = it.items[0].statistics.commentCount.formatNumber(),
             likeCount = it.items[0].statistics.likeCount.formatNumber(),
             viewCount = it.items[0].statistics.viewCount.formatNumber()
