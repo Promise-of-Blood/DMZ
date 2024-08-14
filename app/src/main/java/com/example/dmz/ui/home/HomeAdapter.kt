@@ -1,38 +1,38 @@
 package com.example.dmz.ui.home
 
-import android.content.Context
+import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dmz.R
 
 
-class ImagePagerAdapter(private val imageList: List<Int>, private val context: Context) : RecyclerView.Adapter<ImagePagerAdapter.ImageViewHolder>() {
+class KeywordAdapter(private val imageList: List<Keyword>) : RecyclerView.Adapter<KeywordAdapter.KeywordViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
-        val imageView = ImageView(parent.context).apply {
-            layoutParams = ViewGroup.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-            )
-            scaleType = ImageView.ScaleType.CENTER_CROP
-
-            background = context.getDrawable(R.drawable.shape_corner_radius_30dp)
-
-            clipToOutline = true
-
-        }
-        return ImageViewHolder(imageView)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeywordViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_keyword, parent, false)
+        return KeywordViewHolder(view)
     }
 
-    override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-        val actualPosition = position % imageList.size
-        holder.imageView.setImageResource(imageList[actualPosition])
+    override fun onBindViewHolder(holder: KeywordViewHolder, position: Int) {
+        val keyword = imageList[position]
+        holder.bind(keyword)
     }
 
     override fun getItemCount(): Int {
-        return Integer.MAX_VALUE // 무한 스크롤을 위해 크게 설정
+        return imageList.size
     }
 
-    class ImageViewHolder(val imageView: ImageView) : RecyclerView.ViewHolder(imageView)
+    class KeywordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        private val imageView: ImageView = itemView.findViewById(R.id.iv_keyword_image)
+        private val textView: TextView = itemView.findViewById(R.id.iv_keyword_text)
+
+        // 데이터를 바인딩하는 함수
+        fun bind(keyword: Keyword) {
+            imageView.setImageResource(keyword.keyImage)
+            textView.text = keyword.keyText
+        }
+    }
 }
