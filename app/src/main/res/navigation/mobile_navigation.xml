@@ -5,22 +5,24 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_search">
 
-
     <fragment
         android:id="@+id/navigation_browse"
         android:name="com.example.dmz.ui.BrowseFragment"
         android:label="@string/browse"
         tools:layout="@layout/fragment_search" />
+
     <fragment
         android:id="@+id/navigation_search"
         android:name="com.example.dmz.ui.SearchFragment"
         android:label="@string/search"
         tools:layout="@layout/fragment_search" />
+
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.example.dmz.ui.HomeFragment"
+        android:name="com.example.dmz.ui.home.HomeFragment"
         android:label="@string/home"
         tools:layout="@layout/fragment_search" />
+
     <fragment
         android:id="@+id/navigation_quiz"
         android:name="com.example.dmz.ui.QuizFragment"
