@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@color/black">
+
+    <ImageView
+        android:id="@+id/iv_video_thumbnail"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:contentDescription="@string/common_video_thumbnail"
+        android:scaleType="centerCrop"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintBottom_toBottomOf="@id/tv_video_published_date"
+        app:layout_constraintDimensionRatio="16:9"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_max="200dp" />
+
+    <TextView
+        android:id="@+id/tv_video_title"
+        style="@style/body_b_p"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        android:layout_marginTop="8dp"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_video_thumbnail"
+        app:layout_constraintTop_toTopOf="@id/iv_video_thumbnail"
+        tools:text="티모로 다 해줬잖아" />
+
+    <ImageView
+        android:id="@+id/iv_video_channel_thumbnail"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/shape_circle"
+        android:clipToOutline="true"
+        android:contentDescription="@string/common_channel_thumbnail"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintStart_toStartOf="@id/tv_video_title"
+        app:layout_constraintTop_toBottomOf="@id/tv_video_title" />
+
+    <TextView
+        android:id="@+id/tv_video_channel_title"
+        style="@style/description_p"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="12dp"
+        android:maxLines="1"
+        android:textColor="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/iv_video_channel_thumbnail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/iv_video_channel_thumbnail"
+        app:layout_constraintTop_toTopOf="@id/iv_video_channel_thumbnail"
+        tools:text="Untara" />
+
+    <TextView
+        android:id="@+id/tv_video_view_count"
+        style="@style/description_p"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="12dp"
+        android:maxLines="1"
+        android:text="@string/my_page_video_view_count"
+        android:textColor="@color/light_gray"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/iv_video_channel_thumbnail"
+        app:layout_constraintTop_toBottomOf="@id/iv_video_channel_thumbnail" />
+
+    <TextView
+        android:id="@+id/tv_video_published_date"
+        style="@style/description_p"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="12dp"
+        android:maxLines="1"
+        android:paddingBottom="8dp"
+        android:textColor="@color/light_gray"
+        app:layout_constraintBottom_toBottomOf="@id/iv_video_thumbnail"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@id/tv_video_view_count"
+        app:layout_constraintTop_toBottomOf="@id/tv_video_view_count"
+        tools:text="23분 전" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
