@@ -69,4 +69,8 @@ dependencies {
     //room
     implementation(libs.room.runtime)
     ksp(libs.room.compiler)
+
+    // navigation
+    implementation (libs.androidx.navigation.fragment)
+    implementation (libs.androidx.navigation.ui)
 }
