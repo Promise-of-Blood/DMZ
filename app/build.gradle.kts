@@ -80,4 +80,8 @@ dependencies {
 
     //glide
     implementation(libs.glide)
+
+    //search spinner
+    implementation ("com.github.skydoves:powerspinner:1.2.7")
+
 }
