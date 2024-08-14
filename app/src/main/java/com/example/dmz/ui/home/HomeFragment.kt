@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.recyclerview.widget.RecyclerView
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentHomeBinding
 
@@ -29,22 +28,25 @@ class HomeFragment : Fragment() {
 
     private fun setupViewPager() {
         val images = listOf(R.drawable.img_keyword_yoajung, R.drawable.img_keyword_yoajung, R.drawable.img_keyword_yoajung)
-        val adapter = ImagePagerAdapter(images, requireContext())
-        binding.rvTodayKeyword.adapter = adapter
+        val keywords = listOf("요아정1", "요아정2", "요아정3")
+        val imageAdapter = ImagePagerAdapter(images, requireContext())
 
-        binding.rvTodayKeyword.offscreenPageLimit = 3
-        binding.rvTodayKeyword.setPageTransformer { page, position ->
-            val scaleFactor = 0.85f.coerceAtLeast(1 - kotlin.math.abs(position))
-            page.scaleY = scaleFactor
-            page.alpha = scaleFactor
-            page.translationX = 100 * position
-        }
+        binding.run {
+            rvTodayKeywordImage.adapter = imageAdapter
+            rvTodayKeywordImage.offscreenPageLimit = 3
+            rvTodayKeywordImage.setPageTransformer { page, position ->
+                val scaleFactor = 0.85f.coerceAtLeast(1 - kotlin.math.abs(position))
+                page.scaleY = scaleFactor
+                page.alpha = scaleFactor
+                page.translationX = 100 * position
+            }
 
-        binding.rvTodayKeyword.apply {
-            clipToPadding = false
-            clipChildren = false
-            offscreenPageLimit = 1
-            setPadding(200, 0, 200, 0) // 좌우 패딩 추가
+            rvTodayKeywordImage.apply {
+                clipToPadding = false
+                clipChildren = false
+                offscreenPageLimit = 1
+                setPadding(200, 0, 200, 0) // 좌우 패딩 추가
+            }
         }
     }
 
