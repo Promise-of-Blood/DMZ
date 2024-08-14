@@ -5,8 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
+import com.example.dmz.model.listOfSearch
 
 class SearchFragment : Fragment() {
 
@@ -22,8 +24,20 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
+
+        setViewPager()
+
         return binding.root
     }
+
+    private fun setViewPager() {
+        binding.vpRecentSearch.apply {
+            adapter = SearchRecentAdapter(listOfSearch())
+            offscreenPageLimit = 4
+            setPageTransformer(SliderTransformer(4))
+        }
+    }
+
 
     override fun onDestroy() {
         _binding = null
