@@ -17,6 +17,9 @@
     <string name="detail_subscriber_count">채널 구독자수</string>
     <string name="detail_video_count">동영상</string>
     <string name="detail_bookmark_button">북마크 저장</string>
+    <string name="detail_num_of_counts">%s개</string>
+    <string name="detail_num_of_times">%s회</string>
+    <string name="detail_num_of_people">%s명</string>
     <string name="detail_video_thumbnail">영상 썸네일</string>
     <string name="detail_channel_thumbnail">채널 썸네일</string>
 

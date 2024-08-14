@@ -5,14 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import com.example.dmz.R
+import com.example.dmz.data.repository.DetailRepositoryImpl
 import com.example.dmz.databinding.FragmentDetailBinding
+import com.example.dmz.model.ChannelDetailModel
+import com.example.dmz.model.UiState
+import com.example.dmz.model.VideoDetailModel
+import com.example.dmz.viewmodel.DetailViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
+private const val VIDEO_ID = "CcGKBi1pm7Y"
 
 /**
  * A simple [Fragment] subclass.
@@ -22,6 +31,10 @@ private const val ARG_PARAM2 = "param2"
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
+
+    private val detailViewModel: DetailViewModel by viewModels {
+        viewModelFactory { initializer { DetailViewModel(DetailRepositoryImpl()) } }
+    }
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -45,7 +58,9 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initView()
+        hideBottomNavigation()
+        initViewModel()
+        detailViewModel.fetchDetailData(VIDEO_ID)
     }
 
     override fun onDestroy() {
@@ -53,8 +68,40 @@ class DetailFragment : Fragment() {
         _binding = null
     }
 
-    private fun initView() = with(binding) {
+    private fun hideBottomNavigation() {
         activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility = View.GONE
+    }
+
+    private fun initVideoDetailData(video: VideoDetailModel) =
+        with(binding) {
+            tvDetailVideoTitle.text = video.title
+            tvDetailVideoLikeCount.text = video.likeCount
+            tvDetailVideoViewCount.text =
+                requireContext().getString(R.string.detail_num_of_times, video.viewCount)
+            tvDetailVideoCommentCount.text =
+                requireContext().getString(R.string.detail_num_of_counts, video.commentCount)
+            tvDetailVideoPublishedDate.text = video.publishedAt
+        }
+
+    private fun initChannelDetailData(channel: ChannelDetailModel) = with(binding) {
+        tvDetailChannelTitle.text = channel.title
+        tvDetailChannelVideoCount.text =
+            requireContext().getString(R.string.detail_num_of_counts, channel.videoCount)
+        tvDetailChannelSubscriberCount.text =
+            requireContext().getString(R.string.detail_num_of_people, channel.subscriberCount)
+    }
+
+    private fun initViewModel() = with(detailViewModel) {
+        videoDetail.observe(viewLifecycleOwner) { video ->
+            if (video is UiState.Success) {
+                initVideoDetailData(video.data)
+            }
+        }
+        channelDetail.observe(viewLifecycleOwner) { channel ->
+            if (channel is UiState.Success) {
+                initChannelDetailData(channel.data)
+            }
+        }
     }
 
     companion object {
