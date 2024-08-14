@@ -1,6 +1,8 @@
 package com.example.dmz.data.api
 
+import com.example.dmz.data.model.ChannelDetailResponse
 import com.example.dmz.data.model.ChannelResponse
+import com.example.dmz.data.model.VideoDetailResponse
 import com.example.dmz.data.model.VideoResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -28,4 +30,16 @@ interface YoutubeApi {
         @Query("type") type: String? = "video", // 검색할 미디어, video, channel
         @Query("part") part: String? = "snippet", // snippet 또는 id
     ): VideoResponse
+
+    @GET("/youtube/v3/videos")
+    suspend fun getVideoDetail(
+        @Query("id") id: String,
+        @Query("part") part: String? = "snippet,statistics",
+    ): VideoDetailResponse
+
+    @GET("/youtube/v3/channels")
+    suspend fun getChannelDetail(
+        @Query("id") id: String,
+        @Query("part") part: String? = "snippet,statistics",
+    ): ChannelDetailResponse
 }
