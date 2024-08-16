@@ -35,4 +35,12 @@
     <string name="my_page_gender">성별</string>
     <string name="my_page_joined_date">가입한지</string>
 
+
+    <!-- browse Activity -->
+    <string name = "music_motion_letter_m">M</string>
+    <string name = "music_motion_letter_u">U</string>
+    <string name = "music_motion_letter_s">S</string>
+    <string name = "music_motion_letter_i">I</string>
+    <string name = "music_motion_letter_c">C</string>
+
 </resources>

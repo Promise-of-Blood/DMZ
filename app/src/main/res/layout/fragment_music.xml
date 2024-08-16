@@ -7,6 +7,14 @@
     app:layoutDescription="@xml/music_first_scene"
     tools:context=".ui.browse.category.MusicFragment">
 
+    <include
+        android:id="@+id/music_layout"
+        layout="@layout/music_intro"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+
 
 
 
