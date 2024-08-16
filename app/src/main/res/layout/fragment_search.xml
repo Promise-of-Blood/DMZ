@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -40,11 +39,11 @@
 
             <TextView
                 android:id="@+id/tv_search_title"
+                style="@style/headline_b_p"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:layout_marginTop="30dp"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
                 android:text="SEARCH"
                 android:textColor="@color/black"
                 android:textSize="25sp"
@@ -104,19 +103,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/et_search" />
 
-            <EditText
-                android:id="@+id/et_region"
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:id="@+id/spinner_region"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="3dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
-                android:hint="@string/search_input"
-                android:paddingHorizontal="15dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:hint="국가 선택"
+                android:padding="10dp"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
                 android:textSize="12sp"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_tint="@color/black"
+                app:spinner_divider_color="@color/white"
+                app:spinner_divider_show="true"
+                app:spinner_divider_size="0.4dp"
+                app:spinner_item_array="@array/region_array"
+                app:spinner_item_height="46dp"
+                app:spinner_popup_animation="normal"
+                app:spinner_popup_background="@color/flou_yellow"
+                android:elevation="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_region" />
+                app:layout_constraintTop_toBottomOf="@id/tv_region"
+                tools:ignore="HardcodedText,UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/tv_sort"
@@ -130,21 +142,34 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_region" />
+                app:layout_constraintTop_toBottomOf="@id/spinner_region" />
 
-            <EditText
-                android:id="@+id/et_sort"
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:id="@+id/spinner_sort"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="0dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
-                android:hint="@string/set_sort"
-                android:paddingHorizontal="15dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:hint="정렬 선택"
+                android:padding="10dp"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
                 android:textSize="12sp"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_tint="@color/black"
+                app:spinner_divider_color="@color/white"
+                app:spinner_divider_show="true"
+                app:spinner_divider_size="0.4dp"
+                app:spinner_item_array="@array/sort_array"
+                app:spinner_item_height="46dp"
+                app:spinner_popup_animation="normal"
+                app:spinner_popup_background="@color/flou_yellow"
+                android:elevation="14dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_sort" />
+                app:layout_constraintTop_toBottomOf="@id/tv_sort"
+                tools:ignore="HardcodedText,UnusedAttribute"/>
 
             <TextView
                 android:id="@+id/tv_date"
@@ -158,7 +183,7 @@
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/et_sort" />
+                app:layout_constraintTop_toBottomOf="@id/spinner_sort" />
 
             <EditText
                 android:id="@+id/et_date"
@@ -186,10 +211,10 @@
 
             <TextView
                 android:id="@+id/tv_history_title"
+                style="@style/headline_b_p"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="24dp"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
                 android:text="@string/search_history"
                 android:textColor="@color/white"
                 android:textSize="25sp"
