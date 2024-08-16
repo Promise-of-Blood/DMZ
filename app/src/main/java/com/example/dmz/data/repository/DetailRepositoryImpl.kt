@@ -1,17 +1,17 @@
 package com.example.dmz.data.repository
 
+import com.example.dmz.data.api.YoutubeApi
 import com.example.dmz.model.ChannelDetailModel
 import com.example.dmz.model.VideoDetailModel
 import com.example.dmz.model.toChannelDetail
 import com.example.dmz.model.toVideoDetail
-import com.example.dmz.remote.YoutubeSearchClient.youtubeApi
 
-class DetailRepositoryImpl : DetailRepository {
+class DetailRepositoryImpl(private val api: YoutubeApi) : DetailRepository {
     override suspend fun getVideoDetail(id: String): VideoDetailModel {
-        return youtubeApi.getVideoDetail(id).toVideoDetail()
+        return api.getVideoDetail(id).toVideoDetail()
     }
 
     override suspend fun getChannelDetail(id: String): ChannelDetailModel {
-        return youtubeApi.getChannelDetail(id).toChannelDetail()
+        return api.getChannelDetail(id).toChannelDetail()
     }
 }
