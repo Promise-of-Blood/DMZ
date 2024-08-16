@@ -157,22 +157,22 @@
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintHorizontal_bias=".98"
-            motion:layout_constraintVertical_bias=".01" />
+            android:translationX="300dp"
+            android:translationY="-350dp"/>
 
 
         <Constraint
             android:id="@id/lifestyle_bubble"
             android:layout_width="0dp"
-            motion:layout_constraintWidth_percent=".3"
+            motion:layout_constraintWidth_percent=".2"
             android:layout_height="0dp"
             motion:layout_constraintHeight_percent=".15"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintHorizontal_bias=".95"
-            motion:layout_constraintVertical_bias=".95" />
+            android:translationY="500dp"
+            android:translationX="150dp"/>
 
 
 
@@ -309,7 +309,7 @@
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintHorizontal_bias=".05"
-            motion:layout_constraintVertical_bias=".97"/>
+            motion:layout_constraintVertical_bias=".97" />
 
         <Constraint
             android:id="@id/lifestyle_3d_flower"
@@ -335,8 +335,8 @@
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
-            motion:layout_constraintHorizontal_bias=".98"
-            motion:layout_constraintVertical_bias=".01" />
+            android:translationX="-400dp"
+            android:translationY="-350dp"/>
 
 
         <Constraint
@@ -350,32 +350,121 @@
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
             motion:layout_constraintHorizontal_bias=".2"
-            motion:layout_constraintVertical_bias=".27" />
+            motion:layout_constraintVertical_bias=".1"
+            android:translationY="-300dp"
+            android:transformPivotX="350dp" />
 
 
     </ConstraintSet>
 
     <!-- 기본적인 Transition 설정 -->
-    <Transition
-        motion:constraintSetStart="@id/start"
-        motion:constraintSetEnd="@id/end"
-        motion:duration="3000"
-        motion:autoTransition="animateToEnd">
 
-
-
-
-    </Transition>
 
     <!-- 추가적으로 end에서 start로 다시 전환 설정 -->
     <Transition
-        motion:constraintSetStart="@id/end"
-        motion:constraintSetEnd="@id/start"
-        motion:duration="3000"
+        motion:constraintSetStart="@id/start"
+        motion:constraintSetEnd="@id/end"
+        motion:duration="7000"
         motion:autoTransition="animateToEnd">
 
+        <KeyFrameSet>
+            <KeyPosition
+                motion:motionTarget="@id/lifestyle_bubble"
+                motion:framePosition="25"
+                motion:percentX="0.8" />
+
+            <KeyPosition
+                motion:motionTarget="@id/lifestyle_bubble"
+                motion:framePosition="50"
+                motion:percentX="0.2"
+                motion:percentY="0.6"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_bubble"
+                motion:framePosition="50"
+                android:scaleX="1.3"
+                android:scaleY="1.3"
+                android:translationX="-50dp"
+                android:rotation="-20"/>
+
+            <KeyPosition
+                motion:motionTarget="@id/lifestyle_bubble"
+                motion:framePosition="75"
+                motion:percentX="0.8"
+                motion:percentY="0.8"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_bubble"
+                motion:framePosition="90"
+                android:scaleX="0.8"
+                android:scaleY="0.8"
+                android:rotation="0"/>
 
 
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_flower"
+                motion:framePosition="30"
+                android:rotation="-5"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_flower"
+                motion:framePosition="40"
+                android:rotation="5"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_flower"
+                motion:framePosition="50"
+                android:rotation="0"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_flower"
+                motion:framePosition="60"
+                android:rotation="5"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_flower"
+                motion:framePosition="70" />
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_flower"
+                motion:framePosition="90"
+                android:rotation="-5"/>
+
+
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_cloud"
+                motion:framePosition="20"
+                android:translationY="-310dp"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_cloud"
+                motion:framePosition="30"
+                android:translationY="-340dp"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_cloud"
+                motion:framePosition="50"
+                android:translationY="-320dp"/>
+
+            <KeyAttribute
+                motion:motionTarget="@id/lifestyle_cloud"
+                motion:framePosition="70"
+                android:translationY="-350dp"/>
+
+
+
+
+
+        </KeyFrameSet>
+
+    </Transition>
+
+    <Transition
+        motion:constraintSetStart="@id/start"
+        motion:constraintSetEnd="@id/end"
+        motion:duration="0"
+        motion:autoTransition="animateToStart">
 
     </Transition>
 

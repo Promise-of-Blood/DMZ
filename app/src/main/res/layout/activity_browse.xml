@@ -5,12 +5,12 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".TestActivity">
+    tools:context=".ui.browse.BrowseActivity">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/test_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:name="com.example.dmz.ui.browse.category.GameFragment"/>
+        android:name="com.example.dmz.ui.browse.category.LifeStyleFragment"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

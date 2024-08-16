@@ -6,8 +6,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    app:layoutDescription="@xml/game_first_scene"
-    tools:context=".ui.browse.category.MusicFragment">
+    app:layoutDescription="@xml/game_scene"
+    tools:context=".ui.browse.category.GameFragment">
 
 
 

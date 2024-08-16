@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    app:layoutDescription="@xml/game_first_scene"
+    app:layoutDescription="@xml/game_scene"
     tools:context=".ui.browse.category.GameFragment">
 
     <include
@@ -16,12 +16,12 @@
         android:layout_height="match_parent"
         app:layout_constraintTop_toTopOf="parent"/>
 
-    <include
-        android:id="@+id/game_list_layout"
-        layout="@layout/game_list"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/game_intro_layout"/>
+<!--    <include-->
+<!--        android:id="@+id/game_list_layout"-->
+<!--        layout="@layout/game_list"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@id/game_intro_layout"/>-->
 
 
 
