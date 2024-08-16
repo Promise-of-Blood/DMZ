@@ -16,6 +16,7 @@ import com.example.dmz.databinding.FragmentDetailBinding
 import com.example.dmz.model.ChannelDetailModel
 import com.example.dmz.model.UiState
 import com.example.dmz.model.VideoDetailModel
+import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.viewmodel.DetailViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -35,7 +36,7 @@ class DetailFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val detailViewModel: DetailViewModel by viewModels {
-        viewModelFactory { initializer { DetailViewModel(DetailRepositoryImpl()) } }
+        viewModelFactory { initializer { DetailViewModel(DetailRepositoryImpl(YoutubeSearchClient.youtubeApi)) } }
     }
 
     // TODO: Rename and change types of parameters

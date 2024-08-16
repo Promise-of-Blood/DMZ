@@ -1,19 +1,19 @@
 package com.example.dmz.data.repository
 
+import com.example.dmz.data.api.YoutubeApi
 import com.example.dmz.model.ChannelModel
 import com.example.dmz.model.VideoModel
 import com.example.dmz.model.toChannelList
 import com.example.dmz.model.toVideoList
-import com.example.dmz.remote.YoutubeSearchClient.youtubeApi
 
-class SearchRepositoryImpl : SearchRepository {
+class SearchRepositoryImpl(private val api: YoutubeApi) : SearchRepository {
     override suspend fun searchChannel(
         topicId: String?,
         maxResults: Int?,
         regionCode: String?,
         order: String?
     ): List<ChannelModel> {
-        return youtubeApi.getChannelList(
+        return api.getChannelList(
             topicId = topicId,
             maxResults = maxResults,
             regionCode = regionCode,
@@ -30,7 +30,7 @@ class SearchRepositoryImpl : SearchRepository {
         publishedAfter: String?,
         publishedBefore: String?
     ): List<VideoModel> {
-        return youtubeApi.getVideoList(
+        return api.getVideoList(
             q = q,
             topicId = topicId,
             maxResults = maxResults,
