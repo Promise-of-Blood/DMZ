@@ -1,11 +1,18 @@
 package com.example.dmz.utils
 
+import android.icu.text.DateFormat
 import android.icu.text.DecimalFormat
+import android.util.Log
 import androidx.core.text.isDigitsOnly
+import com.example.dmz.ui.search.SearchFragment
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 object Util {
     fun String.formatDate(): String {
@@ -59,4 +66,77 @@ object Util {
     private fun LocalDateTime.toLong(): Long {
         return this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
+
+    // 현재시간이 ISO 포맷으로 리턴
+    fun getNowTimeAsIso(): String {
+        val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
+        val formattedDate = isoFormat.format(Date())
+        Log.d("formattedDate", formattedDate)
+        return formattedDate
+    }
+
+    enum class DateType {
+        DATE,
+        MONTH,
+        YEAR
+    }
+
+    fun setDateAgo(nowDate: String, type: DateType, ago: Int): String {
+        val cal = Calendar.getInstance()
+        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val date = df.parse(nowDate)
+        cal.time = date
+        Log.d("current", df.format(cal.time))
+
+        when (type) {
+            DateType.DATE -> {
+                cal.add(Calendar.DATE, -ago)
+            }
+
+            DateType.MONTH -> {
+                cal.add(Calendar.MONTH, -ago)
+            }
+
+            DateType.YEAR -> {
+                cal.add(Calendar.YEAR, -ago)
+            }
+        }
+
+        Log.d("after", df.format(cal.time))
+        return df.format(cal.time)
+    }
+
+
+    fun isoToDate(time: String): Date? {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
+        val date = format.parse(time)
+        return date
+    }
+
+    fun isoToString(time: String): String {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
+        val date = format.parse(time)
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN)
+        val dateString: String = formatter.format(date!!)
+        return dateString
+    }
+
+//    fun getDateAgoFromNow(): String {
+//        val cal = Calendar.getInstance()
+//        cal.time = Date()
+//        val isoFormat = SimpleDateFormat("YYYY-MM-DD'T'hh:mm:ss.SSSZ", Locale.KOREAN)
+//        Log.d("current :", isoFormat.format(cal.time))
+//
+//        cal.add(Calendar.MONTH, 2)
+//        cal.add(Calendar.DATE, -3)
+//
+//        Log.d("after", isoFormat.format(cal.time))
+//
+//        return ""
+//    }
 }
+
+
+
+
+

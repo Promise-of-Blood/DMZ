@@ -94,7 +94,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="40dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="0dp"
                 android:fontFamily="@font/elicedigitalbaeum_bold"
                 android:text="@string/set_region"
                 android:textColor="@color/black"
@@ -109,12 +109,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:elevation="14dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:hint="국가 선택"
                 android:padding="10dp"
                 android:paddingStart="15dp"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_region"
                 app:spinner_arrow_gravity="end"
                 app:spinner_arrow_tint="@color/black"
                 app:spinner_divider_color="@color/white"
@@ -124,11 +128,7 @@
                 app:spinner_item_height="46dp"
                 app:spinner_popup_animation="normal"
                 app:spinner_popup_background="@color/flou_yellow"
-                android:elevation="14dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_region"
-                tools:ignore="HardcodedText,UnusedAttribute"/>
+                tools:ignore="HardcodedText,UnusedAttribute" />
 
             <TextView
                 android:id="@+id/tv_sort"
@@ -150,12 +150,16 @@
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
+                android:elevation="14dp"
                 android:foreground="?attr/selectableItemBackground"
                 android:hint="정렬 선택"
                 android:padding="10dp"
                 android:paddingStart="15dp"
                 android:textColor="@color/black"
                 android:textSize="12sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_sort"
                 app:spinner_arrow_gravity="end"
                 app:spinner_arrow_tint="@color/black"
                 app:spinner_divider_color="@color/white"
@@ -165,11 +169,7 @@
                 app:spinner_item_height="46dp"
                 app:spinner_popup_animation="normal"
                 app:spinner_popup_background="@color/flou_yellow"
-                android:elevation="14dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_sort"
-                tools:ignore="HardcodedText,UnusedAttribute"/>
+                tools:ignore="HardcodedText,UnusedAttribute" />
 
             <TextView
                 android:id="@+id/tv_date"
@@ -185,19 +185,50 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/spinner_sort" />
 
-            <EditText
-                android:id="@+id/et_date"
+            <com.skydoves.powerspinner.PowerSpinnerView
+                android:id="@+id/spinner_date"
                 android:layout_width="match_parent"
-                android:layout_height="45dp"
+                android:layout_height="wrap_content"
                 android:layout_marginHorizontal="30dp"
-                android:layout_marginTop="3dp"
                 android:background="@drawable/edittext_rounded_corner_rectangle"
-                android:hint="@string/set_date"
-                android:paddingHorizontal="15dp"
+                android:elevation="14dp"
+                android:foreground="?attr/selectableItemBackground"
+                android:hint="기간 선택"
+                android:padding="10dp"
+                android:paddingStart="15dp"
+                android:textColor="@color/black"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_date" />
+                app:layout_constraintTop_toBottomOf="@id/tv_date"
+                app:spinner_arrow_gravity="end"
+                app:spinner_arrow_tint="@color/black"
+                app:spinner_divider_color="@color/white"
+                app:spinner_divider_show="true"
+                app:spinner_divider_size="0.4dp"
+                app:spinner_item_array="@array/date_array"
+                app:spinner_item_height="46dp"
+                app:spinner_popup_animation="normal"
+                app:spinner_popup_background="@color/flou_yellow"
+                tools:ignore="HardcodedText,UnusedAttribute" />
+
+            <TextView
+                android:id="@+id/btn_search"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="80dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/selector_btn_yellow_fill"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="@font/elicedigitalbaeum_bold"
+                android:gravity="center"
+                android:text="@string/search"
+                android:paddingVertical="5dp"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/spinner_date" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

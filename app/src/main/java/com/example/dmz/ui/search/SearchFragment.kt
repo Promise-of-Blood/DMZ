@@ -7,15 +7,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.TextView
-import androidx.core.content.ContextCompat
+import android.widget.Toast
 import androidx.fragment.app.viewModels
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
 import com.example.dmz.model.listOfSearch
+import com.example.dmz.utils.Util
+import com.example.dmz.utils.Util.getNowTimeAsIso
+import com.example.dmz.utils.Util.setDateAgo
 import com.example.dmz.viewmodel.SearchViewModel
 
 class SearchFragment : Fragment() {
@@ -24,13 +23,15 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var mContext: Context
 
-    private val viewModel: SearchViewModel by viewModels {
+    private val searchViewModel: SearchViewModel by viewModels {
         SearchViewModel.SearchViewModelFactory()
     }
 
     // 검색 변수
-    private lateinit var searchRegion: String
-    private lateinit var searchSort: String
+    private var searchRegion: String? = null
+    private var searchSort: String? = null
+    private var searchBeforeDate: String? = null
+    private var searchNowDate: String? = null
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -47,6 +48,7 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         setViewPager()
+        val nowIso = Util.getNowTimeAsIso()
 
         return binding.root
     }
@@ -54,15 +56,42 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-//        initSpinner(requireContext(), binding.spRegion)
-        binding.spinnerRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
-            val regionArrayResource = resources.getStringArray(R.array.region_array)
-            setRegion(text, regionArrayResource)
+        binding.run {
+            spinnerRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
+                val regionArrayResource = resources.getStringArray(R.array.region_array)
+                setRegion(text, regionArrayResource)
+            }
+            spinnerSort.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
+                val regionArrayResource = resources.getStringArray(R.array.sort_array)
+                setSort(text, regionArrayResource)
+            }
+
+            spinnerDate.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
+                val regionArrayResource = resources.getStringArray(R.array.date_array)
+                searchBeforeDate = setDate(text, regionArrayResource)
+                Log.d("setDate", searchBeforeDate!!)
+            }
+
+            btnSearch.setOnClickListener {
+                val query = etSearch.text.toString().trim()
+
+                if (query.isEmpty()) {
+                    Toast.makeText(mContext, "검색어를 입력하세요", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+
+                searchViewModel.getVideoList(
+                    q = query,
+                    order = searchSort,
+                    publishedAfter = searchBeforeDate,
+                    publishedBefore = searchNowDate,
+                    regionCode = searchRegion
+                )
+            }
         }
-        binding.spinnerSort.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
-            val regionArrayResource = resources.getStringArray(R.array.sort_array)
-            setSort(text, regionArrayResource)
-        }
+
+
     }
 
     override fun onDestroy() {
@@ -85,7 +114,7 @@ class SearchFragment : Fragment() {
             regionArrayResource[2] -> searchRegion = "GB"
             regionArrayResource[3] -> searchRegion = "JP"
         }
-        Log.d("setRegion", searchRegion)
+        searchRegion?.let { Log.d("setRegion", it) }
     }
 
     private fun setSort(input: String, regionArrayResource: Array<String>) {
@@ -96,10 +125,28 @@ class SearchFragment : Fragment() {
             regionArrayResource[3] -> searchSort = "title"
             regionArrayResource[4] -> searchSort = "viewCount"
         }
-        Log.d("setSort", searchSort)
+        searchSort?.let { Log.d("setSort", it) }
     }
 
+    private fun setDate(input: String, regionArrayResource: Array<String>): String? {
 
+        searchNowDate = getNowTimeAsIso()
+
+        return searchNowDate?.let {
+            when (input) {
+                regionArrayResource[0] -> setDateAgo(it, Util.DateType.DATE, 1)
+
+                regionArrayResource[1] -> setDateAgo(it, Util.DateType.DATE, 7)
+
+                regionArrayResource[2] -> setDateAgo(it, Util.DateType.MONTH, 1)
+
+                regionArrayResource[3] -> setDateAgo(it, Util.DateType.YEAR, 1)
+
+                else -> throw IllegalStateException("Invalid RegionArrayResource")
+            }
+        }
+
+    }
 
 
 }

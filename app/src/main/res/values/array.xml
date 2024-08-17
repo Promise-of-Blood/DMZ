@@ -15,4 +15,13 @@
         <item>조회수 순</item>
     </string-array>
 
+    <string-array name="date_array">
+        <item>1일전</item>
+        <item>일주일 전</item>
+        <item>1달전</item>
+        <item>1년전</item>
+    </string-array>
+
+
+
 </resources>
