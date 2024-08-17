@@ -13,6 +13,11 @@
     <string name="common_channel_thumbnail">채널 썸네일</string>
     <string name="common_keyword_thumbnail">키워드 썸네일</string>
 
+    <!-- common: shared preference -->
+    <string name="preference_file_key">preference_dmz</string>
+    <string name="preference_bookmark_key">preference_bookmark</string>
+    <string name="preference_keyword_card_key">preference_keyword_card</string>
+
     <!-- detail page -->
     <string name="detail_video_info">영상 정보</string>
     <string name="detail_published_date">게시 날짜</string>
@@ -21,13 +26,16 @@
     <string name="detail_like_count">좋아요</string>
     <string name="detail_subscriber_count">채널 구독자수</string>
     <string name="detail_video_count">동영상</string>
-    <string name="detail_bookmark_button">북마크 저장</string>
+    <string name="detail_bookmark_button_save">북마크 저장</string>
+    <string name="detail_bookmark_button_cancel">북마크 취소</string>
     <string name="detail_num_of_counts">%s개</string>
     <string name="detail_num_of_times">%s회</string>
     <string name="detail_num_of_people">%s명</string>
 
     <!-- my page -->
     <string name="my_page_title">My Page</string>
+    <string name="my_page_user_name">김태영</string>
+    <string name="my_page_user_gender">여</string>
     <string name="my_page_profile_image">프로필 이미지</string>
     <string name="my_page_video_view_count">조회수 %s회</string>
     <string name="my_page_more">더보기</string>
