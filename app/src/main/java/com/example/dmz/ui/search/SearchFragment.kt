@@ -8,7 +8,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
 import com.example.dmz.model.listOfSearch
@@ -23,7 +23,7 @@ class SearchFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var mContext: Context
 
-    private val searchViewModel: SearchViewModel by viewModels {
+    private val searchViewModel: SearchViewModel by activityViewModels {
         SearchViewModel.SearchViewModelFactory()
     }
 
@@ -48,7 +48,6 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         setViewPager()
-        val nowIso = Util.getNowTimeAsIso()
 
         return binding.root
     }
@@ -88,6 +87,12 @@ class SearchFragment : Fragment() {
                     publishedBefore = searchNowDate,
                     regionCode = searchRegion
                 )
+
+                searchViewModel.videoList.observe(viewLifecycleOwner) { items ->
+
+                    Log.d("data", items.toString())
+                }
+
             }
         }
 

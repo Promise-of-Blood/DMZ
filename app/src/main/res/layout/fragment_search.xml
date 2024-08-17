@@ -221,7 +221,7 @@
                 android:background="@drawable/selector_btn_yellow_fill"
                 android:clickable="true"
                 android:focusable="true"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
+                style="@style/body_b_p"
                 android:gravity="center"
                 android:text="@string/search"
                 android:paddingVertical="5dp"

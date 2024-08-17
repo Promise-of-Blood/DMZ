@@ -12,6 +12,7 @@
     <string name="set_region">국가 설정</string>
     <string name="set_sort">정렬 설정</string>
     <string name="set_date">날짜 설정</string>
+    <string name="search_result">SEARCH RESULT</string>
 
     <!-- common -->
     <string name="common_video_thumbnail">영상 썸네일</string>

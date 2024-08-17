@@ -1,0 +1,49 @@
+package com.example.dmz.ui.search
+
+import android.content.Context
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import com.example.dmz.R
+import com.example.dmz.databinding.FragmentSearchBinding
+import com.example.dmz.databinding.FragmentSearchResultBinding
+import com.example.dmz.viewmodel.SearchViewModel
+
+class SearchResultFragment : Fragment() {
+
+    private var _binding: FragmentSearchResultBinding? = null
+    private val binding get() = _binding!!
+    private lateinit var mContext: Context
+
+    private val searchViewModel: SearchViewModel by activityViewModels {
+        SearchViewModel.SearchViewModelFactory()
+    }
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mContext = context
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
+
+}
