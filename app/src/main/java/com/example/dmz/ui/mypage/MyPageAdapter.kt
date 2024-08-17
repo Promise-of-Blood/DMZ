@@ -14,6 +14,9 @@ import com.example.dmz.databinding.ItemMyPageCardListBinding
 import com.example.dmz.databinding.ItemMyPageHeaderBinding
 import com.example.dmz.databinding.ItemMyPageProfileBinding
 import com.example.dmz.databinding.ItemMyPageVideoBinding
+import com.example.dmz.model.BookmarkedVideo
+import com.example.dmz.model.KeywordCard
+import com.example.dmz.model.MyPageListItem
 import com.example.dmz.utils.Util.formatDiffDay
 import com.example.dmz.utils.Util.formatDiffTime
 import com.example.dmz.utils.Util.formatNumber
@@ -24,8 +27,8 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
         return when {
             oldItem is MyPageListItem.Header && newItem is MyPageListItem.Header -> oldItem.title == newItem.title
             oldItem is MyPageListItem.Profile && newItem is MyPageListItem.Profile -> oldItem.name == newItem.name
-            oldItem is MyPageListItem.Video && newItem is MyPageListItem.Video -> oldItem.thumbnail == newItem.title
-            oldItem is MyPageListItem.Card && newItem is MyPageListItem.Card -> oldItem.thumbnail == newItem.thumbnail
+            oldItem is MyPageListItem.BookmarkList && newItem is MyPageListItem.BookmarkList -> oldItem.hashCode() == newItem.hashCode()
+            oldItem is MyPageListItem.KeywordCardList && newItem is MyPageListItem.KeywordCardList -> oldItem.hashCode() == newItem.hashCode()
             else -> false
         }
     }
@@ -34,10 +37,16 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
         return oldItem == newItem
     }
 }) {
+    companion object {
+        private const val TYPE_HEADER = 0
+        private const val TYPE_PROFILE = 1
+        private const val TYPE_VIDEO = 2
+        private const val TYPE_CARD = 3
+    }
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-        val muiltiViewType = MyPageViewType.entries.find { it.viewType == viewType }
-        return when (muiltiViewType) {
-            MyPageViewType.HEADER -> HeaderHolder(
+        return when (viewType) {
+            TYPE_HEADER -> HeaderHolder(
                 ItemMyPageHeaderBinding.inflate(
                     LayoutInflater.from(
                         parent.context
@@ -45,7 +54,7 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
                 )
             )
 
-            MyPageViewType.PROFILE -> ProfileHolder(
+            TYPE_PROFILE -> ProfileHolder(
                 ItemMyPageProfileBinding.inflate(
                     LayoutInflater.from(
                         parent.context
@@ -53,7 +62,7 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
                 )
             )
 
-            MyPageViewType.VIDEO -> VideoHolder(
+            TYPE_VIDEO -> VideoHolder(
                 ItemMyPageVideoBinding.inflate(
                     LayoutInflater.from(
                         parent.context
@@ -73,10 +82,10 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
-            is MyPageListItem.Header -> MyPageViewType.HEADER.viewType
-            is MyPageListItem.Profile -> MyPageViewType.PROFILE.viewType
-            is MyPageListItem.Video -> MyPageViewType.VIDEO.viewType
-            else -> MyPageViewType.CARD_LIST.viewType
+            is MyPageListItem.Header -> TYPE_HEADER
+            is MyPageListItem.Profile -> TYPE_PROFILE
+            is MyPageListItem.BookmarkList -> TYPE_VIDEO
+            else -> TYPE_CARD
         }
     }
 
@@ -84,10 +93,14 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
         when (holder) {
             is HeaderHolder -> holder.bind(getItem(position))
             is ProfileHolder -> holder.bind(getItem(position))
-            is VideoHolder -> holder.bind(getItem(position))
+            is VideoHolder -> {
+                val item = getItem(position) as MyPageListItem.BookmarkList
+                if (item.list.isNotEmpty()) item.list.map { holder.bind(it) }
+                else holder.itemView.visibility = View.GONE
+            }
             else -> {
-                val item = getItem(position) as MyPageListItem.CardList
-                (holder as CardHolder).bind(item.cards)
+                val item = getItem(position) as MyPageListItem.KeywordCardList
+                (holder as CardHolder).bind(item.list)
             }
         }
     }
@@ -135,16 +148,18 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
         private val viewCountTextView = binding.tvVideoViewCount
         private val publishedDateTextView = binding.tvVideoPublishedDate
 
-        fun bind(item: MyPageListItem) {
-            (item as MyPageListItem.Video).let {
+        fun bind(item: BookmarkedVideo) {
+            item.video?.let {
                 Glide.with(itemView.context).load(it.thumbnail).centerInside()
                     .into(thumbnailImageView)
                 titleTextView.text = it.title
-                Glide.with(itemView.context).load(it.channelThumbnail).centerInside()
+                viewCountTextView.text = itemView.context.getString(R.string.my_page_video_view_count, it.viewCount .formatNumber())
+                publishedDateTextView.text = it.publishedAt.formatDiffTime()
+            }
+            item.channel?.let {
+                Glide.with(itemView.context).load(it.thumbnail).centerInside()
                     .into(channelThumbnailImageView)
-                channelTitleTextView.text = it.channelTitle
-                viewCountTextView.text = itemView.context.getString(R.string.my_page_video_view_count, it.viewCount.formatNumber())
-                publishedDateTextView.text = it.publishedDate.formatDiffTime()
+                channelTitleTextView.text = it.title
             }
         }
     }
@@ -152,7 +167,7 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
     class CardHolder(binding: ItemMyPageCardListBinding) : RecyclerView.ViewHolder(binding.root) {
         private val cardListRecyclerView = binding.rvCardList
 
-        fun bind(item: List<MyPageListItem.Card>) = with(cardListRecyclerView) {
+        fun bind(item: List<KeywordCard>) = with(cardListRecyclerView) {
             val cardAdapter = CardAdapter().apply { submitList(item) }
             adapter = cardAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
