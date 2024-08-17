@@ -1,8 +1,6 @@
 package com.example.dmz.model
 
 import com.example.dmz.data.model.VideoDetailResponse
-import com.example.dmz.utils.Util.formatDate
-import com.example.dmz.utils.Util.formatNumber
 
 data class VideoDetailModel(
     val videoId: String,
@@ -20,12 +18,12 @@ fun VideoDetailResponse.toVideoDetail(): VideoDetailModel {
         VideoDetailModel(
             videoId = it.items[0].id,
             channelId = it.items[0].snippet.channelId,
-            publishedAt = it.items[0].snippet.publishedAt.formatDate(),
+            publishedAt = it.items[0].snippet.publishedAt,
             title = it.items[0].snippet.title,
             thumbnail = it.items[0].snippet.thumbnails.high.url,
-            commentCount = it.items[0].statistics.commentCount.formatNumber(),
-            likeCount = it.items[0].statistics.likeCount.formatNumber(),
-            viewCount = it.items[0].statistics.viewCount.formatNumber()
+            commentCount = it.items[0].statistics.commentCount,
+            likeCount = it.items[0].statistics.likeCount,
+            viewCount = it.items[0].statistics.viewCount
         )
     }
 }
