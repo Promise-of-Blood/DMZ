@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/sports_letter_s"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            android:translationY="1000dp"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_p"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_s"
+            android:translationY="1000dp"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_o"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_p"
+            android:translationX="20dp"
+            android:translationY="1000dp" />
+
+        <Constraint
+            android:id="@+id/sports_letter_r"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_o"
+            android:translationY="1000dp"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_t"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="60dp"
+            android:translationY="1000dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_r"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_s2"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="5dp"
+            android:translationY="1000dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_t"/>
+
+        <Constraint
+            android:id="@id/sports_soccer_ball"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="400dp"
+            android:translationY="900dp"/>
+
+        <Constraint
+            android:id="@id/sports_tennis_ball"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.25"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="-150dp"
+            android:translationY="250dp"
+            />
+
+        <Constraint
+            android:id="@id/sports_bascket_ball"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.44"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="-500dp"
+            android:translationY="600dp"/>
+
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/sports_letter_s"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            android:layout_marginTop="80dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintTop_toTopOf="parent"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_p"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:layout_marginTop="-40dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_s"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_o"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:layout_marginTop="-60dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_p"
+            android:translationX="20dp"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_r"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:layout_marginTop="-60dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_o"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_t"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:layout_marginTop="-60dp"
+            android:translationX="60dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_r"/>
+
+        <Constraint
+            android:id="@+id/sports_letter_s2"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:layout_marginTop="-60dp"
+            android:translationX="5dp"
+            motion:layout_constraintStart_toStartOf="parent"
+            motion:layout_constraintEnd_toEndOf="parent"
+            motion:layout_constraintTop_toBottomOf="@id/sports_letter_t"/>
+
+        <Constraint
+            android:id="@id/sports_soccer_ball"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.4"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="-150dp"
+            android:translationY="-200dp"/>
+
+        <Constraint
+            android:id="@id/sports_tennis_ball"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.25"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="-150dp"
+            android:translationY="250dp"/>
+
+        <Constraint
+            android:id="@id/sports_bascket_ball"
+            android:layout_width="0dp"
+            motion:layout_constraintWidth_percent="0.44"
+            android:layout_height="0dp"
+            motion:layout_constraintDimensionRatio="1"
+            android:translationX="-500dp"
+            android:translationY="600dp"/>
+
+
+    </ConstraintSet>
+
+    <Transition
+        motion:constraintSetStart="@id/start"
+        motion:constraintSetEnd="@id/end"
+        motion:duration="4000"
+        motion:motionInterpolator="easeInOut"
+        motion:autoTransition="animateToEnd">
+
+        <KeyFrameSet>
+            <KeyPosition
+                motion:framePosition="10"
+                motion:motionTarget="@id/sports_letter_s"
+                motion:percentY="0.8"/>
+
+            <KeyPosition
+                motion:framePosition="30"
+                motion:motionTarget="@id/sports_letter_p"
+                motion:percentY="0.7"/>
+
+            <KeyPosition
+                motion:framePosition="50"
+                motion:motionTarget="@id/sports_letter_o"
+                motion:percentY="0.5"/>
+
+            <KeyPosition
+                motion:framePosition="70"
+                motion:motionTarget="@id/sports_letter_r"
+                motion:percentY="0.3"/>
+
+            <KeyPosition
+                motion:framePosition="90"
+                motion:motionTarget="@id/sports_letter_t"
+                motion:percentY="0.1"/>
+
+            <KeyPosition
+                motion:framePosition="95"
+                motion:motionTarget="@id/sports_letter_s2"
+                motion:percentY="0.0"/>
+
+            <KeyAttribute
+                motion:framePosition="30"
+                motion:motionTarget="@id/sports_soccer_ball"
+                android:translationX="-150dp"
+                android:translationY="-200dp"/>
+
+
+
+
+
+        </KeyFrameSet>
+
+    </Transition>
+
+
+
+
+</MotionScene>

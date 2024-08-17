@@ -1,13 +1,13 @@
 package com.example.dmz.ui.browse.category
 
-import android.animation.ObjectAnimator
+
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.dmz.R
 import com.example.dmz.databinding.FragmentLifeStyleBinding
+import com.example.dmz.utils.Util.wiggle
 import kotlin.random.Random
 
 
@@ -41,22 +41,12 @@ class LifeStyleFragment : Fragment() {
 
         letters.forEachIndexed{index, view ->
             val duration = Random.nextLong(1000, 3000)
-            val delay = Random.nextLong(0,500)
-            wiggle(view,duration,delay)
+            wiggle(view,duration,0)
         }
 
         wiggle(binding.lifestyleLayout.lifestyle3dFlower,2000,0)
 
     }
 
-    private fun wiggle(view:View, duration:Long, delay: Long){
-        val firstValueY = Random.nextFloat()*30-30
-        val secondValueY = Random.nextFloat()*20-0
-        val animator = ObjectAnimator.ofFloat(view, "translationY", firstValueY, secondValueY)
-        animator.duration = duration
-        animator.startDelay = delay
-        animator.repeatCount = ObjectAnimator.INFINITE
-        animator.repeatMode = ObjectAnimator.REVERSE
-        animator.start()
-    }
+
 }
