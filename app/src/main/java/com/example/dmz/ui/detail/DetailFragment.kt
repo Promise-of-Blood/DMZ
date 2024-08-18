@@ -154,7 +154,7 @@ class DetailFragment : Fragment() {
             Glide.with(requireContext())
                 .load(channel.thumbnail)
                 .into(ivDetailChannelThumbnail)
-    }
+        }
 
     private fun initViewModel() = with(detailViewModel) {
         videoDetail.observe(viewLifecycleOwner) { video ->

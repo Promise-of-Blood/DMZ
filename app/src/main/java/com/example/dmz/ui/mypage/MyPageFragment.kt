@@ -66,7 +66,8 @@ class MyPageFragment : Fragment() {
 
     private fun initView() = with(binding) {
         rvMyPage.adapter = myPageAdapter
-        rvMyPage.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+        rvMyPage.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
     }
 
     private fun initViewModel() = with(myPageViewModel) {

@@ -14,24 +14,24 @@ sealed class MyPageListItem {
     ) : MyPageListItem()
 
     data class KeywordCardList(
-        val list: List<KeywordCard> = listOf() // 북마크 목록
+        val list: List<KeywordCard> = listOf() // 모은 카드 목록
     ) : MyPageListItem()
 
-    data class BookmarkList(
-        val list: List<BookmarkedVideo> = listOf() // 모은 카드 목록
+    data class Video(
+        val item: BookmarkedVideo,
     ) : MyPageListItem()
+}
+
+fun MutableList<MyPageListItem>.setBookmarkList(list: List<BookmarkedVideo>) {
+    this.apply {
+        removeAll { it is MyPageListItem.Video }
+        addAll(list.map { MyPageListItem.Video(it) })
+    }
 }
 
 fun List<MyPageListItem>.replaceKeywordCardList(list: List<KeywordCard>) = this.map {
     when (it) {
         is MyPageListItem.KeywordCardList -> it.copy(list = list)
-        else -> it
-    }
-}
-
-fun List<MyPageListItem>.replaceBookmarkList(list: List<BookmarkedVideo>) = this.map {
-    when (it) {
-        is MyPageListItem.BookmarkList -> it.copy(list = list)
         else -> it
     }
 }
