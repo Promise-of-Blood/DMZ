@@ -15,7 +15,7 @@
         android:id="@+id/navigation_search"
         android:name="com.example.dmz.ui.search.SearchFragment"
         android:label="@string/search"
-        tools:layout="@layout/fragment_search" >
+        tools:layout="@layout/fragment_search">
         <action
             android:id="@+id/action_navigation_search_to_navigation_search_result"
             app:destination="@id/navigation_search_result" />
@@ -43,6 +43,24 @@
         android:id="@+id/navigation_search_result"
         android:name="com.example.dmz.ui.search.SearchResultFragment"
         android:label="검색 결과 화면"
-        tools:layout="@layout/fragment_search_result" />
+        tools:layout="@layout/fragment_search_result">
+        <action
+            android:id="@+id/action_navigation_search_result_to_navigation_detail"
+            app:destination="@id/navigation_detail">
+            <argument
+                android:name="videoId"
+                app:argType="string" />
+        </action>
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.example.dmz.ui.detail.DetailFragment"
+        android:label="디테일 화면"
+        tools:layout="@layout/fragment_detail">
+        <argument
+            android:name="videoId"
+            app:argType="string" />
+    </fragment>
 
 </navigation>
