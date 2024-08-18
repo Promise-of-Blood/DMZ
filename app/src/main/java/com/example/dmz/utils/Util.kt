@@ -106,7 +106,9 @@ object Util {
         return this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
-    // 현재시간이 ISO 포맷으로 리턴
+    /**
+     * @return 현재시간을 ISO 8601(yyyy-MM-ddTHH:mm:ssZ) 형식으로 반환합니다.
+     */
     fun getNowTimeAsIso(): String {
         val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
         val formattedDate = isoFormat.format(Date())
@@ -114,12 +116,22 @@ object Util {
         return formattedDate
     }
 
+    /**
+     * 기간 설정시 사용되는 type들
+     */
     enum class DateType {
         DATE,
         MONTH,
         YEAR
     }
 
+    /**
+     * 설정된 날짜들 만큼 빼주는 함수
+     *
+     * @property nowDate 계산할 날짜
+     * @property type 기간의 단위 설정(ex. DATE - 며칠을 뺄지, MONTH - 몇 달을 뺄지, YEAR - 몇 년을 뺄지)
+     * @property age 뺄 기간을 설정
+     */
     fun setDateAgo(nowDate: String, type: DateType, ago: Int): String {
         val cal = Calendar.getInstance()
         val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
