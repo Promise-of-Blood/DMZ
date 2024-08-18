@@ -7,7 +7,7 @@
 
         <variable
             name="search"
-            type="com.example.dmz.model.Search" />
+            type="com.example.dmz.model.SearchEntity" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

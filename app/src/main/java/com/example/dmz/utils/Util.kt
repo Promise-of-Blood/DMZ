@@ -1,10 +1,8 @@
 package com.example.dmz.utils
 
-import android.icu.text.DateFormat
 import android.icu.text.DecimalFormat
 import android.util.Log
 import androidx.core.text.isDigitsOnly
-import com.example.dmz.ui.search.SearchFragment
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -130,13 +128,15 @@ object Util {
      *
      * @property nowDate 계산할 날짜
      * @property type 기간의 단위 설정(ex. DATE - 며칠을 뺄지, MONTH - 몇 달을 뺄지, YEAR - 몇 년을 뺄지)
-     * @property age 뺄 기간을 설정
+     * @property ago 뺄 기간을 설정
      */
     fun setDateAgo(nowDate: String, type: DateType, ago: Int): String {
         val cal = Calendar.getInstance()
         val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
         val date = df.parse(nowDate)
-        cal.time = date
+        if (date != null) {
+            cal.time = date
+        }
         Log.d("current", df.format(cal.time))
 
         when (type) {

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.fragment.findNavController
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
 import com.example.dmz.model.listOfSearch
@@ -86,6 +87,9 @@ class SearchFragment : Fragment() {
                     publishedBefore = searchNowDate,
                     regionCode = searchRegion
                 )
+
+                findNavController().navigate(R.id.action_navigation_search_to_navigation_search_result)
+
 
             }
         }
