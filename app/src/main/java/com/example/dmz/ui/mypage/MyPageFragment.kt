@@ -1,13 +1,18 @@
 package com.example.dmz.ui.mypage
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.dmz.R
+import com.example.dmz.DMZApplication
+import com.example.dmz.data.repository.MyPageRepositoryImpl
 import com.example.dmz.databinding.FragmentMyPageBinding
+import com.example.dmz.viewmodel.MyPageViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -23,7 +28,10 @@ class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
     private val binding get() = _binding!!
 
-    private val myPageAdapter by lazy { MyPageAdapter().apply { submitList(getMyPageList()) } }
+    private val myPageAdapter by lazy { MyPageAdapter().apply { submitList(listOf()) } }
+    private val myPageViewModel: MyPageViewModel by activityViewModels {
+        viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(requireActivity().application as DMZApplication)) } }
+    }
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
@@ -48,6 +56,7 @@ class MyPageFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        initViewModel()
     }
 
     override fun onDestroy() {
@@ -58,6 +67,12 @@ class MyPageFragment : Fragment() {
     private fun initView() = with(binding) {
         rvMyPage.adapter = myPageAdapter
         rvMyPage.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+    }
+
+    private fun initViewModel() = with(myPageViewModel) {
+        myPageData.observe(viewLifecycleOwner) {
+            myPageAdapter.submitList(it)
+        }
     }
 
     companion object {
@@ -78,34 +93,5 @@ class MyPageFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
-    }
-
-    private fun getMyPageList(): List<MyPageListItem> {
-        return listOf<MyPageListItem>(
-            MyPageListItem.Profile(
-                R.drawable.ic_launcher_background,
-                "김태영",
-                7,
-                "여",
-                "55일"
-            ),
-            MyPageListItem.Header("Card collection", false),
-            MyPageListItem.CardList(
-                listOf(
-                    MyPageListItem.Card(R.drawable.ic_launcher_background, "요아정"),
-                    MyPageListItem.Card(R.drawable.ic_launcher_background, "요아정"),
-                    MyPageListItem.Card(R.drawable.ic_launcher_background, "요아정"),
-                )
-            ),
-            MyPageListItem.Header("Bookmark", true),
-            MyPageListItem.Video(
-                "https://picsum.photos/200/300",
-                "티모로 다 해줬잖아",
-                "https://picsum.photos/200",
-                "Untara",
-                "100,000",
-                "23분 전"
-            ),
-        )
     }
 }

@@ -288,6 +288,7 @@
                 app:layout_constraintTop_toBottomOf="@id/tv_detail_channel_video_count" />
 
             <TextView
+                android:id="@+id/tv_detail_bookmark_button"
                 style="@style/subtitle_p"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -297,7 +298,7 @@
                 android:backgroundTintMode="multiply"
                 android:gravity="center|center_vertical"
                 android:paddingVertical="16dp"
-                android:text="@string/detail_bookmark_button"
+                android:text="@string/detail_bookmark_button_save"
                 android:textColor="@color/flou_yellow"
                 app:layout_constraintEnd_toEndOf="@id/iv_detail_channel_container"
                 app:layout_constraintStart_toStartOf="@id/iv_detail_channel_container"
