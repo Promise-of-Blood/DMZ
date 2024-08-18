@@ -20,7 +20,7 @@ import com.example.dmz.utils.Util.formatDiffDay
 import com.example.dmz.utils.Util.formatDiffTime
 import com.example.dmz.utils.Util.formatNumber
 
-class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(object :
+class MyPageAdapter(private val onClick: (item: MyPageListItem) -> Unit) : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<MyPageListItem>() {
     override fun areItemsTheSame(oldItem: MyPageListItem, newItem: MyPageListItem): Boolean {
         return when {
@@ -92,7 +92,7 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
         when (holder) {
             is HeaderHolder -> holder.bind(getItem(position))
             is ProfileHolder -> holder.bind(getItem(position))
-            is VideoHolder -> holder.bind(getItem(position))
+            is VideoHolder -> holder.bind(getItem(position), onClick)
             else -> {
                 val item = getItem(position) as MyPageListItem.KeywordCardList
                 (holder as CardHolder).bind(item.list)
@@ -143,7 +143,7 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
         private val viewCountTextView = binding.tvVideoViewCount
         private val publishedDateTextView = binding.tvVideoPublishedDate
 
-        fun bind(item: MyPageListItem) {
+        fun bind(item: MyPageListItem, onClick: (item: MyPageListItem) -> Unit) {
             (item as MyPageListItem.Video).item.let {
                 Glide.with(itemView.context).load(it.video?.thumbnail).centerInside()
                     .into(thumbnailImageView)
@@ -156,6 +156,7 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
                 Glide.with(itemView.context).load(it.channel?.thumbnail).centerInside()
                     .into(channelThumbnailImageView)
                 channelTitleTextView.text = it.channel?.title
+                itemView.setOnClickListener { onClick(item) }
             }
         }
     }
@@ -164,9 +165,12 @@ class MyPageAdapter : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(objec
         private val cardListRecyclerView = binding.rvCardList
 
         fun bind(item: List<KeywordCard>) = with(cardListRecyclerView) {
+            cardListRecyclerView.visibility = View.GONE
             val cardAdapter = CardAdapter().apply { submitList(item) }
             adapter = cardAdapter
             layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
+            itemAnimator = null
+            cardListRecyclerView.visibility = View.VISIBLE
         }
     }
 }

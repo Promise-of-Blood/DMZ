@@ -5,10 +5,9 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_search">
 
-
     <fragment
         android:id="@+id/navigation_browse"
-        android:name="com.example.dmz.ui.BrowseFragment"
+        android:name="com.example.dmz.ui.detail.DetailFragment"
         android:label="@string/browse"
         tools:layout="@layout/fragment_search" />
     <fragment
@@ -26,11 +25,18 @@
         android:name="com.example.dmz.ui.QuizFragment"
         android:label="@string/quiz"
         tools:layout="@layout/fragment_search" />
-
     <fragment
         android:id="@+id/navigation_my_profile"
         android:name="com.example.dmz.ui.mypage.MyPageFragment"
         android:label="@string/my_profile"
-        tools:layout="@layout/fragment_my_page" />
+        tools:layout="@layout/fragment_my_page">
+        <action
+            android:id="@+id/action_my_page_to_detail"
+            app:destination="@id/navigation_detail" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_detail"
+        android:name="com.example.dmz.ui.detail.DetailFragment"
+        tools:layout="@layout/fragment_detail" />
 
 </navigation>

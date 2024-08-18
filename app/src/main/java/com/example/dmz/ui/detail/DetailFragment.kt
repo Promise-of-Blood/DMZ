@@ -28,25 +28,8 @@ import com.example.dmz.viewmodel.DetailViewModel
 import com.example.dmz.viewmodel.MyPageViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
+private const val ARG_VIDEO_ID = "videoId"
 
-private val dummy = listOf(
-    "8dDwuG8yqQQ",
-    "g15OJDuGDCw",
-    "pfzztJfz4fY",
-    "U25oqtQIrTM",
-    "Q13fhk-pzMc",
-)
-private val VIDEO_ID = dummy.random()
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
@@ -59,15 +42,12 @@ class DetailFragment : Fragment() {
         viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(requireActivity().application as DMZApplication)) } }
     }
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private var videoId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
+            videoId = it.getString(ARG_VIDEO_ID)
         }
     }
 
@@ -84,7 +64,7 @@ class DetailFragment : Fragment() {
         handleBottomNavigationVisibility(false)
         initView()
         initViewModel()
-        detailViewModel.fetchDetailData(VIDEO_ID)
+        detailViewModel.fetchDetailData(videoId ?: "")
     }
 
     override fun onDestroy() {
@@ -94,6 +74,12 @@ class DetailFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
+        if (videoId == null) {
+            Toast.makeText(requireContext(), "영상 정보를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
+            return
+        }
+        pbDetailLoading.visibility = View.GONE
+        svDetailContent.visibility = View.VISIBLE
         tvDetailBookmarkButton.setOnClickListener {
             if (detailData.video != null && detailData.channel != null) {
                 if (myPageViewModel.isBookmarked(detailData)) {
@@ -173,20 +159,16 @@ class DetailFragment : Fragment() {
 
     companion object {
         /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
+         * video id를 받아 DetailFragment를 생성합니다.
          *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailFragment.
+         * @param videoId video id.
+         * @return video id에 해당하는 영상 상세 정보를 보여주는 fragment.
          */
-        // TODO: Rename and change types and number of parameters
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
+        fun newInstance(videoId: String) =
             DetailFragment().apply {
                 arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                    putString(ARG_VIDEO_ID, videoId)
                 }
             }
     }
