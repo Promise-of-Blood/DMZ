@@ -7,7 +7,7 @@ data class VideoModel(
     val publishedAt: String, // 2022-11-19T08:28:33Z
     val title: String,
     val thumbnail: String,
-    val channelTitle: String,
+    val channelName: String,
 )
 
 fun VideoResponse.toVideoList(): List<VideoModel> {
@@ -17,7 +17,7 @@ fun VideoResponse.toVideoList(): List<VideoModel> {
             publishedAt = it.snippet.publishedAt,
             title = it.snippet.title,
             thumbnail = it.snippet.thumbnails.default.url,
-            channelTitle = it.snippet.channelTitle,
+            channelName = it.snippet.channelTitle,
         )
     }
 }

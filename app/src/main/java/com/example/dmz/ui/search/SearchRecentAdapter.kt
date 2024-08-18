@@ -6,10 +6,10 @@ import androidx.databinding.DataBindingUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dmz.R
 import com.example.dmz.databinding.ItemRecentSearchBinding
-import com.example.dmz.model.Search
+import com.example.dmz.model.SearchEntity
 
 class SearchRecentAdapter(
-    private val searchList: List<Search>
+    private val searchEntityList: List<SearchEntity>
 ) : RecyclerView.Adapter<SearchRecentAdapter.SearchHolder>() {
     class SearchHolder(val itemLayoutBinding: ItemRecentSearchBinding) :
         RecyclerView.ViewHolder(itemLayoutBinding.root)
@@ -25,11 +25,11 @@ class SearchRecentAdapter(
     }
 
     override fun onBindViewHolder(holder: SearchHolder, position: Int) {
-        holder.itemLayoutBinding.search = searchList[position]
+        holder.itemLayoutBinding.search = searchEntityList[position]
     }
 
     override fun getItemCount(): Int {
-        return searchList.size
+        return searchEntityList.size
     }
 
 

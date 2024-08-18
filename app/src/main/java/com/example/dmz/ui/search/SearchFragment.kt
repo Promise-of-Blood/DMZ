@@ -79,7 +79,6 @@ class SearchFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-
                 searchViewModel.getVideoList(
                     q = query,
                     order = searchSort,
@@ -87,11 +86,6 @@ class SearchFragment : Fragment() {
                     publishedBefore = searchNowDate,
                     regionCode = searchRegion
                 )
-
-                searchViewModel.videoList.observe(viewLifecycleOwner) { items ->
-
-                    Log.d("data", items.toString())
-                }
 
             }
         }
