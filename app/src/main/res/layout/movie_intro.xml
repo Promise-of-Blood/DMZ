@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<androidx.constraintlayout.motion.widget.MotionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/movie_background"
+    app:layoutDescription="@xml/movie_scene"
+    android:id="@+id/ml_movie_intro">
+
+    <ImageView
+        android:id="@+id/movie_frame"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:elevation="10dp"
+        android:src="@drawable/movie_frame_5"/>
+
+        <ImageView
+            android:id="@+id/movie_letter_m"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.3"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1"
+            android:src="@drawable/movie_letter_m"
+            />
+
+        <ImageView
+            android:id="@+id/movie_letter_o"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.32"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1"
+            android:src="@drawable/movie_letter_o"/>
+
+        <ImageView
+            android:id="@+id/movie_letter_v"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.3"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1"
+            android:src="@drawable/movie_letter_v"/>
+
+        <ImageView
+            android:id="@+id/movie_letter_i"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.3"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1"
+            android:src="@drawable/movie_letter_i"
+            android:translationX="230dp"
+            android:translationY="390dp"
+            android:rotation="-10"/>
+
+        <ImageView
+            android:id="@+id/movie_letter_e"
+            android:layout_width="0dp"
+            app:layout_constraintWidth_percent="0.3"
+            android:layout_height="0dp"
+            app:layout_constraintDimensionRatio="1"
+            android:src="@drawable/movie_letter_e"
+            android:translationX="300dp"
+            android:translationY="360dp"
+            android:rotation="-15"/>
+
+    <ImageView
+        android:id="@+id/movie_popcorn_case"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/movie_popcorn_case"
+        android:translationX="-100dp"
+        android:translationY="600dp"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintWidth_percent="0.7" />
+
+
+
+    <ImageView
+        android:id="@+id/movie_film"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:src="@drawable/movie_film"
+        android:translationX="200dp"
+        android:translationY="480dp"
+        app:layout_constraintHeight_percent="0.3"
+        app:layout_constraintWidth_percent="0.7" />
+
+    <ImageView
+        android:id="@+id/movie_camera"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:rotation="30"
+        android:src="@drawable/movie_camera"
+        android:translationX="-50dp"
+        android:translationY="70dp"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintWidth_percent="0.5" />
+
+    <ImageView
+        android:id="@+id/movie_cola"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:rotation="240"
+        android:src="@drawable/movie_cola"
+        android:translationX="200dp"
+        android:translationY="100dp"
+        app:layout_constraintHeight_percent="0.25"
+        app:layout_constraintWidth_percent="0.8"/>
+
+
+
+
+</androidx.constraintlayout.motion.widget.MotionLayout>

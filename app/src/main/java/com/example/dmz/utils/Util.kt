@@ -32,7 +32,7 @@ object Util {
     fun wiggle(view: View, duration:Long, delay: Long){
         val firstValueY = Random.nextFloat()*30-30
         val secondValueY = Random.nextFloat()*20-0
-        val animator = ObjectAnimator.ofFloat(view, "translationY",0f, firstValueY, secondValueY)
+        val animator = ObjectAnimator.ofFloat(view, "translationY", view.translationY+0f, view.translationY+firstValueY, view.translationY+secondValueY)
         animator.duration = duration
         animator.startDelay = delay
         animator.repeatCount = ObjectAnimator.INFINITE

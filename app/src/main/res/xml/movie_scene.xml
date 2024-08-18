@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<MotionScene xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:motion="http://schemas.android.com/apk/res-auto">
+
+    <!-- ConstraintSets 정의 -->
+    <ConstraintSet android:id="@+id/start">
+        <Constraint
+            android:id="@+id/movie_letter_m"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="10"
+            android:translationX="30dp"
+            android:translationY="1000dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_o"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="15"
+            android:translationX="90dp"
+            android:translationY="1000dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_v"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="5"
+            android:translationX="170dp"
+            android:translationY="1000dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_i"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="-10"
+            android:translationX="230dp"
+            android:translationY="1000dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_e"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="-15"
+            android:translationX="300dp"
+            android:translationY="1000dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+
+    </ConstraintSet>
+
+    <ConstraintSet android:id="@+id/end">
+        <Constraint
+            android:id="@+id/movie_letter_m"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="10"
+            android:translationX="30dp"
+            android:translationY="200dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_o"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="15"
+            android:translationX="90dp"
+            android:translationY="300dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_v"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="5"
+            android:translationX="170dp"
+            android:translationY="360dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_i"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="-10"
+            android:translationX="230dp"
+            android:translationY="390dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+
+        <Constraint
+            android:id="@+id/movie_letter_e"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:rotation="-15"
+            android:translationX="300dp"
+            android:translationY="360dp"
+            motion:layout_constraintDimensionRatio="1"
+            motion:layout_constraintWidth_percent="0.3" />
+    </ConstraintSet>
+
+    <!-- 기본적인 Transition 설정 -->
+    <Transition
+        motion:autoTransition="animateToEnd"
+        motion:constraintSetEnd="@id/end"
+        motion:constraintSetStart="@id/start"
+        motion:duration="3000"
+        motion:motionInterpolator="easeInOut">
+
+        <KeyFrameSet>
+
+        <KeyPosition
+            motion:framePosition="10"
+            motion:motionTarget="@id/movie_letter_m"
+            motion:percentY="0.8" />
+
+        <KeyPosition
+            motion:framePosition="30"
+            motion:motionTarget="@id/movie_letter_o"
+            motion:percentY="0.7" />
+
+        <KeyPosition
+            motion:framePosition="50"
+            motion:motionTarget="@id/movie_letter_v"
+            motion:percentY="0.5" />
+
+        <KeyPosition
+            motion:framePosition="70"
+            motion:motionTarget="@id/movie_letter_i"
+            motion:percentY="0.3" />
+
+        <KeyPosition
+            motion:framePosition="90"
+            motion:motionTarget="@id/movie_letter_e"
+            motion:percentY="0.1" />
+
+        </KeyFrameSet>
+
+
+    </Transition>
+
+</MotionScene>
