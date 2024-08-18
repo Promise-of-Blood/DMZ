@@ -46,13 +46,32 @@ class SearchResultFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        observeVideoData()
+        initItemClick()
+
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
+
+    private fun initView(inflater: LayoutInflater, container: ViewGroup?) {
+        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
+        binding.rvSearchResultList.adapter = searchResultAdapter
+        binding.rvSearchResultList.layoutManager = LinearLayoutManager(mContext)
+    }
+
+    private fun observeVideoData(){
         searchViewModel.videoList.observe(viewLifecycleOwner) { searchVideoList ->
 
             searchResultAdapter.submitList(searchVideoList)
 
             Log.d("data", searchVideoList.toString())
         }
+    }
 
+    private fun initItemClick(){
         searchResultAdapter.setItemClickListener(object : SearchResultAdapter.OnItemClickListener {
             override fun onClick(v: View, position: Int) {
                 val videoItem = searchViewModel.videoList.value?.get(position)
@@ -66,37 +85,7 @@ class SearchResultFragment : Fragment() {
                 v.findNavController().navigate(action)
 
             }
-
         })
-
-        // searchListViewAdapter.setItemClickListener(object :
-        //            SearchListViewAdapter.OnItemClickListener {
-        //            override fun onClick(v: View, position: Int) {
-        //
-        //                val searchItem = searchViewModel.returnSearchItem(position)
-        //                if (searchItem != null) {
-        //                    if (searchItem.isLiked){
-        //                        searchViewModel.updateIsLike(position)
-        //                        galleryViewModel.removeGallery(searchItem.uuid)
-        //                    }else{
-        //                        searchItem?.let { galleryViewModel.addGalleryList(it) }
-        //                        searchViewModel.updateIsLike(position)
-        //                    }
-        //                }
-        //            }
-        //        })
-
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
-    }
-
-    private fun initView(inflater: LayoutInflater, container: ViewGroup?) {
-        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
-        binding.rvSearchResultList.adapter = searchResultAdapter
-        binding.rvSearchResultList.layoutManager = LinearLayoutManager(mContext)
     }
 
 
