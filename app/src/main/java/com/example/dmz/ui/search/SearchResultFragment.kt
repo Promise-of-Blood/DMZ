@@ -38,9 +38,7 @@ class SearchResultFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
-        binding.rvSearchResultList.adapter = searchListAdapter
-        binding.rvSearchResultList.layoutManager = LinearLayoutManager(mContext)
+        initView(inflater, container)
         return binding.root
     }
 
@@ -60,6 +58,11 @@ class SearchResultFragment : Fragment() {
         super.onDestroy()
     }
 
+    private fun initView(inflater: LayoutInflater, container: ViewGroup?) {
+        _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
+        binding.rvSearchResultList.adapter = searchListAdapter
+        binding.rvSearchResultList.layoutManager = LinearLayoutManager(mContext)
+    }
 
 
 }

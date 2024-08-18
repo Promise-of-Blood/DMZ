@@ -171,20 +171,6 @@ object Util {
         val dateString: String = formatter.format(date!!)
         return dateString
     }
-
-//    fun getDateAgoFromNow(): String {
-//        val cal = Calendar.getInstance()
-//        cal.time = Date()
-//        val isoFormat = SimpleDateFormat("YYYY-MM-DD'T'hh:mm:ss.SSSZ", Locale.KOREAN)
-//        Log.d("current :", isoFormat.format(cal.time))
-//
-//        cal.add(Calendar.MONTH, 2)
-//        cal.add(Calendar.DATE, -3)
-//
-//        Log.d("after", isoFormat.format(cal.time))
-//
-//        return ""
-//    }
 }
 
 
