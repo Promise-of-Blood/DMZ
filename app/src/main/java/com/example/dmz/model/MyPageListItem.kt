@@ -1,6 +1,8 @@
 package com.example.dmz.model
 
 import com.example.dmz.R
+import com.example.dmz.utils.Util.toISO8601
+import java.time.LocalDateTime
 
 sealed class MyPageListItem {
     data object Default : MyPageListItem()
@@ -9,7 +11,7 @@ sealed class MyPageListItem {
         val name: String = "김태영",
         val profileImage: Int = R.drawable.ic_mypage, // image resource id
         val gender: String = "여",
-        val joinedDate: String = "2024-08-01T16:44:44Z", // ISO 8601, yyyy-MM-ddTHH:mm:ssZ
+        val joinedDate: String = LocalDateTime.of(2002, 2, 2, 0, 0).toISO8601(),
         val cardCount: Int = 0,
     ) : MyPageListItem()
 

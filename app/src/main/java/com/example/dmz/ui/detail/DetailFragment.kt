@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
@@ -14,6 +13,7 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.dmz.DMZApplication
+import com.example.dmz.MainActivity
 import com.example.dmz.R
 import com.example.dmz.data.repository.DetailRepositoryImpl
 import com.example.dmz.data.repository.MyPageRepositoryImpl
@@ -25,9 +25,9 @@ import com.example.dmz.model.VideoDetailModel
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.utils.Util.formatDate
 import com.example.dmz.utils.Util.formatNumber
+import com.example.dmz.utils.Util.handleBottomNavigationVisibility
 import com.example.dmz.viewmodel.DetailViewModel
 import com.example.dmz.viewmodel.MyPageViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
@@ -53,7 +53,7 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handleBottomNavigationVisibility(false)
+        (activity as MainActivity).handleBottomNavigationVisibility(false)
         initView()
         initViewModel()
         detailViewModel.fetchDetailData(args.videoId)
@@ -61,7 +61,7 @@ class DetailFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        handleBottomNavigationVisibility(true)
+        (activity as MainActivity).handleBottomNavigationVisibility(true)
         _binding = null
     }
 
@@ -81,13 +81,6 @@ class DetailFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun handleBottomNavigationVisibility(isShow: Boolean) {
-        activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility =
-            if (isShow) View.VISIBLE else View.GONE
-        activity?.findViewById<ImageView>(R.id.iv_home_btn)?.visibility =
-            if (isShow) View.VISIBLE else View.GONE
     }
 
     private fun initVideoDetailData(video: VideoDetailModel) =
