@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- pretendard font -->
+    <style name="keyword_b_p">
+        <item name="fontFamily">@font/pretendard</item>
+        <item name="android:textSize">48sp</item>
+        <item name="android:textFontWeight">700</item>
+    </style>
+
     <style name="headline_b_p">
         <item name="fontFamily">@font/pretendard</item>
         <item name="android:textSize">36sp</item>

@@ -85,4 +85,6 @@ dependencies {
     //search spinner
     implementation ("com.github.skydoves:powerspinner:1.2.7")
 
+    // MPAndroidChart
+    implementation(libs.mpandroidchart)
 }
