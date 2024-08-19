@@ -1,11 +1,16 @@
 package com.example.dmz.utils
 
 import android.icu.text.DecimalFormat
+import android.util.Log
 import androidx.core.text.isDigitsOnly
+import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
+import java.util.Calendar
+import java.util.Date
+import java.util.Locale
 
 object Util {
     /**
@@ -98,4 +103,77 @@ object Util {
     private fun LocalDateTime.toLong(): Long {
         return this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
+
+    /**
+     * @return 현재시간을 ISO 8601(yyyy-MM-ddTHH:mm:ssZ) 형식으로 반환합니다.
+     */
+    fun getNowTimeAsIso(): String {
+        val isoFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
+        val formattedDate = isoFormat.format(Date())
+        Log.d("formattedDate", formattedDate)
+        return formattedDate
+    }
+
+    /**
+     * 기간 설정시 사용되는 type들
+     */
+    enum class DateType {
+        DATE,
+        MONTH,
+        YEAR
+    }
+
+    /**
+     * 설정된 날짜들 만큼 빼주는 함수
+     *
+     * @property nowDate 계산할 날짜
+     * @property type 기간의 단위 설정(ex. DATE - 며칠을 뺄지, MONTH - 몇 달을 뺄지, YEAR - 몇 년을 뺄지)
+     * @property ago 뺄 기간을 설정
+     */
+    fun setDateAgo(nowDate: String, type: DateType, ago: Int): String {
+        val cal = Calendar.getInstance()
+        val df = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val date = df.parse(nowDate)
+        if (date != null) {
+            cal.time = date
+        }
+        Log.d("current", df.format(cal.time))
+
+        when (type) {
+            DateType.DATE -> {
+                cal.add(Calendar.DATE, -ago)
+            }
+
+            DateType.MONTH -> {
+                cal.add(Calendar.MONTH, -ago)
+            }
+
+            DateType.YEAR -> {
+                cal.add(Calendar.YEAR, -ago)
+            }
+        }
+
+        Log.d("after", df.format(cal.time))
+        return df.format(cal.time)
+    }
+
+
+    fun isoToDate(time: String): Date? {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
+        val date = format.parse(time)
+        return date
+    }
+
+    fun isoToString(time: String): String {
+        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.KOREAN)
+        val date = format.parse(time)
+        val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN)
+        val dateString: String = formatter.format(date!!)
+        return dateString
+    }
 }
+
+
+
+
+

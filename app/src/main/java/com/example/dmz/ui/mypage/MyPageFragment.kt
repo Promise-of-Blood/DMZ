@@ -11,13 +11,10 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dmz.DMZApplication
-import com.example.dmz.R
 import com.example.dmz.data.repository.MyPageRepositoryImpl
 import com.example.dmz.databinding.FragmentMyPageBinding
 import com.example.dmz.model.MyPageListItem
 import com.example.dmz.viewmodel.MyPageViewModel
-
-private const val ARG_VIDEO_ID = "videoId"
 
 class MyPageFragment : Fragment() {
     private var _binding: FragmentMyPageBinding? = null
@@ -62,9 +59,7 @@ class MyPageFragment : Fragment() {
     private fun handleOnClickBookmarkedVideo(item: MyPageListItem) {
         if (item !is MyPageListItem.Video) return
         val videoId = item.item.video?.videoId ?: ""
-        val navController = findNavController()
-        navController.navigate(
-            R.id.action_my_page_to_detail,
-            Bundle().apply { putString(ARG_VIDEO_ID, videoId) })
+        val action = MyPageFragmentDirections.actionMyPageToDetail(videoId)
+        findNavController().navigate(action)
     }
 }

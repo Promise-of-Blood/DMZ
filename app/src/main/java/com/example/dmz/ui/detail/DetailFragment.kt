@@ -11,6 +11,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.dmz.DMZApplication
 import com.example.dmz.R
@@ -28,8 +29,6 @@ import com.example.dmz.viewmodel.DetailViewModel
 import com.example.dmz.viewmodel.MyPageViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
-private const val ARG_VIDEO_ID = "videoId"
-
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
@@ -42,14 +41,7 @@ class DetailFragment : Fragment() {
         viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(requireActivity().application as DMZApplication)) } }
     }
 
-    private var videoId: String? = null
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            videoId = it.getString(ARG_VIDEO_ID)
-        }
-    }
+    private val args: DetailFragmentArgs by navArgs()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -64,7 +56,7 @@ class DetailFragment : Fragment() {
         handleBottomNavigationVisibility(false)
         initView()
         initViewModel()
-        detailViewModel.fetchDetailData(videoId ?: "")
+        detailViewModel.fetchDetailData(args.videoId)
     }
 
     override fun onDestroy() {
@@ -74,10 +66,6 @@ class DetailFragment : Fragment() {
     }
 
     private fun initView() = with(binding) {
-        if (videoId == null) {
-            Toast.makeText(requireContext(), "영상 정보를 불러오는데 실패했습니다.", Toast.LENGTH_SHORT).show()
-            return
-        }
         pbDetailLoading.visibility = View.GONE
         svDetailContent.visibility = View.VISIBLE
         tvDetailBookmarkButton.setOnClickListener {
@@ -144,32 +132,24 @@ class DetailFragment : Fragment() {
 
     private fun initViewModel() = with(detailViewModel) {
         videoDetail.observe(viewLifecycleOwner) { video ->
-            if (video is UiState.Success) {
-                detailData = detailData.copy(video = video.data)
-                initVideoDetailData(video.data)
+            when (video) {
+                is UiState.Loading -> {}
+                is UiState.Error -> Toast.makeText(requireContext(), video.message, Toast.LENGTH_SHORT).show()
+                is UiState.Success -> {
+                    detailData = detailData.copy(video = video.data)
+                    initVideoDetailData(video.data)
+                }
             }
         }
         channelDetail.observe(viewLifecycleOwner) { channel ->
-            if (channel is UiState.Success) {
-                detailData = detailData.copy(channel = channel.data)
-                initChannelDetailData(channel.data)
-            }
-        }
-    }
-
-    companion object {
-        /**
-         * video id를 받아 DetailFragment를 생성합니다.
-         *
-         * @param videoId video id.
-         * @return video id에 해당하는 영상 상세 정보를 보여주는 fragment.
-         */
-        @JvmStatic
-        fun newInstance(videoId: String) =
-            DetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_VIDEO_ID, videoId)
+            when (channel) {
+                is UiState.Loading -> {}
+                is UiState.Error -> Toast.makeText(requireContext(), channel.message, Toast.LENGTH_SHORT).show()
+                is UiState.Success -> {
+                    detailData = detailData.copy(channel = channel.data)
+                    initChannelDetailData(channel.data)
                 }
             }
+        }
     }
 }
