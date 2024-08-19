@@ -45,10 +45,25 @@
 
 
     <!-- browse Activity -->
+    <string name="browse_game">GAME</string>
+    <string name="browse_life_style">LIFE STYLE</string>
+    <string name="browse_music">MUSIC</string>
+    <string name="browse_sports">SPORTS</string>
+    <string name="browse_movie">MOVIE</string>
+
+    <string name="browse_channel_title">채널 추천</string>
+    <string name="browse_video_title">동영상 추천</string>
+    <string name="browse_channel_holder_desc_title">채널 설명</string>
     <string name = "music_motion_letter_m">M</string>
     <string name = "music_motion_letter_u">U</string>
     <string name = "music_motion_letter_s">S</string>
     <string name = "music_motion_letter_i">I</string>
     <string name = "music_motion_letter_c">C</string>
+    <string-array name="spinner_items">
+        <item>한국</item>
+        <item>미국</item>
+        <item>영국</item>
+        <item>일본</item>
+    </string-array>
 
 </resources>

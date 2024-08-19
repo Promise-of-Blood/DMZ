@@ -7,10 +7,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.browse.BrowseActivity">
 
-    <androidx.fragment.app.FragmentContainerView
-        android:id="@+id/test_fragment"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:name="com.example.dmz.ui.browse.category.MovieFragment"/>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

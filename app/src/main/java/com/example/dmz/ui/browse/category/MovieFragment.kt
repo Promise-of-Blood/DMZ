@@ -1,11 +1,15 @@
 package com.example.dmz.ui.browse.category
 
+import ItemMarginDecoration
 import android.animation.Animator
 import android.animation.AnimatorSet
 import android.animation.Keyframe
 import android.animation.ObjectAnimator
 import android.animation.PropertyValuesHolder
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -16,23 +20,47 @@ import android.view.animation.AccelerateInterpolator
 import android.view.animation.DecelerateInterpolator
 import android.widget.ImageView
 import androidx.constraintlayout.motion.widget.MotionLayout
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dmz.R
+import com.example.dmz.R.string.browse_life_style
+import com.example.dmz.R.string.browse_movie
+import com.example.dmz.data.repository.SearchRepositoryImpl
 import com.example.dmz.databinding.FragmentMovieBinding
+import com.example.dmz.remote.YoutubeSearchClient
+import com.example.dmz.ui.browse.ChannelListAdapter
+import com.example.dmz.ui.browse.VideoListAdapter
+import com.example.dmz.ui.browse.fetchBrowseData
+import com.example.dmz.ui.browse.initSpinner
+import com.example.dmz.ui.browse.loadLastRegion
+import com.example.dmz.ui.browse.saveSelectedRegion
 import com.example.dmz.utils.Util.wiggle
+import com.example.dmz.viewmodel.SearchViewModel
 import kotlinx.coroutines.Job
 import kotlin.random.Random
 import kotlin.time.Duration
 
 
 class MovieFragment : Fragment() {
+    private lateinit var sharedPreferences: SharedPreferences
 
     private var _binding : FragmentMovieBinding? = null
     private val binding get() = _binding!!
 
+    private val browseChannelAdapter by lazy { ChannelListAdapter() }
+    private val browseVideoAdapter by lazy { VideoListAdapter() }
+
+    private val channelViewModel: SearchViewModel by activityViewModels {
+        viewModelFactory { initializer { SearchViewModel(SearchRepositoryImpl(YoutubeSearchClient.youtubeApi)) } }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
+        sharedPreferences = requireContext().getSharedPreferences("regionCode", Context.MODE_PRIVATE)
         _binding = FragmentMovieBinding.inflate(inflater,container, false)
         return binding.root
     }
@@ -40,22 +68,25 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        initBrowseView()
+        initBrowseViewModel()
+
         startPopcornAnimation()
-        rotateAnimation(binding.movieLayout.movieCamera,15f,30f,3000)
-        rotateAnimation(binding.movieLayout.movieFilm,15f,30f,2000)
-        rotateAnimation(binding.movieLayout.moviePopcornCase,0f,15f,250)
-        rotateAnimation(binding.movieLayout.movieCola,240f,200f,2500)
+        rotateAnimation(binding.introLayout.movieCamera,15f,30f,3000)
+        rotateAnimation(binding.introLayout.movieFilm,15f,30f,2000)
+        rotateAnimation(binding.introLayout.moviePopcornCase,0f,15f,250)
+        rotateAnimation(binding.introLayout.movieCola,240f,200f,2500)
 
 
         val letters = listOf(
-            binding.movieLayout.movieLetterM,
-            binding.movieLayout.movieLetterO,
-            binding.movieLayout.movieLetterV,
-            binding.movieLayout.movieLetterI,
-            binding.movieLayout.movieLetterE
+            binding.introLayout.movieLetterM,
+            binding.introLayout.movieLetterO,
+            binding.introLayout.movieLetterV,
+            binding.introLayout.movieLetterI,
+            binding.introLayout.movieLetterE
         )
 
-        val motionLayout = binding.movieLayout.mlMovieIntro
+        val motionLayout = binding.introLayout.mlMovieIntro
 
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
             override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
@@ -78,6 +109,89 @@ class MovieFragment : Fragment() {
 
     }
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initBrowseView() = with(binding) {
+
+        val navView: View = requireActivity().findViewById(R.id.nav_view)
+        val homeBtn: View = requireActivity().findViewById(R.id.iv_home_btn)
+        navView.visibility = View.GONE
+        homeBtn.visibility = View.GONE
+
+        mlMovieFragment.setTransitionListener(object : MotionLayout.TransitionListener{
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
+                Log.d("MotionLayout", "Transition Started: $startId -> $endId")
+            }
+
+            override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
+
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+                Log.d("MotionLayout", "Transition Completed: $currentId")
+                if (currentId == R.id.end){
+                    navView.visibility = View.VISIBLE
+                    homeBtn.visibility = View.VISIBLE
+                }else if(currentId == R.id.start){
+                    navView.visibility = View.GONE
+                    homeBtn.visibility = View.GONE
+                }
+            }
+
+            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
+        })
+
+
+        listLayout.tvTopbarTitle.text = getString(browse_movie)
+        listLayout.tvChannelTitle.text = getString(browse_movie)
+        listLayout.tvVideoTitle.text = getString(R.string.browse_movie)
+
+
+        initSpinner(binding,sharedPreferences)
+        listLayout.spinnerSelectRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
+            val regionCode = when (text) {
+                "한국" -> "KR"
+                "미국" -> "US"
+                "영국" -> "GB"
+                "일본" -> "JP"
+                else -> "KR"
+            }
+            saveSelectedRegion(sharedPreferences,regionCode)
+            fetchBrowseData(channelViewModel,"/m/02vxn",regionCode)
+        }
+
+
+
+        listLayout.rvCategoryChannel.apply {
+            adapter = browseChannelAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            addItemDecoration(ItemMarginDecoration(context, 0, 0, 0, 16))
+        }
+
+        listLayout.rvCategoryVideo.apply {
+            adapter = browseVideoAdapter
+            layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, false)
+            addItemDecoration(ItemMarginDecoration(context, 0, 32, 0, 0))
+        }
+    }
+
+    private fun initBrowseViewModel() {
+        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
+            browseChannelAdapter.submitList(channels)
+        }
+
+        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
+            browseVideoAdapter.submitList(videos)
+        }
+
+        val lastRegionCode = loadLastRegion(sharedPreferences)
+        fetchBrowseData(channelViewModel,"/m/02vxn",lastRegionCode)
+
+    }
+
     private fun rotateAnimation(view: View,firstValue : Float, secondValue :Float,time: Long){
 
         val rotateAnimator = ObjectAnimator.ofFloat(view,"rotation",firstValue,secondValue).apply {
@@ -92,7 +206,7 @@ class MovieFragment : Fragment() {
 
     private fun startPopcornAnimation() {
         val parentLayout = binding.root
-        val popcornBox = binding.movieLayout.moviePopcornCase // 팝콘 상자 뷰
+        val popcornBox = binding.introLayout.moviePopcornCase // 팝콘 상자 뷰
 
         parentLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
             override fun onGlobalLayout() {
@@ -117,6 +231,9 @@ class MovieFragment : Fragment() {
                         layoutParams = ViewGroup.LayoutParams(100, 100)
                         x = randomX
                         y = randomY
+
+                        id = View.generateViewId()
+
                         parentLayout.addView(this) // 부모 레이아웃에 팝콘 추가
                     }
 
