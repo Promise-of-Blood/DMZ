@@ -14,7 +14,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/pink" />
+        app:tint="@color/light_gray" />
 
     <TextView
         android:id="@+id/tv_day_of_week"
