@@ -2,7 +2,9 @@ package com.example.dmz.utils
 
 import android.app.Activity
 import android.content.Context
+import android.content.res.Resources.getSystem
 import android.icu.text.DecimalFormat
+import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.util.Log
@@ -23,6 +25,8 @@ import java.util.Date
 import java.util.Locale
 
 object Util {
+    val Float.px get() = (this * getSystem().displayMetrics.density).toInt()
+
     /**
      * ISO 8601(yyyy-MM-ddTHH:mm:ssZ) 형식의 날짜를 yyyy.MM.dd 형식으로 변환합니다.
      *
