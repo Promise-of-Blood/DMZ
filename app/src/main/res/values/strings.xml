@@ -49,4 +49,8 @@
     <string name="my_page_gender">성별</string>
     <string name="my_page_joined_date">가입한지</string>
 
+    <!-- bookmark page -->
+    <string name="bookmark_title">Bookmark</string>
+    <string name="bookmark_back">뒤로가기</string>
+
 </resources>

@@ -41,6 +41,9 @@
                 android:name="videoId"
                 app:argType="string" />
         </action>
+        <action
+            android:id="@+id/action_my_page_to_bookmark"
+            app:destination="@id/navigation_bookmark" />
     </fragment>
     <fragment
         android:id="@+id/navigation_search_result"
@@ -63,6 +66,18 @@
             android:name="videoId"
             android:defaultValue=""
             app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_bookmark"
+        android:name="com.example.dmz.ui.mypage.BookmarkFragment"
+        tools:layout="@layout/fragment_bookmark">
+        <action
+            android:id="@+id/action_bookmark_to_detail"
+            app:destination="@id/navigation_detail">
+            <argument
+                android:name="videoId"
+                app:argType="string" />
+        </action>
     </fragment>
 
 </navigation>

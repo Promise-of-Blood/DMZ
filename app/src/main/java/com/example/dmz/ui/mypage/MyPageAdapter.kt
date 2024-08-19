@@ -20,7 +20,7 @@ import com.example.dmz.utils.Util.formatDiffDay
 import com.example.dmz.utils.Util.formatDiffTime
 import com.example.dmz.utils.Util.formatNumber
 
-class MyPageAdapter(private val onClick: (item: MyPageListItem) -> Unit) : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(object :
+class MyPageAdapter(private val onClickVideo: (item: MyPageListItem) -> Unit, private val onClickMore: () -> Unit) : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<MyPageListItem>() {
     override fun areItemsTheSame(oldItem: MyPageListItem, newItem: MyPageListItem): Boolean {
         return when {
@@ -90,9 +90,9 @@ class MyPageAdapter(private val onClick: (item: MyPageListItem) -> Unit) : ListA
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
-            is HeaderHolder -> holder.bind(getItem(position))
+            is HeaderHolder -> holder.bind(getItem(position), onClickMore)
             is ProfileHolder -> holder.bind(getItem(position))
-            is VideoHolder -> holder.bind(getItem(position), onClick)
+            is VideoHolder -> holder.bind(getItem(position), onClickVideo)
             else -> {
                 val item = getItem(position) as MyPageListItem.KeywordCardList
                 (holder as CardHolder).bind(item.list)
@@ -104,10 +104,11 @@ class MyPageAdapter(private val onClick: (item: MyPageListItem) -> Unit) : ListA
         private val titleTextView = binding.tvHeaderTitle
         private val moreTextView = binding.tvHeaderMore
 
-        fun bind(item: MyPageListItem) {
+        fun bind(item: MyPageListItem, onClick: () -> Unit) {
             (item as MyPageListItem.Header).let {
                 titleTextView.text = it.title
                 moreTextView.visibility = if (it.isMore) View.VISIBLE else View.GONE
+                moreTextView.setOnClickListener { onClick() }
             }
         }
     }
@@ -145,7 +146,7 @@ class MyPageAdapter(private val onClick: (item: MyPageListItem) -> Unit) : ListA
 
         fun bind(item: MyPageListItem, onClick: (item: MyPageListItem) -> Unit) {
             (item as MyPageListItem.Video).item.let {
-                Glide.with(itemView.context).load(it.video?.thumbnail).centerInside()
+                Glide.with(itemView.context).load(it.video?.thumbnail)
                     .into(thumbnailImageView)
                 titleTextView.text = it.video?.title
                 viewCountTextView.text = itemView.context.getString(
