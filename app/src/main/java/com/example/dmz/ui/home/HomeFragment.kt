@@ -12,6 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
 import com.example.dmz.R
+import com.example.dmz.data.CacheDataSource
+import com.example.dmz.data.model.Keywords
+import com.example.dmz.data.repository.KeywordsRepositoryImpl
 import com.example.dmz.databinding.FragmentHomeBinding
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
@@ -24,8 +27,10 @@ import kotlin.math.abs
 class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
-
     private var isSyncingScroll = false
+
+    private val keywordsRepository = KeywordsRepositoryImpl(CacheDataSource.getCacheDataSource())
+    private lateinit var keywordsList : List<Keywords>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +41,7 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        getKeywords()
         setupViewPager()
         setupCalendar()
         setupChart(binding.lineChart)
@@ -43,23 +49,30 @@ class HomeFragment : Fragment() {
         return binding.root
     }
 
+    private fun getKeywords(): Keywords {
+        keywordsList = keywordsRepository.getKeywordsList()
+        return keywordsRepository.getKeywordsList().first()
+    }
+
     private fun setupScrollSync() {
-        binding.rvCalendar.addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                super.onScrolled(recyclerView, dx, dy)
+        binding.apply {
+            rvCalendar.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    if (!isSyncingScroll) {
+                        isSyncingScroll = true
+                        binding.hsvChart.scrollBy(dx, 0)
+                        isSyncingScroll = false
+                    }
+                }
+            })
+
+            hsvChart.setOnScrollChangeListener { _, scrollX, _, _, _ ->
                 if (!isSyncingScroll) {
                     isSyncingScroll = true
-                    binding.hsvChart.scrollBy(dx, 0)
+                    binding.rvCalendar.scrollBy(scrollX - binding.rvCalendar.computeHorizontalScrollOffset(), 0)
                     isSyncingScroll = false
                 }
-            }
-        })
-
-        binding.hsvChart.setOnScrollChangeListener { _, scrollX, _, _, _ ->
-            if (!isSyncingScroll) {
-                isSyncingScroll = true
-                binding.rvCalendar.scrollBy(scrollX - binding.rvCalendar.computeHorizontalScrollOffset(), 0)
-                isSyncingScroll = false
             }
         }
     }
@@ -87,12 +100,12 @@ class HomeFragment : Fragment() {
             val date = Date(dayOfWeek, dayOfMonth.toString())
             dateSet.add(date)
         }
-
-        val adapter = DayAdapter(dateSet.reversed())
-        binding.rvCalendar.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
-        binding.rvCalendar.adapter = adapter
-        (binding.rvCalendar.getChildAt(0) as? RecyclerView)?.also {
-            it.overScrollMode = View.OVER_SCROLL_NEVER
+        //TODO Keywords 객체 하나만 전달 하기
+        val adapter = DayAdapter(dateSet.reversed(), keywordsList)
+        binding.apply {
+            rvCalendar.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            rvCalendar.adapter = adapter
+            rvCalendar.overScrollMode = View.OVER_SCROLL_NEVER
         }
     }
 
@@ -120,13 +133,11 @@ class HomeFragment : Fragment() {
             animateY(500)
         }
 
-        val dataList = arrayListOf(
-            1, 5, 3, 4, 3, 0, 0, 0, 2, 1, 5, 2, 2, 4
-        )
 
         chart.apply {
             val entryList = arrayListOf<Entry>()
-            dataList.forEachIndexed { index, d ->
+            val recentTrend = keywordsList[0].recentTrend
+            recentTrend.forEachIndexed { index, d ->
                 entryList.add(Entry(index.toFloat(), d.toFloat()))
             }
 
@@ -144,17 +155,10 @@ class HomeFragment : Fragment() {
 
 
     private fun setupViewPager() {
-        val keywords = listOf(
-            Keyword(R.drawable.img_keyword_yoajung, "요아정1"),
-            Keyword(R.drawable.img_keyword_yoajung, "요아정2"),
-            Keyword(R.drawable.img_keyword_yoajung, "요아정3"),
-            Keyword(R.drawable.img_keyword_yoajung, "요아정4"),
-            Keyword(R.drawable.img_keyword_yoajung, "요아정5"),
-            Keyword(R.drawable.img_keyword_yoajung, "요아정6")
-        )
-        val adapter = KeywordAdapter(keywords)
 
-        binding.run {
+        val adapter = KeywordAdapter(keywordsList)
+
+        binding.apply {
             vpTodayKeyword.adapter = adapter
             (vpTodayKeyword.getChildAt(0) as? RecyclerView)?.also {
                 it.overScrollMode = View.OVER_SCROLL_NEVER
