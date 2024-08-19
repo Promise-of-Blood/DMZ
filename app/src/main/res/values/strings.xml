@@ -7,6 +7,22 @@
     <string name="my_profile">내 정보</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_history">SEARCH HISTORY</string>
+    <string name="search_input">검색어 입력</string>
+    <string name="set_region">국가 설정</string>
+    <string name="set_sort">정렬 설정</string>
+    <string name="set_date">날짜 설정</string>
+    <string name="search_result">SEARCH RESULT</string>
+
+    <!-- common -->
+    <string name="common_video_thumbnail">영상 썸네일</string>
+    <string name="common_channel_thumbnail">채널 썸네일</string>
+    <string name="common_keyword_thumbnail">키워드 썸네일</string>
+
+    <!-- common: shared preference -->
+    <string name="preference_file_key">preference_dmz</string>
+    <string name="preference_bookmark_key">preference_bookmark</string>
+    <string name="preference_keyword_card_key">preference_keyword_card</string>
 
     <!-- detail page -->
     <string name="detail_video_info">영상 정보</string>
@@ -16,11 +32,21 @@
     <string name="detail_like_count">좋아요</string>
     <string name="detail_subscriber_count">채널 구독자수</string>
     <string name="detail_video_count">동영상</string>
-    <string name="detail_bookmark_button">북마크 저장</string>
+    <string name="detail_bookmark_button_save">북마크 저장</string>
+    <string name="detail_bookmark_button_cancel">북마크 취소</string>
     <string name="detail_num_of_counts">%s개</string>
     <string name="detail_num_of_times">%s회</string>
     <string name="detail_num_of_people">%s명</string>
-    <string name="detail_video_thumbnail">영상 썸네일</string>
-    <string name="detail_channel_thumbnail">채널 썸네일</string>
+
+    <!-- my page -->
+    <string name="my_page_title">My Page</string>
+    <string name="my_page_user_name">김태영</string>
+    <string name="my_page_user_gender">여</string>
+    <string name="my_page_profile_image">프로필 이미지</string>
+    <string name="my_page_video_view_count">조회수 %s회</string>
+    <string name="my_page_more">더보기</string>
+    <string name="my_page_card_count">모은 카드 수</string>
+    <string name="my_page_gender">성별</string>
+    <string name="my_page_joined_date">가입한지</string>
 
 </resources>
