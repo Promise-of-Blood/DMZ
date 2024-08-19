@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.fragment.FragmentNavigatorExtras
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.dmz.DMZApplication
@@ -104,10 +105,14 @@ class BookmarkFragment : Fragment() {
             }
     }
 
-    private fun handleOnClickBookmarkedVideo(item: MyPageListItem) {
+    private fun handleOnClickBookmarkedVideo(item: MyPageListItem, sharedElement: View) {
         if (item !is MyPageListItem.Video) return
-        val videoId = item.item.video?.videoId ?: ""
-        val action = BookmarkFragmentDirections.actionBookmarkToDetail(videoId)
-        findNavController().navigate(action)
+        val videoId = item.item.video?.videoId ?: "null"
+        val thumbnail = item.item.video?.thumbnail ?: "null"
+        val action = BookmarkFragmentDirections.actionBookmarkToDetail(videoId, thumbnail)
+        val extras = FragmentNavigatorExtras(
+            sharedElement to "thumbnail_$videoId"
+        )
+        findNavController().navigate(action, extras)
     }
 }

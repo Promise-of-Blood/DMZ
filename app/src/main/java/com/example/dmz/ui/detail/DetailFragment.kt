@@ -1,5 +1,6 @@
 package com.example.dmz.ui.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.example.dmz.DMZApplication
 import com.example.dmz.MainActivity
@@ -43,6 +45,14 @@ class DetailFragment : Fragment() {
 
     private val args: DetailFragmentArgs by navArgs()
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val transition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = transition
+        sharedElementReturnTransition = transition
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -68,6 +78,13 @@ class DetailFragment : Fragment() {
     private fun initView() = with(binding) {
         pbDetailLoading.visibility = View.GONE
         svDetailContent.visibility = View.VISIBLE
+        ivDetailVideoThumbnail.transitionName = "thumbnail_${args.videoId}"
+        if (args.thumbnail != "null") {
+            Glide.with(requireContext())
+                .load(args.thumbnail)
+                .centerCrop()
+                .into(ivDetailVideoThumbnail)
+        }
         tvDetailBookmarkButton.setOnClickListener {
             if (detailData.video != null && detailData.channel != null) {
                 if (myPageViewModel.isBookmarked(detailData)) {
@@ -98,11 +115,14 @@ class DetailFragment : Fragment() {
                     video.commentCount.formatNumber()
                 )
             tvDetailVideoPublishedDate.text = video.publishedAt.formatDate()
-            Glide.with(requireContext())
-                .load(video.thumbnail)
-                .into(ivDetailVideoThumbnail)
             tvDetailBookmarkButton.text =
                 if (myPageViewModel.isBookmarked(detailData)) "북마크 취소" else "북마크 저장"
+            if (args.thumbnail == "null") {
+                Glide.with(requireContext())
+                    .load(video.thumbnail)
+                    .centerCrop()
+                    .into(ivDetailVideoThumbnail)
+            }
         }
 
     private fun initChannelDetailData(channel: ChannelDetailModel) =
@@ -127,7 +147,12 @@ class DetailFragment : Fragment() {
         videoDetail.observe(viewLifecycleOwner) { video ->
             when (video) {
                 is UiState.Loading -> {}
-                is UiState.Error -> Toast.makeText(requireContext(), video.message, Toast.LENGTH_SHORT).show()
+                is UiState.Error -> Toast.makeText(
+                    requireContext(),
+                    video.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 is UiState.Success -> {
                     detailData = detailData.copy(video = video.data)
                     initVideoDetailData(video.data)
@@ -137,7 +162,12 @@ class DetailFragment : Fragment() {
         channelDetail.observe(viewLifecycleOwner) { channel ->
             when (channel) {
                 is UiState.Loading -> {}
-                is UiState.Error -> Toast.makeText(requireContext(), channel.message, Toast.LENGTH_SHORT).show()
+                is UiState.Error -> Toast.makeText(
+                    requireContext(),
+                    channel.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+
                 is UiState.Success -> {
                     detailData = detailData.copy(channel = channel.data)
                     initChannelDetailData(channel.data)

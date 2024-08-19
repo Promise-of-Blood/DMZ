@@ -36,14 +36,22 @@
         tools:layout="@layout/fragment_my_page">
         <action
             android:id="@+id/action_my_page_to_detail"
-            app:destination="@id/navigation_detail">
+            app:destination="@id/navigation_detail"
+            app:enterAnim="@null"
+            app:exitAnim="@null"
+            app:popEnterAnim="@null"
+            app:popExitAnim="@null">
             <argument
                 android:name="videoId"
+                app:argType="string" />
+            <argument
+                android:name="thumbnail"
                 app:argType="string" />
         </action>
         <action
             android:id="@+id/action_my_page_to_bookmark"
-            app:destination="@id/navigation_bookmark" />
+            app:destination="@id/navigation_bookmark"
+            app:enterAnim="@anim/slide_in_right" />
     </fragment>
     <fragment
         android:id="@+id/navigation_search_result"
@@ -64,7 +72,9 @@
         tools:layout="@layout/fragment_detail">
         <argument
             android:name="videoId"
-            android:defaultValue=""
+            app:argType="string" />
+        <argument
+            android:name="thumbnail"
             app:argType="string" />
     </fragment>
     <fragment
@@ -79,5 +89,4 @@
                 app:argType="string" />
         </action>
     </fragment>
-
 </navigation>

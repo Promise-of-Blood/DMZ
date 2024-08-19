@@ -15,7 +15,6 @@
         android:contentDescription="@string/common_video_thumbnail"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background"
-        android:transitionName="thumbnail"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

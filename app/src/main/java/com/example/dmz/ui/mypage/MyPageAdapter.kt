@@ -20,7 +20,10 @@ import com.example.dmz.utils.Util.formatDiffDay
 import com.example.dmz.utils.Util.formatDiffTime
 import com.example.dmz.utils.Util.formatNumber
 
-class MyPageAdapter(private val onClickVideo: (item: MyPageListItem) -> Unit, private val onClickMore: () -> Unit) : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(object :
+class MyPageAdapter(
+    private val onClickVideo: (item: MyPageListItem, sharedElement: View) -> Unit,
+    private val onClickMore: () -> Unit
+) : ListAdapter<MyPageListItem, RecyclerView.ViewHolder>(object :
     DiffUtil.ItemCallback<MyPageListItem>() {
     override fun areItemsTheSame(oldItem: MyPageListItem, newItem: MyPageListItem): Boolean {
         return when {
@@ -144,10 +147,14 @@ class MyPageAdapter(private val onClickVideo: (item: MyPageListItem) -> Unit, pr
         private val viewCountTextView = binding.tvVideoViewCount
         private val publishedDateTextView = binding.tvVideoPublishedDate
 
-        fun bind(item: MyPageListItem, onClick: (item: MyPageListItem) -> Unit) {
+        fun bind(
+            item: MyPageListItem,
+            onClick: (item: MyPageListItem, sharedElement: View) -> Unit
+        ) {
             (item as MyPageListItem.Video).item.let {
                 Glide.with(itemView.context).load(it.video?.thumbnail)
                     .into(thumbnailImageView)
+                thumbnailImageView.transitionName = "thumbnail_${it.video?.videoId}"
                 titleTextView.text = it.video?.title
                 viewCountTextView.text = itemView.context.getString(
                     R.string.my_page_video_view_count,
@@ -157,7 +164,7 @@ class MyPageAdapter(private val onClickVideo: (item: MyPageListItem) -> Unit, pr
                 Glide.with(itemView.context).load(it.channel?.thumbnail).centerInside()
                     .into(channelThumbnailImageView)
                 channelTitleTextView.text = it.channel?.title
-                itemView.setOnClickListener { onClick(item) }
+                itemView.setOnClickListener { onClick(item, thumbnailImageView) }
             }
         }
     }
