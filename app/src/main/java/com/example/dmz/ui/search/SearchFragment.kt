@@ -50,7 +50,11 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         setViewPager()
-        searchViewModel.getRecentSearchItems(mContext)
+//        searchViewModel.getRecentSearchItems(mContext)
+
+        searchViewModel.loadRecentSearchItems(mContext)
+
+
 
         return binding.root
     }
@@ -82,17 +86,37 @@ class SearchFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                if (searchRegion != null && searchSort != null && searchNowDate != null) {
-                    saveSearchItem(query)
-                } else {
+                if (searchRegion == null || searchSort == null || searchNowDate == null) {
                     Toast.makeText(mContext, "설정하지 않은 속성이 있습니다.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
 
-                doVideoSearch(query)
+                val searchItem =
+                    SearchEntity(
+                        query = query,
+                        region = searchRegion!!,
+                        sort = searchSort!!,
+                        date = searchNowDate!!,
+                        color = R.color.flou_yellow
+                    )
 
+                doVideoSearch(query)
+//                    saveSearchItem(query)
+//                    Util.addPrefItem(mContext, searchItem)
+
+
+                searchViewModel.addRecentSearch(searchItem)
+                searchViewModel.saveRecentSearchList(mContext)
                 findNavController().navigate(R.id.action_navigation_search_to_navigation_search_result)
 
+            }
+        }
+
+        searchViewModel.recentSearchedList.observe(viewLifecycleOwner) { searchedItem ->
+            binding.vpRecentSearch.apply {
+                adapter = SearchRecentAdapter(searchedItem)
+                offscreenPageLimit = 4
+                setPageTransformer(SliderTransformer(4))
             }
         }
 
@@ -112,18 +136,6 @@ class SearchFragment : Fragment() {
             publishedBefore = searchNowDate,
             regionCode = searchRegion
         )
-    }
-
-    private fun saveSearchItem(query: String) {
-        val searchItem =
-            SearchEntity(
-                query = query,
-                region = searchRegion!!,
-                sort = searchSort!!,
-                date = searchNowDate!!,
-                color = R.color.flou_yellow
-            )
-        Util.addPrefItem(mContext, searchItem)
     }
 
     private fun setViewPager() {

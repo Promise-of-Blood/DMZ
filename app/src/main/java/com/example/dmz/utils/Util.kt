@@ -1,5 +1,6 @@
 package com.example.dmz.utils
 
+import android.app.Activity
 import android.content.Context
 import android.icu.text.DecimalFormat
 import android.view.View
@@ -202,7 +203,7 @@ object Util {
     fun getPrefRecentSearchList(context: Context): ArrayList<SearchEntity> {
         val prefs = context.getSharedPreferences(
             context.getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
+            Activity.MODE_PRIVATE
         )
         val allEntries: Map<String, *> = prefs.all
         val searchItems = ArrayList<SearchEntity>()

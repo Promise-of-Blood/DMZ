@@ -11,10 +11,13 @@ import com.example.dmz.R
 import com.example.dmz.data.repository.SearchRepository
 import com.example.dmz.data.repository.SearchRepositoryImpl
 import com.example.dmz.model.ChannelModel
+import com.example.dmz.model.KeywordCard
 import com.example.dmz.model.SearchEntity
 import com.example.dmz.model.VideoModel
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.utils.Util
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.coroutines.async
 import kotlinx.coroutines.launch
 
@@ -74,21 +77,43 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         }
     }
 
-    fun getRecentSearchItems(context: Context){
+    fun getRecentSearchItems(context: Context) {
         _recentSearchedList.value = Util.getPrefRecentSearchList(context)
     }
 
+    fun saveRecentSearchList(context: Context) {
+        val gson = Gson()
+        val sharedPreferences = context.getSharedPreferences(
+            context.getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        )
+
+        val jsonString = gson.toJson(recentSearchedList.value)
+        sharedPreferences.edit()
+            .putString(context.getString(R.string.preference_recent_search_key), jsonString).apply()
+    }
+
+    fun loadRecentSearchItems(context: Context) {
+        val gson = Gson()
+        val sharedPreferences = context.getSharedPreferences(
+            context.getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        )
+        val jsonString =
+            sharedPreferences.getString(
+                context.getString(R.string.preference_recent_search_key),
+                "[]"
+            )
+        val listType = object : TypeToken<MutableList<SearchEntity>>() {}.type
+        _recentSearchedList.value = gson.fromJson(jsonString, listType)
+    }
 
     fun addRecentSearch(searchEntity: SearchEntity) {
-        val search = searchEntity
-//            SearchEntity(query = query, region = region, sort = sort, date = date, color = color)
         val searchList = recentSearchedList.value
         searchList?.let {
             val updateList = it.toMutableList()
-            updateList.add(searchEntity)
-
+            updateList.add(0, searchEntity)
             _recentSearchedList.value = updateList
-
         }
     }
 
@@ -97,7 +122,7 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
             context.getString(R.string.preference_file_key),
             Context.MODE_PRIVATE
         ) ?: return
-        with(sharedPref.edit()){
+        with(sharedPref.edit()) {
 //            putString(context.getString(R.string.preference_recent_search_key), searchEntity)
             apply()
         }
