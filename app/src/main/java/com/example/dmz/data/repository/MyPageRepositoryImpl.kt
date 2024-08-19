@@ -6,11 +6,13 @@ import com.example.dmz.model.BookmarkedVideo
 import com.example.dmz.model.KeywordCard
 import com.example.dmz.model.MyPageListItem
 import com.example.dmz.model.include
-import com.example.dmz.model.replaceBookmarkList
 import com.example.dmz.model.replaceKeywordCardList
+import com.example.dmz.model.setBookmarkList
 import com.example.dmz.model.setCardCount
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+
+private const val MAX_BOOKMARK_COUNT = 5
 
 class MyPageRepositoryImpl(context: Context) : BookmarkRepository, KeywordCardRepository {
     private val gson = Gson()
@@ -37,7 +39,7 @@ class MyPageRepositoryImpl(context: Context) : BookmarkRepository, KeywordCardRe
             MyPageListItem.Header("Card collection", false),
             MyPageListItem.KeywordCardList(_keywordCardList),
             MyPageListItem.Header("Bookmark", true),
-            MyPageListItem.BookmarkList(_bookmarkList)
+            *_bookmarkList.take(MAX_BOOKMARK_COUNT).map { MyPageListItem.Video(it) }.toTypedArray(),
         )
     }
 
@@ -46,14 +48,14 @@ class MyPageRepositoryImpl(context: Context) : BookmarkRepository, KeywordCardRe
     * */
     override fun addBookmark(item: BookmarkedVideo) {
         if (!_bookmarkList.include(item)) {
-            _bookmarkList.add(item)
-            _myPageData = _myPageData.replaceBookmarkList(list = _bookmarkList).toMutableList()
+            _bookmarkList.add(0, item)
+            _myPageData.setBookmarkList(_bookmarkList.take(MAX_BOOKMARK_COUNT))
         }
     }
 
     override fun removeBookmark(item: BookmarkedVideo) {
         _bookmarkList.removeIf { item.video?.videoId == it.video?.videoId }
-        _myPageData = _myPageData.replaceBookmarkList(list = _bookmarkList).toMutableList()
+        _myPageData.setBookmarkList(_bookmarkList.take(MAX_BOOKMARK_COUNT))
     }
 
     override fun isBookmarked(item: BookmarkedVideo) = _bookmarkList.include(item)
