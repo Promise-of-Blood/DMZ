@@ -1,8 +1,11 @@
 package com.example.dmz.ui.mypage
 
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
@@ -19,6 +22,7 @@ import com.example.dmz.model.MyPageListItem
 import com.example.dmz.utils.Util.formatDiffDay
 import com.example.dmz.utils.Util.formatDiffTime
 import com.example.dmz.utils.Util.formatNumber
+import com.example.dmz.utils.Util.px
 
 class MyPageAdapter(
     private val onClickVideo: (item: MyPageListItem, sharedElement: View) -> Unit,
@@ -31,6 +35,7 @@ class MyPageAdapter(
             oldItem is MyPageListItem.Profile && newItem is MyPageListItem.Profile -> oldItem.name == newItem.name
             oldItem is MyPageListItem.Video && newItem is MyPageListItem.Video -> oldItem.hashCode() == newItem.hashCode()
             oldItem is MyPageListItem.KeywordCardList && newItem is MyPageListItem.KeywordCardList -> oldItem.hashCode() == newItem.hashCode()
+            oldItem is MyPageListItem.Empty && newItem is MyPageListItem.Empty -> oldItem.hashCode() == newItem.hashCode()
             else -> false
         }
     }
@@ -44,10 +49,13 @@ class MyPageAdapter(
         private const val TYPE_PROFILE = 1
         private const val TYPE_VIDEO = 2
         private const val TYPE_CARD = 3
+        private const val TYPE_EMPTY = 4
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         return when (viewType) {
+            TYPE_EMPTY -> EmptyHolder(parent.context)
+
             TYPE_HEADER -> HeaderHolder(
                 ItemMyPageHeaderBinding.inflate(
                     LayoutInflater.from(
@@ -84,6 +92,7 @@ class MyPageAdapter(
 
     override fun getItemViewType(position: Int): Int {
         return when (getItem(position)) {
+            is MyPageListItem.Empty -> TYPE_EMPTY
             is MyPageListItem.Header -> TYPE_HEADER
             is MyPageListItem.Profile -> TYPE_PROFILE
             is MyPageListItem.Video -> TYPE_VIDEO
@@ -93,12 +102,31 @@ class MyPageAdapter(
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when (holder) {
+            is EmptyHolder -> holder.bind(getItem(position))
             is HeaderHolder -> holder.bind(getItem(position), onClickMore)
             is ProfileHolder -> holder.bind(getItem(position))
             is VideoHolder -> holder.bind(getItem(position), onClickVideo)
             else -> {
                 val item = getItem(position) as MyPageListItem.KeywordCardList
                 (holder as CardHolder).bind(item.list)
+            }
+        }
+    }
+
+    class EmptyHolder(context: Context) : RecyclerView.ViewHolder(TextView(context)) {
+        fun bind(item: MyPageListItem) {
+            (item as MyPageListItem.Empty).let {
+                (itemView as TextView).apply {
+                    text = it.message
+                    setTextAppearance(R.style.description_p)
+                    textAlignment = View.TEXT_ALIGNMENT_CENTER
+                    setTextColor(itemView.context.getColor(R.color.light_gray))
+                    setPadding(0, 40f.px, 0, 40f.px)
+                    layoutParams = ConstraintLayout.LayoutParams(
+                        ConstraintLayout.LayoutParams.MATCH_PARENT,
+                        ConstraintLayout.LayoutParams.WRAP_CONTENT
+                    )
+                }
             }
         }
     }
@@ -170,9 +198,17 @@ class MyPageAdapter(
     }
 
     class CardHolder(binding: ItemMyPageCardListBinding) : RecyclerView.ViewHolder(binding.root) {
+        private val root = binding.root
         private val cardListRecyclerView = binding.rvCardList
 
         fun bind(item: List<KeywordCard>) = with(cardListRecyclerView) {
+            if (item.isEmpty()) {
+                cardListRecyclerView.visibility = View.GONE
+                val emptyHolder = EmptyHolder(context)
+                emptyHolder.bind(MyPageListItem.Empty("아직 수집한 카드가 없어요.\n퀴즈를 풀고 카드를 모아보세요!"))
+                root.addView(emptyHolder.itemView)
+                return@with
+            }
             cardListRecyclerView.visibility = View.GONE
             val cardAdapter = CardAdapter().apply { submitList(item) }
             adapter = cardAdapter
