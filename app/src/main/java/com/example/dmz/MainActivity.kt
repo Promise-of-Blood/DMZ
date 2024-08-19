@@ -27,5 +27,12 @@ class MainActivity : AppCompatActivity() {
         Glide.with(this)
             .load(R.raw.ic_home)
             .into(binding.ivHomeBtn)
+
+        binding.ivHomeBtn.setOnClickListener {
+            // HomeFragment로 이동
+            binding.navView.selectedItemId = R.id.navigation_home
+            navController.navigate(R.id.navigation_home)
+
+        }
     }
 }
