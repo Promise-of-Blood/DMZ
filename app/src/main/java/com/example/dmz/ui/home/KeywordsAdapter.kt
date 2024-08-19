@@ -29,7 +29,6 @@ class KeywordAdapter(private val imageList: List<Keyword>) : RecyclerView.Adapte
         private val imageView: ImageView = itemView.findViewById(R.id.iv_keyword_image)
         private val textView: TextView = itemView.findViewById(R.id.iv_keyword_text)
 
-        // 데이터를 바인딩하는 함수
         fun bind(keyword: Keyword) {
             imageView.setImageResource(keyword.keyImage)
             textView.text = keyword.keyText
