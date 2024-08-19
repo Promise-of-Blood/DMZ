@@ -1,6 +1,7 @@
 package com.example.dmz.ui.detail
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.example.dmz.DMZApplication
 import com.example.dmz.R
@@ -59,6 +61,8 @@ class DetailFragment : Fragment() {
         viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(requireActivity().application as DMZApplication)) } }
     }
 
+    val args: DetailFragmentArgs by navArgs()
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -85,6 +89,9 @@ class DetailFragment : Fragment() {
         initView()
         initViewModel()
         detailViewModel.fetchDetailData(VIDEO_ID)
+
+        val videoId = args.videoId
+        Log.d("video", videoId)
     }
 
     override fun onDestroy() {
@@ -154,7 +161,7 @@ class DetailFragment : Fragment() {
             Glide.with(requireContext())
                 .load(channel.thumbnail)
                 .into(ivDetailChannelThumbnail)
-    }
+        }
 
     private fun initViewModel() = with(detailViewModel) {
         videoDetail.observe(viewLifecycleOwner) { video ->
