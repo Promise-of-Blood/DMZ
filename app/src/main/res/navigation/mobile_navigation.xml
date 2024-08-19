@@ -5,7 +5,6 @@
     android:id="@+id/mobile_navigation"
     app:startDestination="@+id/navigation_home">
 
-
     <fragment
         android:id="@+id/navigation_browse"
         android:name="com.example.dmz.ui.BrowseFragment"
@@ -20,25 +19,40 @@
             android:id="@+id/action_navigation_search_to_navigation_search_result"
             app:destination="@id/navigation_search_result" />
     </fragment>
-
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.example.dmz.ui.HomeFragment"
         android:label="@string/home"
         tools:layout="@layout/fragment_search" />
-
     <fragment
         android:id="@+id/navigation_quiz"
         android:name="com.example.dmz.ui.QuizFragment"
         android:label="@string/quiz"
         tools:layout="@layout/fragment_search" />
-
     <fragment
         android:id="@+id/navigation_my_profile"
         android:name="com.example.dmz.ui.mypage.MyPageFragment"
         android:label="@string/my_profile"
-        tools:layout="@layout/fragment_my_page" />
-
+        tools:layout="@layout/fragment_my_page">
+        <action
+            android:id="@+id/action_my_page_to_detail"
+            app:destination="@id/navigation_detail"
+            app:enterAnim="@null"
+            app:exitAnim="@null"
+            app:popEnterAnim="@null"
+            app:popExitAnim="@null">
+            <argument
+                android:name="videoId"
+                app:argType="string" />
+            <argument
+                android:name="thumbnail"
+                app:argType="string" />
+        </action>
+        <action
+            android:id="@+id/action_my_page_to_bookmark"
+            app:destination="@id/navigation_bookmark"
+            app:enterAnim="@anim/slide_in_right" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_search_result"
         android:name="com.example.dmz.ui.search.SearchResultFragment"
@@ -52,15 +66,27 @@
                 app:argType="string" />
         </action>
     </fragment>
-
     <fragment
         android:id="@+id/navigation_detail"
         android:name="com.example.dmz.ui.detail.DetailFragment"
-        android:label="디테일 화면"
         tools:layout="@layout/fragment_detail">
         <argument
             android:name="videoId"
             app:argType="string" />
+        <argument
+            android:name="thumbnail"
+            app:argType="string" />
     </fragment>
-
+    <fragment
+        android:id="@+id/navigation_bookmark"
+        android:name="com.example.dmz.ui.mypage.BookmarkFragment"
+        tools:layout="@layout/fragment_bookmark">
+        <action
+            android:id="@+id/action_bookmark_to_detail"
+            app:destination="@id/navigation_detail">
+            <argument
+                android:name="videoId"
+                app:argType="string" />
+        </action>
+    </fragment>
 </navigation>
