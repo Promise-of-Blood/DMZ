@@ -7,9 +7,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dmz.R
+import com.example.dmz.data.model.Keywords
 
 
-class KeywordAdapter(private val imageList: List<Keyword>) : RecyclerView.Adapter<KeywordAdapter.KeywordViewHolder>() {
+class KeywordAdapter(private val imageList: List<Keywords>) : RecyclerView.Adapter<KeywordAdapter.KeywordViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): KeywordViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_keyword, parent, false)
@@ -29,7 +30,7 @@ class KeywordAdapter(private val imageList: List<Keyword>) : RecyclerView.Adapte
         private val imageView: ImageView = itemView.findViewById(R.id.iv_keyword_image)
         private val textView: TextView = itemView.findViewById(R.id.iv_keyword_text)
 
-        fun bind(keyword: Keyword) {
+        fun bind(keyword: Keywords) {
             imageView.setImageResource(keyword.keyImage)
             textView.text = keyword.keyText
         }
