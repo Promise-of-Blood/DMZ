@@ -10,7 +10,7 @@
         android:icon="@drawable/ic_quiz"
         android:title="@string/quiz" />
     <item
-        android:id="@+id/navigation_home"
+        android:id="@+id/navigation_blank"
         android:title="" />
     <item
         android:id="@+id/navigation_search"

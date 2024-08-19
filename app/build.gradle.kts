@@ -5,6 +5,8 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs")
 }
 
 android {
@@ -46,6 +48,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        dataBinding = true
     }
 }
 
@@ -79,6 +82,7 @@ dependencies {
     //glide
     implementation(libs.glide)
 
-    // MPAndroidChart
-    implementation(libs.mpandroidchart)
+    //search spinner
+    implementation ("com.github.skydoves:powerspinner:1.2.7")
+
 }

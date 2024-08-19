@@ -2,15 +2,24 @@ package com.example.dmz
 
 import android.os.Bundle
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.bumptech.glide.Glide
+import com.example.dmz.data.repository.MyPageRepositoryImpl
 import com.example.dmz.databinding.ActivityMainBinding
+import com.example.dmz.viewmodel.MyPageViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+
+    private val myPageViewModel by viewModels<MyPageViewModel> {
+        viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(this@MainActivity)) } }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,12 +36,15 @@ class MainActivity : AppCompatActivity() {
         Glide.with(this)
             .load(R.raw.ic_home)
             .into(binding.ivHomeBtn)
+    }
 
+    override fun onPause() {
+        super.onPause()
+        myPageViewModel.saveData()
         binding.ivHomeBtn.setOnClickListener {
             // HomeFragment로 이동
             binding.navView.selectedItemId = R.id.navigation_home
             navController.navigate(R.id.navigation_home)
-
         }
     }
 }

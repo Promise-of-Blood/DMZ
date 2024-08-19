@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="32dp">
+
+    <ImageView
+        android:id="@+id/iv_profile_image"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:background="@drawable/shape_corner_radius_10dp_shadow"
+        android:clipToOutline="true"
+        android:contentDescription="@string/my_page_profile_image"
+        android:elevation="1dp"
+        android:src="@drawable/ic_launcher_background"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <View
+        android:id="@+id/v_profile_container"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="50dp"
+        android:background="@color/white"
+        app:layout_constraintBottom_toBottomOf="@id/gl_profile_info"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/iv_profile_image" />
+
+    <TextView
+        android:id="@+id/tv_profile_name"
+        style="@style/subtitle_b_p"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@id/v_profile_container"
+        app:layout_constraintStart_toStartOf="@id/v_profile_container"
+        app:layout_constraintTop_toBottomOf="@id/iv_profile_image"
+        tools:text="김태영" />
+
+    <GridLayout
+        android:id="@+id/gl_profile_info"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:columnCount="3"
+        android:orientation="vertical"
+        android:paddingVertical="20dp"
+        android:rowCount="2"
+        app:layout_constraintEnd_toEndOf="@id/v_profile_container"
+        app:layout_constraintStart_toStartOf="@id/v_profile_container"
+        app:layout_constraintTop_toBottomOf="@id/tv_profile_name">
+
+        <TextView
+            android:id="@+id/tv_profile_card_count"
+            style="@style/headline_b_p"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:maxLines="1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            tools:text="7" />
+
+        <TextView
+            android:id="@+id/tv_profile_card_count_label"
+            style="@style/description_p"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:maxLines="1"
+            android:text="@string/my_page_card_count"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_profile_gender"
+            style="@style/headline_b_p"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:maxLines="1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            tools:text="여" />
+
+
+        <TextView
+            android:id="@+id/tv_profile_gender_label"
+            style="@style/description_p"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:maxLines="1"
+            android:text="@string/my_page_gender"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+
+        <TextView
+            android:id="@+id/tv_profile_joined_date"
+            style="@style/headline_b_p"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:maxLines="1"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            tools:text="55일" />
+
+        <TextView
+            android:id="@+id/tv_profile_joined_date_label"
+            style="@style/description_p"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:maxLines="1"
+            android:text="@string/my_page_joined_date"
+            android:textAlignment="center"
+            android:textColor="@color/black" />
+
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
