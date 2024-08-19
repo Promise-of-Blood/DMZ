@@ -11,7 +11,6 @@ import com.example.dmz.R
 import com.example.dmz.data.repository.SearchRepository
 import com.example.dmz.data.repository.SearchRepositoryImpl
 import com.example.dmz.model.ChannelModel
-import com.example.dmz.model.KeywordCard
 import com.example.dmz.model.SearchEntity
 import com.example.dmz.model.VideoModel
 import com.example.dmz.remote.YoutubeSearchClient

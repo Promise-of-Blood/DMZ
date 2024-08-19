@@ -34,7 +34,7 @@ class SearchFragment : Fragment() {
     private var searchSort: String? = null
     private var searchBeforeDate: String? = null
     private var searchNowDate: String? = null
-
+    private var searchDateSet: String? = null
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -74,6 +74,7 @@ class SearchFragment : Fragment() {
 
             spinnerDate.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
                 val regionArrayResource = resources.getStringArray(R.array.date_array)
+                searchDateSet = text
                 searchBeforeDate = setDate(text, regionArrayResource)
                 Log.d("setDate", searchBeforeDate!!)
             }
@@ -96,7 +97,7 @@ class SearchFragment : Fragment() {
                         query = query,
                         region = searchRegion!!,
                         sort = searchSort!!,
-                        date = searchNowDate!!,
+                        date = searchDateSet!!,
                         color = R.color.flou_yellow
                     )
 

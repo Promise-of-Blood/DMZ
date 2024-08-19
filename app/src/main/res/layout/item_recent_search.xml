@@ -8,6 +8,11 @@
         <variable
             name="search"
             type="com.example.dmz.model.SearchEntity" />
+
+        <variable
+            name="viewModel"
+            type="com.example.dmz.viewmodel.SearchViewModel" />
+
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -18,7 +23,7 @@
         <androidx.cardview.widget.CardView
             android:layout_width="300dp"
             android:layout_height="350dp"
-            app:cardBackgroundColor="@{search.color}"
+            app:cardBackgroundColor="@color/flou_yellow"
             app:cardCornerRadius="30dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -46,9 +51,9 @@
                 />
 
             <TextView
+                android:id="@+id/tv_query"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{search.color}"
                 android:textSize="12sp"
                 android:fontFamily="@font/elicedigitalbaeum"
                 android:layout_marginTop="120dp"
@@ -67,10 +72,11 @@
                 />
 
             <TextView
+                android:id="@+id/tv_region"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{search.region}"
                 android:textSize="12sp"
+                android:textColor="@color/black"
                 android:fontFamily="@font/elicedigitalbaeum"
                 android:layout_marginTop="180dp"
                 android:layout_marginHorizontal="60dp"
@@ -88,9 +94,9 @@
                 />
 
             <TextView
+                android:id="@+id/tv_sort"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{search.sort}"
                 android:textSize="12sp"
                 android:fontFamily="@font/elicedigitalbaeum"
                 android:layout_marginTop="240dp"
@@ -109,9 +115,9 @@
                 />
 
             <TextView
+                android:id="@+id/tv_date"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{search.date}"
                 android:textSize="12sp"
                 android:fontFamily="@font/elicedigitalbaeum"
                 android:layout_marginTop="300dp"
