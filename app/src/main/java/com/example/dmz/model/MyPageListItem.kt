@@ -5,7 +5,7 @@ import com.example.dmz.utils.Util.toISO8601
 import java.time.LocalDateTime
 
 sealed class MyPageListItem {
-    data object Default : MyPageListItem()
+    data class Empty(val message: String) : MyPageListItem()
     data class Header(val title: String, val isMore: Boolean) : MyPageListItem()
     data class Profile(
         val name: String = "김태영",
@@ -26,8 +26,9 @@ sealed class MyPageListItem {
 
 fun MutableList<MyPageListItem>.setBookmarkList(list: List<BookmarkedVideo>) {
     this.apply {
-        removeAll { it is MyPageListItem.Video }
-        addAll(list.map { MyPageListItem.Video(it) })
+        removeAll { it is MyPageListItem.Video || it is MyPageListItem.Empty }
+        if (list.isEmpty()) add(MyPageListItem.Empty("아직 저장한 영상이 없어요."))
+        else addAll(list.map { MyPageListItem.Video(it) })
     }
 }
 
