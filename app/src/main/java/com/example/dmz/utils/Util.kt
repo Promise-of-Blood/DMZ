@@ -1,8 +1,13 @@
 package com.example.dmz.utils
 
 import android.icu.text.DecimalFormat
+import android.view.View
+import android.widget.ImageView
 import android.util.Log
 import androidx.core.text.isDigitsOnly
+import com.example.dmz.MainActivity
+import com.example.dmz.R
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
@@ -104,6 +109,18 @@ object Util {
         return this.atZone(ZoneId.systemDefault()).toInstant().toEpochMilli()
     }
 
+    fun LocalDateTime.toISO8601(): String {
+        val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        return this.format(formatter)
+    }
+
+    fun MainActivity.handleBottomNavigationVisibility(isShow: Boolean) {
+        this.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility =
+            if (isShow) View.VISIBLE else View.GONE
+        this.findViewById<ImageView>(R.id.iv_home_btn)?.visibility =
+            if (isShow) View.VISIBLE else View.GONE
+    }
+
     /**
      * @return 현재시간을 ISO 8601(yyyy-MM-ddTHH:mm:ssZ) 형식으로 반환합니다.
      */
@@ -172,8 +189,3 @@ object Util {
         return dateString
     }
 }
-
-
-
-
-
