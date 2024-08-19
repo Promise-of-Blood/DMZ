@@ -23,20 +23,20 @@
         android:id="@+id/vp_today_keyword"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:clipToPadding="false"
-        android:clipChildren="false"
         android:layout_marginTop="32dp"
-        app:layout_constraintStart_toStartOf="parent"
+        android:clipChildren="false"
+        android:clipToPadding="false"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_today_keyword" />
 
     <LinearLayout
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:gravity="end"
         android:background="@color/black"
+        android:gravity="end"
         app:layout_constraintBottom_toBottomOf="@id/vp_today_keyword"
-        app:layout_constraintStart_toStartOf="parent" >
+        app:layout_constraintStart_toStartOf="parent">
 
         <ImageView
             android:id="@+id/iv_arrow_left"
@@ -51,10 +51,10 @@
         android:id="@+id/ll_arrow_right"
         android:layout_width="150dp"
         android:layout_height="50dp"
-        android:gravity="start"
         android:background="@color/black"
+        android:gravity="start"
         app:layout_constraintBottom_toBottomOf="@id/vp_today_keyword"
-        app:layout_constraintEnd_toEndOf="parent" >
+        app:layout_constraintEnd_toEndOf="parent">
 
         <ImageView
             android:id="@+id/iv_arrow_right"
@@ -64,14 +64,37 @@
             android:src="@drawable/ic_arrow_right"
             app:tint="@color/white" />
 
-
     </LinearLayout>
 
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/line_chart"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_calendar"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_marginBottom="50dp"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/hsv_chart"/>
+
+    <HorizontalScrollView
+        android:id="@+id/hsv_chart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        android:layout_marginBottom="40dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" >
+
+            <com.github.mikephil.charting.charts.LineChart
+                android:id="@+id/line_chart"
+                android:layout_width="wrap_content"
+                android:layout_margin="8dp"
+                android:layout_height="80dp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
