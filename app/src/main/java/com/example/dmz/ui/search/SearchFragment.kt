@@ -12,6 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
+import com.example.dmz.model.SearchEntity
 import com.example.dmz.model.listOfSearch
 import com.example.dmz.utils.Util
 import com.example.dmz.utils.Util.getNowTimeAsIso
@@ -49,6 +50,7 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
         setViewPager()
+        searchViewModel.getRecentSearchItems(mContext)
 
         return binding.root
     }
@@ -80,16 +82,16 @@ class SearchFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                searchViewModel.getVideoList(
-                    q = query,
-                    order = searchSort,
-                    publishedAfter = searchBeforeDate,
-                    publishedBefore = searchNowDate,
-                    regionCode = searchRegion
-                )
+                if (searchRegion != null && searchSort != null && searchNowDate != null) {
+                    saveSearchItem(query)
+                } else {
+                    Toast.makeText(mContext, "설정하지 않은 속성이 있습니다.", Toast.LENGTH_SHORT).show()
+                    return@setOnClickListener
+                }
+
+                doVideoSearch(query)
 
                 findNavController().navigate(R.id.action_navigation_search_to_navigation_search_result)
-
 
             }
         }
@@ -100,6 +102,28 @@ class SearchFragment : Fragment() {
     override fun onDestroy() {
         _binding = null
         super.onDestroy()
+    }
+
+    private fun doVideoSearch(query: String) {
+        searchViewModel.doVideoSearch(
+            q = query,
+            order = searchSort,
+            publishedAfter = searchBeforeDate,
+            publishedBefore = searchNowDate,
+            regionCode = searchRegion
+        )
+    }
+
+    private fun saveSearchItem(query: String) {
+        val searchItem =
+            SearchEntity(
+                query = query,
+                region = searchRegion!!,
+                sort = searchSort!!,
+                date = searchNowDate!!,
+                color = R.color.flou_yellow
+            )
+        Util.addPrefItem(mContext, searchItem)
     }
 
     private fun setViewPager() {

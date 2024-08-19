@@ -1,5 +1,6 @@
 package com.example.dmz.utils
 
+import android.content.Context
 import android.icu.text.DecimalFormat
 import android.view.View
 import android.widget.ImageView
@@ -7,12 +8,15 @@ import android.util.Log
 import androidx.core.text.isDigitsOnly
 import com.example.dmz.MainActivity
 import com.example.dmz.R
+import com.example.dmz.model.SearchEntity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.GsonBuilder
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
+import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -172,6 +176,42 @@ object Util {
 
         Log.d("after", df.format(cal.time))
         return df.format(cal.time)
+    }
+
+    fun addPrefItem(context: Context, item: SearchEntity) {
+        val prefs = context.getSharedPreferences(
+            context.getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        )
+        val editor = prefs.edit()
+        val gson = GsonBuilder().create()
+        editor.putString(item.query, gson.toJson(item))
+        editor.apply()
+    }
+
+    fun deletePrefItem(context: Context, query: String) {
+        val prefs = context.getSharedPreferences(
+            context.getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        )
+        val editor = prefs.edit()
+        editor.remove(query)
+        editor.apply()
+    }
+
+    fun getPrefRecentSearchList(context: Context): ArrayList<SearchEntity> {
+        val prefs = context.getSharedPreferences(
+            context.getString(R.string.preference_file_key),
+            Context.MODE_PRIVATE
+        )
+        val allEntries: Map<String, *> = prefs.all
+        val searchItems = ArrayList<SearchEntity>()
+        val gson = GsonBuilder().create()
+        for ((key, value) in allEntries) {
+            val item = gson.fromJson(value as String, SearchEntity::class.java)
+            searchItems.add(item)
+        }
+        return searchItems
     }
 
 
