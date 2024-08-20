@@ -27,9 +27,13 @@
         tools:layout="@layout/fragment_search" />
     <fragment
         android:id="@+id/navigation_quiz"
-        android:name="com.example.dmz.ui.QuizFragment"
+        android:name="com.example.dmz.ui.quiz.StartFragment"
         android:label="@string/quiz"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_start">
+        <action
+            android:id="@+id/action_quiz_start_to_quiz_question"
+            app:destination="@id/navigation_quiz_question" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_my_profile"
         android:name="com.example.dmz.ui.mypage.MyPageFragment"
@@ -97,5 +101,35 @@
                 android:name="videoId"
                 app:argType="string" />
         </action>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_quiz_question"
+        android:name="com.example.dmz.ui.quiz.QuizFragment">
+        <action
+            android:id="@+id/action_quiz_question_to_navigation_quiz_result"
+            app:destination="@id/navigation_quiz_result">
+            <argument
+                android:name="score"
+                app:argType="integer" />
+            <argument
+                android:name="keyword"
+                app:argType="com.example.dmz.data.model.Keywords" />
+        </action>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_quiz_result"
+        android:name="com.example.dmz.ui.quiz.ResultFragment">
+        <argument
+            android:name="score"
+            app:argType="integer" />
+        <argument
+            android:name="keyword"
+            app:argType="com.example.dmz.data.model.Keywords" />
+        <action
+            android:id="@+id/action_quiz_result_to_my_page"
+            app:destination="@id/navigation_my_profile" />
+        <action
+            android:id="@+id/action_quiz_result_to_quiz_start"
+            app:destination="@id/navigation_quiz" />
     </fragment>
 </navigation>

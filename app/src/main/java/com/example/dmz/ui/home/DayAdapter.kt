@@ -12,7 +12,7 @@ import com.example.dmz.data.model.Keywords
 import com.example.dmz.databinding.ItemCalendarDayBinding
 
 //TODO keywordsList[X] Keywords 객체 하나만 받아오기
-class DayAdapter(private val days: List<Date>, private val keywordsList: List<Keywords>) : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
+class DayAdapter(private val days: List<Date>, private val keyword: Keywords) : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
 
     class DayViewHolder(val binding: ItemCalendarDayBinding) : ViewHolder(binding.root)
 
@@ -24,7 +24,7 @@ class DayAdapter(private val days: List<Date>, private val keywordsList: List<Ke
     override fun onBindViewHolder(holder: DayViewHolder, position: Int) {
         val date = days[position]
 
-        val statusColor = when(keywordsList[0].recentTrend[position]) {
+        val statusColor = when(keyword.recentTrend[position]) {
             in 4..5 -> R.color.sky_blue
             in 2..3 -> R.color.flou_yellow
             else -> R.color.light_gray
