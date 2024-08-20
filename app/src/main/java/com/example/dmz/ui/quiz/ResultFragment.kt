@@ -68,7 +68,7 @@ class ResultFragment : Fragment() {
         tvQuizResultButton.setOnClickListener {
             val action = ResultFragmentDirections.actionQuizResultToMyPage()
             val navOptions =
-                NavOptions.Builder().setPopUpTo(R.id.navigation_quiz_result, true).build()
+                NavOptions.Builder().setPopUpTo(R.id.navigation_quiz, true).build()
             findNavController().navigate(action, navOptions)
         }
         ivQuizResultKeywordImage.setImageResource(args.keyword.keyImage)

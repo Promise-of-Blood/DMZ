@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.nav_host_fragment_activity_main) as NavHostFragment
-        val navController = navHostFragment.navController
+        navController = navHostFragment.navController
         NavigationUI.setupWithNavController(binding.navView, navController)
 
         Glide.with(this)
@@ -50,5 +50,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
+    fun handleQuizNavigation() {
+        if (binding.navView.selectedItemId == R.id.navigation_quiz) return
+        binding.navView.selectedItemId = R.id.navigation_quiz
+        navController.navigate(R.id.navigation_quiz)
+    }
 }

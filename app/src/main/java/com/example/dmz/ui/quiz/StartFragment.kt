@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.dmz.MainActivity
 import com.example.dmz.R
 import com.example.dmz.data.CacheDataSource
 import com.example.dmz.data.repository.QuizRepositoryImpl
@@ -24,15 +25,7 @@ class StartFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-
-        val isCompleted = quizViewModel.isCompleted.value ?: false
-        if (isCompleted) {
-            val action =
-                StartFragmentDirections.actionQuizStartToQuizResult(quizRepository.getTodayQuiz().keyword)
-            val navOptions =
-                NavOptions.Builder().setPopUpTo(R.id.navigation_quiz_result, true).build()
-            findNavController().navigate(action, navOptions)
-        } else quizViewModel.clearAnswers()
+        (context as MainActivity).handleQuizNavigation()
     }
 
     override fun onCreateView(
@@ -46,6 +39,7 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initView()
+        handleIsCompleted()
     }
 
     override fun onDestroy() {
@@ -61,5 +55,16 @@ class StartFragment : Fragment() {
     private fun startQuiz() {
         val action = StartFragmentDirections.actionQuizStartToQuizQuestion()
         findNavController().navigate(action)
+    }
+
+    private fun handleIsCompleted() {
+        val isCompleted = quizViewModel.isCompleted.value ?: false
+        if (isCompleted) {
+            val action =
+                StartFragmentDirections.actionQuizStartToQuizResult(quizRepository.getTodayQuiz().keyword)
+            val navOptions =
+                NavOptions.Builder().setPopUpTo(R.id.navigation_quiz_result, true).build()
+            findNavController().navigate(action, navOptions)
+        } else quizViewModel.clearAnswers()
     }
 }
