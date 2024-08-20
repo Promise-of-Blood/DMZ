@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.dmz.DMZApplication
 import com.example.dmz.R
@@ -67,6 +68,7 @@ class QuizFragment : Fragment() {
                 -1 -> {
                     Toast.makeText(requireContext(), "정답을 처리하지 못했습니다.", Toast.LENGTH_SHORT).show()
                     vpQuiz.currentItem = 0
+                    quizViewModel.clearAnswers()
                     findNavController().popBackStack()
                 }
 
@@ -86,7 +88,9 @@ class QuizFragment : Fragment() {
                             score,
                             keyword
                         )
-                    findNavController().navigate(action)
+                    val navOptions = NavOptions.Builder().setPopUpTo(R.id.navigation_quiz, true).build()
+                    quizViewModel.clearAnswers()
+                    findNavController().navigate(action, navOptions)
                 }
             }
         } else {

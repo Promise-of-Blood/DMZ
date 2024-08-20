@@ -15,4 +15,8 @@ class QuizViewModel: ViewModel() {
     fun getSubmittedAnswer(questionNumber: Int): Int {
         return _answer.value?.getOrDefault(questionNumber, -1) ?: -1
     }
+
+    fun clearAnswers() {
+        _answer.value = emptyMap()
+    }
 }
