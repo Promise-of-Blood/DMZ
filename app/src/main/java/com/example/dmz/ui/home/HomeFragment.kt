@@ -15,10 +15,9 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
 import androidx.viewpager2.widget.MarginPageTransformer
+import androidx.viewpager2.widget.ViewPager2
 import com.example.dmz.R
-import com.example.dmz.data.CacheDataSource
 import com.example.dmz.data.model.Keywords
-import com.example.dmz.data.repository.KeywordsRepositoryImpl
 import com.example.dmz.databinding.FragmentHomeBinding
 import com.example.dmz.viewmodel.HomeViewModel
 import com.example.dmz.viewmodel.HomeViewModelFactory
@@ -68,12 +67,12 @@ class HomeFragment : Fragment() {
                 .filter { it.isNotEmpty() }
                 .collectLatest { keywordsList ->
                     Log.i("Keywords List", keywordsList.toString())
-
                     setupViewPager(keywordsList)
-                    setupCalendar(keywordsList)
-                    setupChart(binding.lineChart, keywordsList)
-                    setupScrollSync()
 
+                    val keyword = keywordsList[0]
+                    setupCalendar(keyword)
+                    setupChart(binding.lineChart, keyword)
+                    setupScrollSync()
                 }
         }
     }
@@ -104,7 +103,7 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupCalendar(keywordsList: List<Keywords>) {
+    private fun setupCalendar(keyword: Keywords) {
         Log.i("process test", "setupCalendar 실행중")
         val dateSet = mutableListOf<Date>()
         val currentDate = LocalDate.now()
@@ -129,8 +128,7 @@ class HomeFragment : Fragment() {
             val date = Date(dayOfWeek, dayOfMonth.toString())
             dateSet.add(date)
         }
-        //TODO Keywords 객체 하나만 전달 하기
-        val adapter = DayAdapter(dateSet.reversed(), keywordsList[0])
+        val adapter = DayAdapter(dateSet.reversed(), keyword)
         binding.apply {
             rvCalendar.layoutManager =
                 LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
@@ -139,9 +137,10 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun setupChart(chart: LineChart, keywordsList: List<Keywords>) {
+    private fun setupChart(chart: LineChart, keyword: Keywords) {
         Log.i("process test", "setupChart 실행중")
-        if (keywordsList.isNotEmpty()) {
+
+        if (keyword.recentTrend.isNotEmpty()) {
             // 화면 너비를 가져오기 위해 DisplayMetrics를 사용
             val displayMetrics = chart.context.resources.displayMetrics
             val deviceWidth = displayMetrics.widthPixels
@@ -165,10 +164,9 @@ class HomeFragment : Fragment() {
                 animateY(500)
             }
 
-
             chart.apply {
                 val entryList = arrayListOf<Entry>()
-                val recentTrend = keywordsList[0].recentTrend
+                val recentTrend = keyword.recentTrend
                 recentTrend.forEachIndexed { index, d ->
                     entryList.add(Entry(index.toFloat(), d.toFloat()))
                 }
@@ -194,15 +192,15 @@ class HomeFragment : Fragment() {
         val adapter = KeywordAdapter(keywordsList)
 
         binding.apply {
+            // 어댑터 설정
             vpTodayKeyword.adapter = adapter
+            // 오버스크롤 X
             (vpTodayKeyword.getChildAt(0) as? RecyclerView)?.also {
                 it.overScrollMode = View.OVER_SCROLL_NEVER
             }
-
+            // 양 옆 아이템 크기 및 색상 설정
             val compositePageTransformer = CompositePageTransformer().apply {
-
                 addTransformer(MarginPageTransformer(50))
-
                 addTransformer { page, position ->
                     val scaleFactor = if (position in -1f..1f) {
                         0.85f + (1 - abs(position)) * 0.15f
@@ -214,16 +212,34 @@ class HomeFragment : Fragment() {
                         scaleX = scaleFactor
                         scaleY = scaleFactor
                     }
-
                     page.alpha = 0.5f + (1 - abs(position))
                 }
             }
-
+            // 뷰페이저 세팅
             vpTodayKeyword.apply {
                 setPageTransformer(compositePageTransformer)
                 offscreenPageLimit = 2
                 setPadding(200, 0, 200, 0)
-                clipToPadding = false // Ensure padding is not clipped
+                clipToPadding = false
+
+                registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                    override fun onPageSelected(position: Int) {
+                        super.onPageSelected(position)
+                        val calendarScrollPosition = (binding.rvCalendar.layoutManager as LinearLayoutManager)
+                            .findFirstVisibleItemPosition()
+                        val chartScrollX = binding.hsvChart.scrollX
+
+                        val keyword = keywordsList[position]
+                        setupCalendar(keyword)
+                        setupChart(binding.lineChart, keyword)
+
+                        binding.rvCalendar.layoutManager?.scrollToPosition(calendarScrollPosition)
+                        binding.hsvChart.post {
+                            binding.hsvChart.scrollTo(chartScrollX, 0)
+                        }
+                    }
+                })
+
             }
 
             ivArrowLeft.setOnClickListener {
@@ -233,6 +249,7 @@ class HomeFragment : Fragment() {
             ivArrowRight.setOnClickListener {
                 vpTodayKeyword.setCurrentItem(vpTodayKeyword.currentItem + 1, true)
             }
+
         }
     }
 
