@@ -49,7 +49,6 @@ class QuestionFragment : Fragment() {
     private fun initView() = with(binding) {
         val currentQuestion = todayQuiz.questions[position]
 
-        tvQuizNumber.text = getString(R.string.quiz_number, position + 1)
         tvQuizQuestion.text = highlightKeyword(
             currentQuestion.question,
             todayQuiz.keyword.keyText,
