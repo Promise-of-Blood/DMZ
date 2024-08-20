@@ -1,11 +1,14 @@
-package com.example.dmz.ui
+package com.example.dmz.ui.quiz
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.dmz.R
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
+import com.example.dmz.data.CacheDataSource
+import com.example.dmz.data.repository.QuizRepositoryImpl
+import com.example.dmz.databinding.FragmentStartBinding
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -14,10 +17,15 @@ private const val ARG_PARAM2 = "param2"
 
 /**
  * A simple [Fragment] subclass.
- * Use the [QuizFragment.newInstance] factory method to
+ * Use the [StartFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class QuizFragment : Fragment() {
+class StartFragment : Fragment() {
+    private var _binding: FragmentStartBinding? = null
+    private val binding get() = _binding!!
+
+    private val quizRepository = QuizRepositoryImpl(CacheDataSource.getCacheDataSource())
+
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
@@ -33,9 +41,29 @@ class QuizFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_quiz, container, false)
+    ): View {
+        _binding = FragmentStartBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initView()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+    }
+
+    private fun initView() = with(binding) {
+        tvQuizStartTitle.text = quizRepository.getTodayQuiz().keyword.keyText
+        tvQuizStartButton.setOnClickListener { startQuiz() }
+    }
+
+    private fun startQuiz() {
+        val action = StartFragmentDirections.actionQuizStartToQuizQuestion()
+        findNavController().navigate(action)
     }
 
     companion object {
@@ -45,12 +73,12 @@ class QuizFragment : Fragment() {
          *
          * @param param1 Parameter 1.
          * @param param2 Parameter 2.
-         * @return A new instance of fragment QuizFragment.
+         * @return A new instance of fragment StartFragment.
          */
         // TODO: Rename and change types and number of parameters
         @JvmStatic
         fun newInstance(param1: String, param2: String) =
-            QuizFragment().apply {
+            StartFragment().apply {
                 arguments = Bundle().apply {
                     putString(ARG_PARAM1, param1)
                     putString(ARG_PARAM2, param2)

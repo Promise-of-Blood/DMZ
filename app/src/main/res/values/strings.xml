@@ -53,4 +53,15 @@
     <string name="bookmark_title">Bookmark</string>
     <string name="bookmark_back">뒤로가기</string>
 
+    <!-- quiz page -->
+    <string name="quiz_intro">오늘 알아볼\nMZ 키워드는?</string>
+    <string name="quiz_number">Quiz %d</string>
+    <string name="quiz_result_title">결과</string>
+    <string name="quiz_result">%d문제 맞췄습니다!</string>
+    <string name="quiz_button_next">다음으로</string>
+    <string name="quiz_button_submit">제출하기</string>
+    <string name="quiz_button_start">수집하러가기</string>
+    <string name="quiz_button_collect">카드 획득하기</string>
+    <string name="quiz_button_back">돌아가기</string>
+
 </resources>

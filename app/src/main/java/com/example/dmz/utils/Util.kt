@@ -2,6 +2,9 @@ package com.example.dmz.utils
 
 import android.content.res.Resources.getSystem
 import android.icu.text.DecimalFormat
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
@@ -190,5 +193,17 @@ object Util {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN)
         val dateString: String = formatter.format(date!!)
         return dateString
+    }
+
+    fun highlightKeyword(text: String, keyword: String, color: Int): SpannableStringBuilder {
+        if (!text.contains(keyword)) return SpannableStringBuilder(text)
+        val spannableStringBuilder = SpannableStringBuilder(text)
+        val start = text.indexOf(keyword)
+        val end = start + keyword.length
+        spannableStringBuilder.setSpan(
+            ForegroundColorSpan(color), start, end,
+            Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
+        )
+        return spannableStringBuilder
     }
 }

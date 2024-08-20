@@ -6,10 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/black"
-    tools:context=".ui.StartActivity">
+    android:paddingBottom="60dp"
+    tools:context=".ui.quiz.StartFragment">
 
     <TextView
-        android:id="@+id/tv_description"
+        android:id="@+id/tv_quiz_start_description"
         style="@style/headline_b_p"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -22,39 +23,41 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/tv_title"
+        android:id="@+id/tv_quiz_start_title"
         style="@style/keyword_b_p"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:letterSpacing="0.1"
         android:lineSpacingExtra="5dp"
-        android:text="요아정"
         android:textColor="@color/sky_blue"
-        app:layout_constraintStart_toStartOf="@id/tv_description"
-        app:layout_constraintTop_toBottomOf="@id/tv_description" />
+        app:layout_constraintStart_toStartOf="@id/tv_quiz_start_description"
+        app:layout_constraintTop_toBottomOf="@id/tv_quiz_start_description"
+        tools:text="요아정" />
 
     <ImageView
+        android:id="@+id/iv_quiz_start_image"
         android:layout_width="0dp"
         android:layout_height="400dp"
+        android:contentDescription="@string/common_keyword_thumbnail"
         android:src="@drawable/img_yoajung"
         android:translationX="150dp"
-        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toTopOf="@id/tv_quiz_start_button"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_title" />
+        app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
-        android:id="@+id/tv_start_button"
+        android:id="@+id/tv_quiz_start_button"
         style="@style/subtitle_p"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="24dp"
-        android:layout_marginBottom="24dp"
-        android:background="@drawable/background_start_button"
-        android:gravity="center"
+        android:layout_marginHorizontal="32dp"
+        android:background="@drawable/shape_corner_radius_10dp_border"
+        android:backgroundTint="@color/flou_yellow"
+        android:backgroundTintMode="multiply"
+        android:gravity="center|center_vertical"
         android:paddingVertical="16dp"
-        android:text="알아보러가기"
+        android:text="@string/quiz_button_start"
         android:textColor="@color/flou_yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
