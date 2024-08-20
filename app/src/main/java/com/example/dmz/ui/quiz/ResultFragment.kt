@@ -42,7 +42,7 @@ class ResultFragment : Fragment() {
             getString(if (isPassedQuiz) R.string.quiz_button_collect else R.string.quiz_button_back)
         tvQuizResultButton.setOnClickListener {
             if (isPassedQuiz) {
-                val action = ResultFragmentDirections.actionQuizResultToBookmark()
+                val action = ResultFragmentDirections.actionQuizResultToMyPage()
                 findNavController().navigate(action)
             } else {
                 val action = ResultFragmentDirections.actionQuizResultToQuizStart()

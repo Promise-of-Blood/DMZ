@@ -118,8 +118,8 @@
             android:name="keyword"
             app:argType="com.example.dmz.data.model.Keywords" />
         <action
-            android:id="@+id/action_quiz_result_to_bookmark"
-            app:destination="@id/navigation_bookmark" />
+            android:id="@+id/action_quiz_result_to_my_page"
+            app:destination="@id/navigation_my_profile" />
         <action
             android:id="@+id/action_quiz_result_to_quiz_start"
             app:destination="@id/navigation_quiz" />

@@ -10,13 +10,12 @@
     <ImageView
         android:id="@+id/iv_card_image"
         android:layout_width="150dp"
-        android:layout_height="0dp"
+        android:layout_height="200dp"
         android:background="@drawable/shape_corner_radius_24dp"
         android:clipToOutline="true"
         android:contentDescription="@string/common_keyword_thumbnail"
         android:scaleType="centerCrop"
         android:src="@drawable/ic_launcher_background"
-        app:layout_constraintDimensionRatio="4:5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

@@ -6,33 +6,33 @@ import java.time.LocalDate
 
 
 fun quizList(): List<Quiz> {
-    val keywordList = CacheDataSource.getCacheDataSource().getUserList()
+    val keywordList = CacheDataSource.getCacheDataSource().getKeywordsList()
 
     return listOf(
         Quiz(
             date = LocalDate.of(2024, 8, 20),
-            keyword = keywordList.random(),
+            keyword = keywordList[0],
             questions = listOf(
                 Question(
                     question = "질문1",
                     answers = listOf("답안1", "답안2", "답안3"),
-                    correctAnswerIndex = 2
+                    correctAnswerIndex = 0
                 ),
                 Question(
                     question = "질문2",
                     answers = listOf("답안1", "답안2", "답안3"),
-                    correctAnswerIndex = 1
+                    correctAnswerIndex = 0
                 ),
                 Question(
                     question = "질문3",
                     answers = listOf("답안1", "답안2", "답안3"),
-                    correctAnswerIndex = 1
+                    correctAnswerIndex = 0
                 ),
             )
         ),
         Quiz(
             date = LocalDate.of(2024, 8, 21),
-            keyword = keywordList.random(),
+            keyword = keywordList[1],
             questions = listOf(
                 Question(
                     question = "질문1",
