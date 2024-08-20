@@ -161,15 +161,6 @@ class SearchFragment : Fragment() {
         )
     }
 
-    private fun setViewPager() {
-        binding.vpRecentSearch.apply {
-            searchRecentAdapter = SearchRecentAdapter(listOfSearch())
-            adapter = searchRecentAdapter
-            offscreenPageLimit = 4
-            setPageTransformer(SliderTransformer(4))
-        }
-    }
-
     private fun setRegion(input: String, regionArrayResource: Array<String>) {
         when (input) {
             regionArrayResource[0] -> searchRegion = "KR"
