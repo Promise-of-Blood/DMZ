@@ -1,6 +1,7 @@
 package com.example.dmz.data
 
 import com.example.dmz.data.model.Keywords
+import com.example.dmz.data.model.Quiz
 
 class CacheDataSource {
     companion object {
@@ -19,5 +20,9 @@ class CacheDataSource {
 
     fun getUserList(): List<Keywords> {
         return keywordsList()
+    }
+
+    fun getQuizList(): List<Quiz> {
+        return quizList()
     }
 }
