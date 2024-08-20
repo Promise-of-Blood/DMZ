@@ -87,4 +87,7 @@ dependencies {
 
     // MPAndroidChart
     implementation(libs.mpandroidchart)
+    //코루틴
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+
 }
