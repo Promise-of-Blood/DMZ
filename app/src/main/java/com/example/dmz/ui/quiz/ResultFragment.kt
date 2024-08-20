@@ -104,16 +104,14 @@ class ResultFragment : Fragment() {
     }
 
     private fun collectKeyword() {
-        val keyword = quizRepository.getTodayQuiz().keyword
-        if (score >= 2) {
-            myPageViewModel.addKeywordCard(
-                KeywordCard(
-                    id = UUID.randomUUID().toString(),
-                    keyword = keyword.keyText,
-                    thumbnail = keyword.keyImage
-                )
+        val keyword = args.keyword
+        myPageViewModel.addKeywordCard(
+            KeywordCard(
+                id = UUID.randomUUID().toString(),
+                keyword = keyword.keyText,
+                thumbnail = keyword.keyImage
             )
-        }
+        )
     }
 
     private fun ImageView.setGrayScaleFilter() {
