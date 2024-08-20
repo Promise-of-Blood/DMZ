@@ -29,6 +29,8 @@ class SearchFragment : Fragment() {
         SearchViewModel.SearchViewModelFactory()
     }
 
+    private lateinit var searchRecentAdapter: SearchRecentAdapter
+
     // 검색 변수
     private var searchRegion: String? = null
     private var searchSort: String? = null
@@ -49,7 +51,9 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
-        setViewPager()
+
+
+//        setViewPager()
 //        searchViewModel.getRecentSearchItems(mContext)
 
         searchViewModel.loadRecentSearchItems(mContext)
@@ -115,11 +119,29 @@ class SearchFragment : Fragment() {
 
         searchViewModel.recentSearchedList.observe(viewLifecycleOwner) { searchedItem ->
             binding.vpRecentSearch.apply {
-                adapter = SearchRecentAdapter(searchedItem)
+                searchRecentAdapter = SearchRecentAdapter(searchedItem)
+                adapter = searchRecentAdapter
                 offscreenPageLimit = 4
                 setPageTransformer(SliderTransformer(4))
             }
+
+            searchRecentAdapter.setItemClickListener(object :
+                SearchRecentAdapter.OnItemClickListener {
+                override fun onClick(v: View, position: Int) {
+                    val searchItem = searchViewModel.recentSearchedList.value?.get(position)
+                    if (searchItem == null) {
+                        Log.d("SearchItemError", "searchItem is null")
+                    }
+                    searchItem?.let {
+                        binding.run {
+                            etSearch.setText(it.query)
+                        }
+                    }
+                }
+
+            })
         }
+
 
 
     }
@@ -141,7 +163,8 @@ class SearchFragment : Fragment() {
 
     private fun setViewPager() {
         binding.vpRecentSearch.apply {
-            adapter = SearchRecentAdapter(listOfSearch())
+            searchRecentAdapter = SearchRecentAdapter(listOfSearch())
+            adapter = searchRecentAdapter
             offscreenPageLimit = 4
             setPageTransformer(SliderTransformer(4))
         }

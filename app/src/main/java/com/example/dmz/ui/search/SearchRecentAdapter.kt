@@ -2,6 +2,7 @@ package com.example.dmz.ui.search
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.dmz.databinding.ItemRecentSearchBinding
@@ -28,10 +29,6 @@ class SearchRecentAdapter(
 
     override fun onBindViewHolder(holder: SearchHolder, position: Int) {
         val searchEntity = searchEntityList[position]
-        holder.binding.apply {
-            search = searchEntity
-        }
-
         val region = setRegionData(searchEntity.region)
         val sort = setSort(searchEntity.sort)
 
@@ -42,11 +39,26 @@ class SearchRecentAdapter(
             tvDate.text = searchEntity.date
         }
 
+        holder.itemView.setOnClickListener {
+            itemClickListener.onClick(it, position)
+        }
+
     }
 
     override fun getItemCount(): Int {
         return searchEntityList.size
     }
+
+    private lateinit var itemClickListener: OnItemClickListener
+
+    interface OnItemClickListener {
+        fun onClick(v: View, position: Int)
+    }
+
+    fun setItemClickListener(onItemClickListener: OnItemClickListener) {
+        this.itemClickListener = onItemClickListener
+    }
+
 
     private fun setRegionData(region: String): String {
         Log.d("SearchViewModel", "setRegionData called with region: $region")
@@ -70,15 +82,15 @@ class SearchRecentAdapter(
         }
     }
 
-    private fun setDate(input: String): String {
-        return when (input) {
-            "relevance" -> "관련성 순"
-            "date" -> "날짜 순"
-            "rating" -> "평점 순"
-            "title" -> "제목 순"
-            "viewCount" -> "조회수 순"
-            else -> input
-        }
-    }
+//    private fun setDate(input: String): String {
+//        return when (input) {
+//            "relevance" -> "관련성 순"
+//            "date" -> "날짜 순"
+//            "rating" -> "평점 순"
+//            "title" -> "제목 순"
+//            "viewCount" -> "조회수 순"
+//            else -> input
+//        }
+//    }
 
 }

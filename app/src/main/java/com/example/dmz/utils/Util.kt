@@ -7,7 +7,6 @@ import android.icu.text.DecimalFormat
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
-import android.util.Log
 import androidx.core.text.isDigitsOnly
 import com.example.dmz.MainActivity
 import com.example.dmz.R
