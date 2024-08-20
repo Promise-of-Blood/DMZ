@@ -1,5 +1,6 @@
 package com.example.dmz.ui.search
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -10,6 +11,7 @@ import com.bumptech.glide.Glide
 import com.example.dmz.databinding.ItemSearchResultBinding
 import com.example.dmz.model.VideoModel
 import com.example.dmz.ui.search.SearchResultAdapter.SearchResultViewHolder
+import com.example.dmz.utils.Util.formatDiffDay
 
 class SearchResultAdapter : ListAdapter<VideoModel, SearchResultViewHolder>(diffUtil) {
 
@@ -30,7 +32,9 @@ class SearchResultAdapter : ListAdapter<VideoModel, SearchResultViewHolder>(diff
                 Glide.with(itemView.context).load(item.thumbnail).into(ivThumbImage)
                 tvResultTitle.text = item.title
                 tvChannelName.text = item.channelName
-                tvVideoTime.text = item.publishedAt
+                tvVideoTime.text = String.format("%s 전",item.publishedAt.formatDiffDay())
+                Log.d("date", item.publishedAt)
+                Log.d("date", item.publishedAt.formatDiffDay())
             }
         }
 

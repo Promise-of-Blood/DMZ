@@ -1,132 +1,120 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/black">
 
-    <data>
+    <androidx.cardview.widget.CardView
+        android:layout_width="300dp"
+        android:layout_height="350dp"
+        app:cardBackgroundColor="@color/flou_yellow"
+        app:cardCornerRadius="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <variable
-            name="search"
-            type="com.example.dmz.model.SearchEntity" />
-    </data>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:layout_marginTop="20dp"
+            android:fontFamily="@font/elicedigitalbaeum_bold"
+            android:text="HISTORY CARD"
+            android:textSize="25sp" />
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/black">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="90dp"
+            android:fontFamily="@font/elicedigitalbaeum_bold"
+            android:text="검색어"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
-        <androidx.cardview.widget.CardView
-            android:layout_width="300dp"
-            android:layout_height="350dp"
-            app:cardBackgroundColor="@{search.color}"
-            app:cardCornerRadius="30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/tv_query"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginTop="120dp"
+            android:fontFamily="@font/elicedigitalbaeum"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            tools:text="검색어" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="150dp"
+            android:fontFamily="@font/elicedigitalbaeum_bold"
+            android:text="국가 설정"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/tv_region"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginTop="180dp"
+            android:fontFamily="@font/elicedigitalbaeum"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            tools:text="대한민국" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
-                android:text="HISTORY CARD"
-                android:layout_marginTop="20dp"
-                android:layout_marginHorizontal="30dp"
-                android:textSize="25sp" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="210dp"
+            android:fontFamily="@font/elicedigitalbaeum_bold"
+            android:text="정렬 설정"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="검색어"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
-                android:layout_marginTop="90dp"
-                android:layout_marginHorizontal="50dp"
-                />
+        <TextView
+            android:id="@+id/tv_sort"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginTop="240dp"
+            android:fontFamily="@font/elicedigitalbaeum"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            tools:text="정렬" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{search.color}"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum"
-                android:layout_marginTop="120dp"
-                android:layout_marginHorizontal="60dp"
-                tools:text="검색어"
-                />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="50dp"
+            android:layout_marginTop="270dp"
+            android:fontFamily="@font/elicedigitalbaeum_bold"
+            android:text="날짜"
+            android:textColor="@color/black"
+            android:textSize="12sp" />
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="국가 설정"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
-                android:layout_marginTop="150dp"
-                android:layout_marginHorizontal="50dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{search.region}"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum"
-                android:layout_marginTop="180dp"
-                android:layout_marginHorizontal="60dp"
-                tools:text="대한민국"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="정렬 설정"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
-                android:layout_marginTop="210dp"
-                android:layout_marginHorizontal="50dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{search.sort}"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum"
-                android:layout_marginTop="240dp"
-                android:layout_marginHorizontal="60dp"
-                tools:text="정렬"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="날짜"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum_bold"
-                android:layout_marginTop="270dp"
-                android:layout_marginHorizontal="50dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{search.date}"
-                android:textSize="12sp"
-                android:fontFamily="@font/elicedigitalbaeum"
-                android:layout_marginTop="300dp"
-                android:layout_marginHorizontal="60dp"
-                tools:text="2024.07.11 ~ 2024.08.12"
-                />
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="60dp"
+            android:layout_marginTop="300dp"
+            android:fontFamily="@font/elicedigitalbaeum"
+            android:textColor="@color/black"
+            android:textSize="12sp"
+            tools:text="1년 전" />
 
 
+    </androidx.cardview.widget.CardView>
 
 
-        </androidx.cardview.widget.CardView>
+</androidx.constraintlayout.widget.ConstraintLayout>
 
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-</layout>
 
 

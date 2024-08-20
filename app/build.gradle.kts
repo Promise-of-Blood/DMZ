@@ -49,7 +49,6 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
-        dataBinding = true
     }
 }
 
@@ -84,7 +83,7 @@ dependencies {
     implementation(libs.glide)
 
     //search spinner
-    implementation("com.github.skydoves:powerspinner:1.2.7")
+    implementation (libs.powerspinner)
 
     // MPAndroidChart
     implementation(libs.mpandroidchart)

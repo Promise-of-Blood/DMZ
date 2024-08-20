@@ -1,5 +1,7 @@
 package com.example.dmz.utils
 
+import android.app.Activity
+import android.content.Context
 import android.animation.ObjectAnimator
 import android.content.res.Resources.getSystem
 import android.icu.text.DecimalFormat
@@ -12,12 +14,15 @@ import android.widget.ImageView
 import androidx.core.text.isDigitsOnly
 import com.example.dmz.MainActivity
 import com.example.dmz.R
+import com.example.dmz.model.SearchEntity
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.gson.GsonBuilder
 import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.time.format.DateTimeFormatterBuilder
+import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
@@ -195,6 +200,28 @@ object Util {
         val formatter = SimpleDateFormat("yyyy-MM-dd", Locale.KOREAN)
         val dateString: String = formatter.format(date!!)
         return dateString
+    }
+
+    fun koreanToRegionCode(region: String): String {
+        Log.d("SearchViewModel", "setRegionData called with region: $region")
+        return when (region) {
+            "KR" -> "대한민국"
+            "US" -> "미국"
+            "JP" -> "일본"
+            "GB" -> "영국"
+            else -> region
+        }
+    }
+
+    fun koreanToSortData(input: String): String {
+        return when (input) {
+            "relevance" -> "관련성 순"
+            "date" -> "날짜 순"
+            "rating" -> "평점 순"
+            "title" -> "제목 순"
+            "viewCount" -> "조회수 순"
+            else -> input
+        }
     }
 
     fun highlightKeyword(text: String, keyword: String, color: Int): SpannableStringBuilder {

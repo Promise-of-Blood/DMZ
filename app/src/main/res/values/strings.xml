@@ -23,6 +23,7 @@
     <string name="preference_file_key">preference_dmz</string>
     <string name="preference_bookmark_key">preference_bookmark</string>
     <string name="preference_keyword_card_key">preference_keyword_card</string>
+    <string name="preference_recent_search_key">preference_recent_search</string>
 
     <!-- detail page -->
     <string name="detail_video_info">영상 정보</string>

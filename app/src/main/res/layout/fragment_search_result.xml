@@ -20,19 +20,33 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/tv_search_result_query"
-        style="@style/subtitle_b_e"
+    <com.skydoves.powerspinner.PowerSpinnerView
+        android:id="@+id/spinner_result"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="32dp"
-        android:text="검색 결과"
-        android:textColor="@color/white"
+        android:background="@color/white"
+        android:elevation="14dp"
+        android:foreground="?attr/selectableItemBackground"
+        android:layout_marginTop="10dp"
+        android:padding="8dp"
+        android:paddingStart="15dp"
+        android:textColor="@color/black"
+        style="@style/description_e"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_search_result_title" />
+        app:layout_constraintTop_toBottomOf="@id/tv_search_result_title"
+        app:spinner_arrow_gravity="end"
+        app:spinner_arrow_tint="@color/black"
+        app:spinner_divider_color="@color/black"
+        app:spinner_divider_show="false"
+        app:spinner_item_height="40dp"
+        app:spinner_popup_animation="bounce"
+        app:spinner_popup_background="@color/white"
+        tools:ignore="HardcodedText,UnusedAttribute" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:layout_marginHorizontal="32dp"
         android:id="@+id/rv_search_result_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -40,6 +54,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/tv_search_result_query" />
+        app:layout_constraintTop_toBottomOf="@id/spinner_result" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
