@@ -65,8 +65,10 @@ class QuizFragment : Fragment() {
             val navOptions = NavOptions.Builder().setPopUpTo(R.id.navigation_quiz, true).build()
             findNavController().navigate(action, navOptions)
         } else {
-            if (selectedAnswer != -1) vpQuiz.currentItem = nextItem
-            else Toast.makeText(requireContext(), "정답을 선택해주세요.", Toast.LENGTH_SHORT).show()
+            if (selectedAnswer != -1) {
+                tvQuizNumber.text = getString(R.string.quiz_number, nextItem + 1)
+                vpQuiz.currentItem = nextItem
+            } else Toast.makeText(requireContext(), "정답을 선택해주세요.", Toast.LENGTH_SHORT).show()
         }
     }
 }
