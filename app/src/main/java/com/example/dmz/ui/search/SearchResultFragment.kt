@@ -11,7 +11,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.dmz.MainActivity
 import com.example.dmz.databinding.FragmentSearchResultBinding
+import com.example.dmz.utils.Util.handleBottomNavigationVisibility
 import com.example.dmz.utils.Util.koreanToRegionCode
 import com.example.dmz.utils.Util.koreanToSortData
 import com.example.dmz.viewmodel.SearchViewModel
@@ -54,11 +56,16 @@ class SearchResultFragment : Fragment() {
 
         observeVideoData()
         initItemClick()
+    }
 
+    override fun onResume() {
+        (activity as MainActivity).handleBottomNavigationVisibility(false)
+        super.onResume()
     }
 
     override fun onDestroy() {
         _binding = null
+        (activity as MainActivity).handleBottomNavigationVisibility(true)
         super.onDestroy()
     }
 
@@ -68,7 +75,6 @@ class SearchResultFragment : Fragment() {
         binding.run {
             rvSearchResultList.adapter = searchResultAdapter
             rvSearchResultList.layoutManager = LinearLayoutManager(mContext)
-
 
             spinnerResult.setOnSpinnerItemSelectedListener<String> { _, _, _, _ ->
                 spinnerResult.setText(args.query)
