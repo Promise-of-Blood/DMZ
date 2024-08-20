@@ -10,11 +10,13 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import com.example.dmz.MainActivity
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
 import com.example.dmz.model.SearchEntity
 import com.example.dmz.utils.Util
 import com.example.dmz.utils.Util.getNowTimeAsIso
+import com.example.dmz.utils.Util.handleBottomNavigationVisibility
 import com.example.dmz.utils.Util.koreanToRegionCode
 import com.example.dmz.utils.Util.koreanToSortData
 import com.example.dmz.utils.Util.setDateAgo
@@ -38,6 +40,7 @@ class SearchFragment : Fragment() {
     private var searchBeforeDate: String? = null
     private var searchNowDate: String? = null
     private var searchDateSet: String? = null
+    private var maxResults: Int = 5
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -60,6 +63,7 @@ class SearchFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        (activity as MainActivity).handleBottomNavigationVisibility(false)
 
         setSpinners()
         setSearchButton()
@@ -69,6 +73,7 @@ class SearchFragment : Fragment() {
 
     override fun onDestroy() {
         _binding = null
+        (activity as MainActivity).handleBottomNavigationVisibility(true)
         super.onDestroy()
     }
 

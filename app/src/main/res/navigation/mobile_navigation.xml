@@ -61,11 +61,19 @@
         tools:layout="@layout/fragment_search_result">
         <action
             android:id="@+id/action_navigation_search_result_to_navigation_detail"
-            app:destination="@id/navigation_detail">
-            <argument
-                android:name="videoId"
-                app:argType="string" />
-        </action>
+            app:destination="@id/navigation_detail"/>
+        <argument
+            android:name="query"
+            app:argType="string" />
+        <argument
+            android:name="region"
+            app:argType="string" />
+        <argument
+            android:name="sort"
+            app:argType="string" />
+        <argument
+            android:name="date"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/navigation_detail"
