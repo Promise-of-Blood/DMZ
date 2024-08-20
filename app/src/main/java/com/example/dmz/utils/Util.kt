@@ -1,8 +1,14 @@
 package com.example.dmz.utils
 
 import android.animation.ObjectAnimator
+import android.content.res.Resources.getSystem
 import android.icu.text.DecimalFormat
+import android.text.Spannable
+import android.text.SpannableStringBuilder
+import android.text.style.ForegroundColorSpan
+import android.util.Log
 import android.view.View
+import android.widget.ImageView
 import androidx.core.text.isDigitsOnly
 import com.example.dmz.MainActivity
 import com.example.dmz.R
