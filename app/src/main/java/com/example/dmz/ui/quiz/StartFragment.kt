@@ -1,14 +1,19 @@
 package com.example.dmz.ui.quiz
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.dmz.R
 import com.example.dmz.data.CacheDataSource
 import com.example.dmz.data.repository.QuizRepositoryImpl
 import com.example.dmz.databinding.FragmentStartBinding
+import com.example.dmz.viewmodel.QuizViewModel
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -25,10 +30,24 @@ class StartFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val quizRepository = QuizRepositoryImpl(CacheDataSource.getCacheDataSource())
+    private val quizViewModel: QuizViewModel by activityViewModels()
 
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+
+        val answer = quizViewModel.answer.value ?: mapOf()
+        if (answer.size == 3) {
+            val action =
+                StartFragmentDirections.actionQuizStartToQuizResult(quizRepository.getTodayQuiz().keyword)
+            val navOptions =
+                NavOptions.Builder().setPopUpTo(R.id.navigation_quiz_result, true).build()
+            findNavController().navigate(action, navOptions)
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
