@@ -232,4 +232,26 @@ object Util {
         val dateString: String = formatter.format(date!!)
         return dateString
     }
+
+    fun koreanToRegionCode(region: String): String {
+        Log.d("SearchViewModel", "setRegionData called with region: $region")
+        return when (region) {
+            "KR" -> "대한민국"
+            "US" -> "미국"
+            "JP" -> "일본"
+            "GB" -> "영국"
+            else -> region
+        }
+    }
+
+    fun koreanToSortData(input: String): String {
+        return when (input) {
+            "relevance" -> "관련성 순"
+            "date" -> "날짜 순"
+            "rating" -> "평점 순"
+            "title" -> "제목 순"
+            "viewCount" -> "조회수 순"
+            else -> input
+        }
+    }
 }

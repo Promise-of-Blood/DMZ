@@ -13,9 +13,10 @@ import androidx.navigation.fragment.findNavController
 import com.example.dmz.R
 import com.example.dmz.databinding.FragmentSearchBinding
 import com.example.dmz.model.SearchEntity
-import com.example.dmz.model.listOfSearch
 import com.example.dmz.utils.Util
 import com.example.dmz.utils.Util.getNowTimeAsIso
+import com.example.dmz.utils.Util.koreanToRegionCode
+import com.example.dmz.utils.Util.koreanToSortData
 import com.example.dmz.utils.Util.setDateAgo
 import com.example.dmz.viewmodel.SearchViewModel
 
@@ -52,13 +53,7 @@ class SearchFragment : Fragment() {
     ): View {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-
-//        setViewPager()
-//        searchViewModel.getRecentSearchItems(mContext)
-
         searchViewModel.loadRecentSearchItems(mContext)
-
-
 
         return binding.root
     }
@@ -91,7 +86,7 @@ class SearchFragment : Fragment() {
                     return@setOnClickListener
                 }
 
-                if (searchRegion == null || searchSort == null || searchNowDate == null) {
+                if (searchRegion == null || searchSort == null || searchDateSet == null) {
                     Toast.makeText(mContext, "설정하지 않은 속성이 있습니다.", Toast.LENGTH_SHORT).show()
                     return@setOnClickListener
                 }
@@ -135,14 +130,22 @@ class SearchFragment : Fragment() {
                     searchItem?.let {
                         binding.run {
                             etSearch.setText(it.query)
+                            val region = koreanToRegionCode(it.region)
+                            searchRegion = it.region
+                            spinnerRegion.setText(region)
+
+                            val sort = koreanToSortData(it.sort)
+                            searchSort = it.sort
+                            spinnerSort.setText(sort)
+
+                            searchDateSet = it.date
+                            spinnerDate.setText(it.date)
                         }
                     }
                 }
 
             })
         }
-
-
 
     }
 
@@ -170,6 +173,7 @@ class SearchFragment : Fragment() {
         }
         searchRegion?.let { Log.d("setRegion", it) }
     }
+
 
     private fun setSort(input: String, regionArrayResource: Array<String>) {
         when (input) {
