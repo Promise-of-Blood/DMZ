@@ -140,31 +140,16 @@ class LifeStyleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         homeBtn.visibility = View.GONE
 
         mlLifeStyleFragment.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
-                Log.d("MotionLayout", "Transition Started: $startId -> $endId")
-            }
-
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                Log.d("MotionLayout", "LifeStyle: {${requireActivity().resources.getResourceEntryName(currentId)}}")
-                bottomNavControl(currentId, navView, homeBtn)
-                Log.d("라이브 데이터","${motionViewModel.isListVisible.value}")
-                if(currentId == R.id.end){
-                    motionViewModel.setListVisible(true)
-                }else if(currentId == R.id.start) {
-                    motionViewModel.setListVisible(false)
-                }
+                Log.d("MotionLayout", "Life: {${requireActivity().resources.getResourceEntryName(currentId)}}")
+                bottomNavControl(currentId,navView,homeBtn)
 
             }
-
-            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
-                Log.d("MotionLayout", "Transition Triggered: $triggerId, positive: $positive")
-            }
+            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
         })
 
-        val initState = mlLifeStyleFragment.currentState
-        bottomNavControl(initState,navView,homeBtn)
 
         listLayout.tvTopbarTitle.text = getString(browse_life_style)
         listLayout.tvChannelTitle.text = getString(browse_life_style)
@@ -182,7 +167,7 @@ class LifeStyleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
             }
             if(regionCode != previousRegionCode){
                 saveSelectedRegion(sharedPreferences,regionCode)
-//                fetchBrowseData(channelViewModel,"/m/019_rr",regionCode)
+                fetchBrowseData(channelViewModel,"/m/019_rr",regionCode)
                 previousRegionCode = regionCode
             }
         }
@@ -205,33 +190,19 @@ class LifeStyleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
     }
 
     private fun initBrowseViewModel(motionLayout:MotionLayout) {
-//        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
-//            browseChannelAdapter.submitList(channels)
-//        }
-//
-//        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
-//            browseVideoAdapter.submitList(videos)
-//        }
-
-        motionViewModel.isListVisible.observe(viewLifecycleOwner){isListVisible ->
-            lifecycleScope.launch {
-                repeatOnLifecycle(Lifecycle.State.STARTED){
-                    delay(1000)
-                    if(isListVisible){
-                        motionLayout.transitionToEnd()
-                        Log.d("라이브 데이터","라이프 isListVisible 값 :${motionViewModel.isListVisible.value}")
-                    }else{
-                        motionLayout.transitionToStart()
-                        Log.d("라이브 데이터","라이프 isListVisible 값 :${motionViewModel.isListVisible.value}")
-                    }
-                }
-            }
-
+        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
+            browseChannelAdapter.submitList(channels)
         }
 
-//        val lastRegionCode = loadLastRegion(sharedPreferences)
-//        fetchBrowseData(channelViewModel,"/m/019_rr",lastRegionCode)
-//        previousRegionCode = lastRegionCode
+        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
+            browseVideoAdapter.submitList(videos)
+        }
+
+
+
+        val lastRegionCode = loadLastRegion(sharedPreferences)
+        fetchBrowseData(channelViewModel,"/m/019_rr",lastRegionCode)
+        previousRegionCode = lastRegionCode
 
     }
 

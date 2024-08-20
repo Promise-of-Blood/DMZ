@@ -54,10 +54,6 @@ class GameFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         viewModelFactory { initializer { SearchViewModel(SearchRepositoryImpl(YoutubeSearchClient.youtubeApi)) } }
     }
 
-    private val motionViewModel: BrowseMotionViewModel by activityViewModels {
-        viewModelFactory { initializer { BrowseMotionViewModel() } }
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -74,7 +70,7 @@ class GameFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBrowseView()
-        initBrowseViewModel(binding.mlGameFragment)
+        initBrowseViewModel()
     }
 
     override fun onResume() {
@@ -125,17 +121,11 @@ class GameFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
                 Log.d("MotionLayout", "Game: {${requireActivity().resources.getResourceEntryName(currentId)}}")
                 bottomNavControl(currentId,navView,homeBtn)
-                if(currentId == R.id.end){
-                    motionViewModel.setListVisible(true)
-                }else if(currentId == R.id.start){
-                    motionViewModel.setListVisible(false)
-                }
+
             }
             override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
         })
 
-        val initState = mlGameFragment.currentState
-        bottomNavControl(initState,navView,homeBtn)
 
 
 
@@ -156,7 +146,7 @@ class GameFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
             }
             if(regionCode != previousRegionCode){
                 saveSelectedRegion(sharedPreferences,regionCode)
-//                fetchBrowseData(channelViewModel,"/m/0bzvm2",regionCode)
+                fetchBrowseData(channelViewModel,"/m/0bzvm2",regionCode)
                 previousRegionCode = regionCode
             }
 
@@ -179,35 +169,18 @@ class GameFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListe
         }
     }
 
-    private fun initBrowseViewModel(motionLayout: MotionLayout) {
-//        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
-//            browseChannelAdapter.submitList(channels)
-//        }
-//
-//        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
-//            browseVideoAdapter.submitList(videos)
-//        }
-
-        motionViewModel.isListVisible.observe(viewLifecycleOwner){isListVisible ->
-            lifecycleScope.launch{
-                repeatOnLifecycle(Lifecycle.State.STARTED){
-                    Log.d("LiveData","$isListVisible")
-                    if(isListVisible){
-                        delay(1000)
-//                        motionLayout.transitionToEnd()
-                        Log.d("라이브 데이터","게임 isListVisible 값 :${motionViewModel.isListVisible.value}")
-                    }else{
-//                        motionLayout.transitionToStart()
-                        Log.d("라이브 데이터","게임 isListVisible 값 :${motionViewModel.isListVisible.value}")
-                    }
-                }
-            }
-
+    private fun initBrowseViewModel() {
+        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
+            browseChannelAdapter.submitList(channels)
         }
 
-//        val lastRegionCode = loadLastRegion(sharedPreferences)
-//        fetchBrowseData(channelViewModel,"/m/0bzvm2",lastRegionCode)
-//        previousRegionCode = lastRegionCode
+        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
+            browseVideoAdapter.submitList(videos)
+        }
+
+        val lastRegionCode = loadLastRegion(sharedPreferences)
+        fetchBrowseData(channelViewModel,"/m/0bzvm2",lastRegionCode)
+        previousRegionCode = lastRegionCode
 
     }
 

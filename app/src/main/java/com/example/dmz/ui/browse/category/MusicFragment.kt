@@ -24,6 +24,7 @@ import com.example.dmz.databinding.FragmentMusicBinding
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.ui.browse.ChannelListAdapter
 import com.example.dmz.ui.browse.VideoListAdapter
+import com.example.dmz.ui.browse.bottomNavControl
 import com.example.dmz.ui.browse.fetchBrowseData
 import com.example.dmz.ui.browse.initSpinner
 import com.example.dmz.ui.browse.loadLastRegion
@@ -33,6 +34,7 @@ import com.example.dmz.viewmodel.SearchViewModel
 class MusicFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var sharedPreferences: SharedPreferences
+    private var previousRegionCode : String? = null
 
     private var _binding : FragmentMusicBinding? = null
     private val binding get() = _binding!!
@@ -45,37 +47,43 @@ class MusicFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
     }
 
 
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sharedPreferences = requireContext().getSharedPreferences("regionCode", Context.MODE_PRIVATE)
         _binding = FragmentMusicBinding.inflate(inflater, container, false)
+        sharedPreferences = requireContext().getSharedPreferences("regionCode", Context.MODE_PRIVATE)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBrowseView()
-        //initBrowseViewModel()
+        initBrowseViewModel()
     }
 
     override fun onResume() {
         super.onResume()
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        sharedPreferences
+
+        val currentRegionCode = sharedPreferences.getString("current_selected_country", "KR")
+        if (currentRegionCode != previousRegionCode) {
+            initSpinner(binding,sharedPreferences)
+            fetchBrowseData(channelViewModel, "/m/019_rr", currentRegionCode)
+            previousRegionCode = currentRegionCode
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
         if(key == "current_selected_country"){
-            val regionCode = sharedPreferences.getString(key, "KR")
-            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
+            initSpinner(binding,sharedPreferences)
+//            val regionCode = sharedPreferences.getString(key, "KR")
+//            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
         }
     }
 
@@ -86,29 +94,21 @@ class MusicFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
 
     private fun initBrowseView() = with(binding) {
 
+        previousRegionCode = loadLastRegion(sharedPreferences)
+
         val navView: View = requireActivity().findViewById(R.id.nav_view)
         val homeBtn: View = requireActivity().findViewById(R.id.iv_home_btn)
         navView.visibility = View.GONE
         homeBtn.visibility = View.GONE
 
         mlMusicFragment.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
-                Log.d("MotionLayout", "Transition Started: $startId -> $endId")
-            }
-
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                Log.d("MotionLayout", "Transition Completed: $currentId")
-                if (currentId == R.id.end){
-                    navView.visibility = View.VISIBLE
-                    homeBtn.visibility = View.VISIBLE
-                }else if(currentId == R.id.start){
-                    navView.visibility = View.GONE
-                    homeBtn.visibility = View.GONE
-                }
-            }
+                Log.d("MotionLayout", "Game: {${requireActivity().resources.getResourceEntryName(currentId)}}")
+                bottomNavControl(currentId,navView,homeBtn)
 
+            }
             override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
         })
 
@@ -119,6 +119,7 @@ class MusicFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
 
 
         initSpinner(binding,sharedPreferences)
+
         listLayout.spinnerSelectRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
             val regionCode = when (text) {
                 "한국" -> "KR"
@@ -127,8 +128,13 @@ class MusicFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                 "일본" -> "JP"
                 else -> "KR"
             }
-            saveSelectedRegion(sharedPreferences,regionCode)
-            fetchBrowseData(channelViewModel,"/m/04rlf",regionCode)
+
+            if(regionCode != previousRegionCode) {
+                saveSelectedRegion(sharedPreferences, regionCode)
+                fetchBrowseData(channelViewModel,"/m/04rlf",regionCode)
+                previousRegionCode = regionCode
+            }
+
         }
 
 
@@ -159,6 +165,8 @@ class MusicFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
 
         val lastRegionCode = loadLastRegion(sharedPreferences)
         fetchBrowseData(channelViewModel,"/m/04rlf",lastRegionCode)
+        previousRegionCode = lastRegionCode
+
 
     }
 

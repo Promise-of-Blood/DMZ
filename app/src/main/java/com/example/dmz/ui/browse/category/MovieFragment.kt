@@ -33,6 +33,7 @@ import com.example.dmz.databinding.FragmentMovieBinding
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.ui.browse.ChannelListAdapter
 import com.example.dmz.ui.browse.VideoListAdapter
+import com.example.dmz.ui.browse.bottomNavControl
 import com.example.dmz.ui.browse.fetchBrowseData
 import com.example.dmz.ui.browse.initSpinner
 import com.example.dmz.ui.browse.loadLastRegion
@@ -46,6 +47,7 @@ import kotlin.time.Duration
 
 class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var sharedPreferences: SharedPreferences
+    private var previousRegionCode : String? = null
 
     private var _binding : FragmentMovieBinding? = null
     private val binding get() = _binding!!
@@ -70,14 +72,15 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
         super.onViewCreated(view, savedInstanceState)
 
         initBrowseView()
-        //initBrowseViewModel()
+        initBrowseViewModel()
 
-        startPopcornAnimation()
+
         rotateAnimation(binding.introLayout.movieCamera,15f,30f,3000)
         rotateAnimation(binding.introLayout.movieFilm,15f,30f,2000)
         rotateAnimation(binding.introLayout.moviePopcornCase,0f,15f,250)
         rotateAnimation(binding.introLayout.movieCola,240f,200f,2500)
 
+        startPopcornAnimation()
 
         val letters = listOf(
             binding.introLayout.movieLetterM,
@@ -86,10 +89,23 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
             binding.introLayout.movieLetterI,
             binding.introLayout.movieLetterE
         )
-
-        val motionLayout = binding.introLayout.mlMovieIntro
+        val motionLayout = binding.mlMovieFragment
 
         motionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
+
+            override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
+
+            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
+
+            }
+
+            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
+        })
+
+        val introMotionLayout = binding.introLayout.mlMovieIntro
+
+        introMotionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
             override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
             override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
@@ -100,6 +116,8 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                         val duration = Random.nextLong(1000, 3000)
                         val delay = index * 100L
                         wiggle(view,duration,delay)
+
+
                     }
 
                 }
@@ -113,16 +131,23 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
     override fun onResume() {
         super.onResume()
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        sharedPreferences
+
+        val currentRegionCode = sharedPreferences.getString("current_selected_country", "KR")
+        if (currentRegionCode != previousRegionCode) {
+            initSpinner(binding,sharedPreferences)
+            fetchBrowseData(channelViewModel, "/m/0bzvm2", currentRegionCode)
+            previousRegionCode = currentRegionCode
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
         if(key == "current_selected_country"){
+            initSpinner(binding,sharedPreferences)
             val regionCode = sharedPreferences.getString(key, "KR")
             fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
         }
@@ -135,32 +160,24 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
 
     private fun initBrowseView() = with(binding) {
 
+        previousRegionCode = loadLastRegion(sharedPreferences)
+
+
         val navView: View = requireActivity().findViewById(R.id.nav_view)
         val homeBtn: View = requireActivity().findViewById(R.id.iv_home_btn)
         navView.visibility = View.GONE
         homeBtn.visibility = View.GONE
 
         mlMovieFragment.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
-                Log.d("MotionLayout", "Transition Started: $startId -> $endId")
-            }
-
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                Log.d("MotionLayout", "Transition Completed: $currentId")
-                if (currentId == R.id.end){
-                    navView.visibility = View.VISIBLE
-                    homeBtn.visibility = View.VISIBLE
-                }else if(currentId == R.id.start){
-                    navView.visibility = View.GONE
-                    homeBtn.visibility = View.GONE
-                }
-            }
+                Log.d("MotionLayout", "Game: {${requireActivity().resources.getResourceEntryName(currentId)}}")
+                bottomNavControl(currentId,navView,homeBtn)
 
+            }
             override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
         })
-
 
         listLayout.tvTopbarTitle.text = getString(browse_movie)
         listLayout.tvChannelTitle.text = getString(browse_movie)
@@ -176,10 +193,12 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                 "일본" -> "JP"
                 else -> "KR"
             }
-            saveSelectedRegion(sharedPreferences,regionCode)
-            fetchBrowseData(channelViewModel,"/m/02vxn",regionCode)
+            if(regionCode != previousRegionCode) {
+                saveSelectedRegion(sharedPreferences, regionCode)
+                fetchBrowseData(channelViewModel,"/m/0bzvm2",regionCode)
+                previousRegionCode = regionCode
+            }
         }
-
 
 
         listLayout.rvCategoryChannel.apply {
@@ -207,7 +226,8 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
         }
 
         val lastRegionCode = loadLastRegion(sharedPreferences)
-        fetchBrowseData(channelViewModel,"/m/02vxn",lastRegionCode)
+        fetchBrowseData(channelViewModel,"/m/0bzvm2",lastRegionCode)
+        previousRegionCode = lastRegionCode
 
     }
 
@@ -231,10 +251,11 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
             override fun onGlobalLayout() {
                 parentLayout.viewTreeObserver.removeOnGlobalLayoutListener(this)
 
+                if(context == null || !isAdded)return
 
                 for (i in 1..15) { // 튀어오르는 팝콘 개수
                     // 팝콘 뷰 생성
-                    val popcorn = ImageView(requireContext()).apply {
+                    val popcorn = ImageView(context).apply {
                         val popcornImages = listOf(
                             R.drawable.movie_popcorn_1,
                             R.drawable.movie_popcorn_2,

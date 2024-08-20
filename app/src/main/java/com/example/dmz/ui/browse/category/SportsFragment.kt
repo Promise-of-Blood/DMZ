@@ -32,6 +32,7 @@ import com.example.dmz.databinding.FragmentSportsBinding
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.ui.browse.ChannelListAdapter
 import com.example.dmz.ui.browse.VideoListAdapter
+import com.example.dmz.ui.browse.bottomNavControl
 import com.example.dmz.ui.browse.fetchBrowseData
 import com.example.dmz.ui.browse.initSpinner
 import com.example.dmz.ui.browse.loadLastRegion
@@ -44,6 +45,7 @@ import kotlin.random.Random
 
 class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var sharedPreferences: SharedPreferences
+    private var previousRegionCode : String? = null
 
     private var _binding : FragmentSportsBinding? = null
     private val binding get() = _binding!!
@@ -60,8 +62,8 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        sharedPreferences = requireContext().getSharedPreferences("regionCode", Context.MODE_PRIVATE)
         _binding = FragmentSportsBinding.inflate(inflater,container,false)
+        sharedPreferences = requireContext().getSharedPreferences("regionCode", Context.MODE_PRIVATE)
         return binding.root
     }
 
@@ -69,7 +71,7 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
         super.onViewCreated(view, savedInstanceState)
 
         initBrowseView()
-        //initBrowseViewModel()
+        initBrowseViewModel()
 
         val motionLayout = binding.introLayout.mlSportsIntro
 
@@ -120,18 +122,25 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
     override fun onResume() {
         super.onResume()
         sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-        sharedPreferences
+
+        val currentRegionCode = sharedPreferences.getString("current_selected_country", "KR")
+        if (currentRegionCode != previousRegionCode) {
+            initSpinner(binding,sharedPreferences)
+            fetchBrowseData(channelViewModel, "/m/0bzvm2", currentRegionCode)
+            previousRegionCode = currentRegionCode
+        }
     }
 
     override fun onPause() {
         super.onPause()
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
     }
 
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
         if(key == "current_selected_country"){
-            val regionCode = sharedPreferences.getString(key, "KR")
-            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
+            initSpinner(binding,sharedPreferences)
+//            val regionCode = sharedPreferences.getString(key, "KR")
+//            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
         }
     }
 
@@ -142,29 +151,21 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
 
     private fun initBrowseView() = with(binding) {
 
+        previousRegionCode = loadLastRegion(sharedPreferences)
+
         val navView: View = requireActivity().findViewById(R.id.nav_view)
         val homeBtn: View = requireActivity().findViewById(R.id.iv_home_btn)
         navView.visibility = View.GONE
         homeBtn.visibility = View.GONE
 
         mlSportsFragment.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {
-                Log.d("MotionLayout", "Transition Started: $startId -> $endId")
-            }
-
+            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                Log.d("MotionLayout", "Transition Completed: $currentId")
-                if (currentId == R.id.end){
-                    navView.visibility = View.VISIBLE
-                    homeBtn.visibility = View.VISIBLE
-                }else if(currentId == R.id.start){
-                    navView.visibility = View.GONE
-                    homeBtn.visibility = View.GONE
-                }
-            }
+                Log.d("MotionLayout", "Game: {${requireActivity().resources.getResourceEntryName(currentId)}}")
+                bottomNavControl(currentId,navView,homeBtn)
 
+            }
             override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
         })
 
@@ -183,8 +184,11 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
                 "일본" -> "JP"
                 else -> "KR"
             }
-            saveSelectedRegion(sharedPreferences,regionCode)
-            fetchBrowseData(channelViewModel,"/m/06ntj",regionCode)
+            if(regionCode != previousRegionCode){
+                saveSelectedRegion(sharedPreferences,regionCode)
+              fetchBrowseData(channelViewModel,"/m/06ntj",regionCode)
+                previousRegionCode = regionCode
+            }
         }
 
 
@@ -216,6 +220,7 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
 
         channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
             browseVideoAdapter.submitList(videos)
+            previousRegionCode = lastRegionCode
         }
 
 
@@ -303,6 +308,8 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
 
     private fun bubbleAnimation(bubble: View) {
         // 화면 너비에 따라 랜덤한 X 좌표 설정
+        val context = context ?: return
+
         val screenWidth = resources.displayMetrics.widthPixels
         val startX = Random.nextInt(0, screenWidth).toFloat()
 
@@ -348,7 +355,10 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
                 }
 
                 override fun onAnimationEnd(animation: Animator) {
-                    bubbleAnimation(bubble)
+                    if(context != null && isAdded){
+                        bubbleAnimation(bubble)
+                    }
+
                 }
 
                 override fun onAnimationCancel(animation: Animator) {
