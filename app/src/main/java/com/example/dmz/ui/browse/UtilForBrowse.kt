@@ -13,13 +13,13 @@ import com.example.dmz.databinding.FragmentSportsBinding
 import com.example.dmz.viewmodel.SearchViewModel
 
 
-fun fetchBrowseData(channelViewModel: SearchViewModel,topic:String, regionCode: String?) {
+fun fetchBrowseData(channelViewModel: SearchViewModel, topic: String, regionCode: String?) {
     channelViewModel.getChannelList(
         topicId = topic,
         maxResults = 5,
         regionCode = regionCode
     )
-    channelViewModel.getVideoList(
+    channelViewModel.doVideoSearch(
         topicId = topic,
         maxResults = 10,
         regionCode = regionCode
@@ -71,14 +71,14 @@ fun initSpinner(binding: ViewBinding, sharedPreferences: SharedPreferences) {
     }
 }
 
-fun bottomNavControl(currentId: Int, navView : View, homeBtn : View){
-    if (currentId == R.id.end){
+fun bottomNavControl(currentId: Int, navView: View, homeBtn: View) {
+    if (currentId == R.id.end) {
         navView.visibility = View.VISIBLE
         homeBtn.visibility = View.VISIBLE
-    }else if(currentId == R.id.start){
+    } else if (currentId == R.id.start) {
         navView.visibility = View.GONE
         homeBtn.visibility = View.GONE
-    }else{
-        Log.d("MotionLayout","잘못된 상태 $currentId")
+    } else {
+        Log.d("MotionLayout", "잘못된 상태 $currentId")
     }
 }

@@ -76,10 +76,6 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
         }
     }
 
-    fun getRecentSearchItems(context: Context) {
-        _recentSearchedList.value = Util.getPrefRecentSearchList(context)
-    }
-
     fun saveRecentSearchList(context: Context) {
         val gson = Gson()
         val sharedPreferences = context.getSharedPreferences(
@@ -113,17 +109,6 @@ class SearchViewModel(private val searchRepository: SearchRepository) : ViewMode
             val updateList = it.toMutableList()
             updateList.add(0, searchEntity)
             _recentSearchedList.value = updateList
-        }
-    }
-
-    fun addSharedPrf(context: Context, searchEntity: SearchEntity) {
-        val sharedPref = context.getSharedPreferences(
-            context.getString(R.string.preference_file_key),
-            Context.MODE_PRIVATE
-        ) ?: return
-        with(sharedPref.edit()) {
-//            putString(context.getString(R.string.preference_recent_search_key), searchEntity)
-            apply()
         }
     }
 
