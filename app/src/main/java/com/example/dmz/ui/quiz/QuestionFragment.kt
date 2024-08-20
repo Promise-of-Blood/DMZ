@@ -7,7 +7,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.example.dmz.R
-import com.example.dmz.data.CacheDataSource
 import com.example.dmz.data.repository.QuizRepositoryImpl
 import com.example.dmz.databinding.FragmentQuestionBinding
 import com.example.dmz.utils.Util.highlightKeyword
@@ -21,7 +20,7 @@ class QuestionFragment : Fragment() {
 
     private var position: Int = 0
     private val quizViewModel: QuizViewModel by activityViewModels()
-    private val todayQuiz = QuizRepositoryImpl(CacheDataSource.getCacheDataSource()).getTodayQuiz()
+    private val todayQuiz = QuizRepositoryImpl().getTodayQuiz()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

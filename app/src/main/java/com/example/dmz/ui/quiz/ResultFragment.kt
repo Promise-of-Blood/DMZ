@@ -17,7 +17,6 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.dmz.DMZApplication
 import com.example.dmz.R
-import com.example.dmz.data.CacheDataSource
 import com.example.dmz.data.repository.MyPageRepositoryImpl
 import com.example.dmz.data.repository.QuizRepositoryImpl
 import com.example.dmz.databinding.FragmentResultBinding
@@ -33,7 +32,7 @@ class ResultFragment : Fragment() {
 
     private val args: ResultFragmentArgs by navArgs()
     private val quizViewModel: QuizViewModel by activityViewModels()
-    private val quizRepository = QuizRepositoryImpl(CacheDataSource.getCacheDataSource())
+    private val quizRepository = QuizRepositoryImpl()
     private val myPageViewModel: MyPageViewModel by activityViewModels {
         viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(requireActivity().application as DMZApplication)) } }
     }
@@ -105,6 +104,8 @@ class ResultFragment : Fragment() {
 
     private fun collectKeyword() {
         val keyword = args.keyword
+        quizViewModel.clearAnswers()
+        quizRepository.shuffleQuizList()
         myPageViewModel.addKeywordCard(
             KeywordCard(
                 id = UUID.randomUUID().toString(),

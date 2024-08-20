@@ -10,7 +10,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
 import com.example.dmz.R
-import com.example.dmz.data.CacheDataSource
 import com.example.dmz.data.repository.QuizRepositoryImpl
 import com.example.dmz.databinding.FragmentQuizBinding
 import com.example.dmz.viewmodel.QuizViewModel
@@ -20,7 +19,7 @@ class QuizFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val quizViewModel: QuizViewModel by activityViewModels()
-    private val quizRepository = QuizRepositoryImpl(CacheDataSource.getCacheDataSource())
+    private val quizRepository = QuizRepositoryImpl()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,

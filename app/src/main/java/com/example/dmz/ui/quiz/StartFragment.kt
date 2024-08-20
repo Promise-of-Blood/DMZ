@@ -7,21 +7,28 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.navigation.NavOptions
 import androidx.navigation.fragment.findNavController
+import com.example.dmz.DMZApplication
 import com.example.dmz.MainActivity
 import com.example.dmz.R
-import com.example.dmz.data.CacheDataSource
+import com.example.dmz.data.repository.MyPageRepositoryImpl
 import com.example.dmz.data.repository.QuizRepositoryImpl
 import com.example.dmz.databinding.FragmentStartBinding
+import com.example.dmz.viewmodel.MyPageViewModel
 import com.example.dmz.viewmodel.QuizViewModel
 
 class StartFragment : Fragment() {
     private var _binding: FragmentStartBinding? = null
     private val binding get() = _binding!!
 
-    private val quizRepository = QuizRepositoryImpl(CacheDataSource.getCacheDataSource())
+    private val quizRepository = QuizRepositoryImpl()
     private val quizViewModel: QuizViewModel by activityViewModels()
+    private val myPageViewModel: MyPageViewModel by activityViewModels {
+        viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(requireActivity().application as DMZApplication)) } }
+    }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
@@ -38,8 +45,9 @@ class StartFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        handleIsCompleted()
         initView()
-        handleIsCompleted()
+        handleIsCollected()
     }
 
     override fun onDestroy() {
@@ -59,12 +67,27 @@ class StartFragment : Fragment() {
 
     private fun handleIsCompleted() {
         val isCompleted = quizViewModel.isCompleted.value ?: false
+
         if (isCompleted) {
             val action =
                 StartFragmentDirections.actionQuizStartToQuizResult(quizRepository.getTodayQuiz().keyword)
             val navOptions =
                 NavOptions.Builder().setPopUpTo(R.id.navigation_quiz_result, true).build()
             findNavController().navigate(action, navOptions)
+        } else quizViewModel.clearAnswers()
+    }
+
+    private fun handleIsCollected() {
+        val isCollected =
+            myPageViewModel.keywordCardList.value?.any { it.keyword == quizRepository.getTodayQuiz().keyword.keyText }
+                ?: false
+
+        if (isCollected) {
+            binding.tvQuizStartButton.text = "이미 수집한 키워드입니다."
+            binding.tvQuizStartButton.setOnClickListener {}
+            binding.tvQuizStartButton.setTextColor(requireContext().getColor(R.color.gray))
+            binding.tvQuizStartButton.backgroundTintList =
+                requireContext().getColorStateList(R.color.gray)
         } else quizViewModel.clearAnswers()
     }
 }
