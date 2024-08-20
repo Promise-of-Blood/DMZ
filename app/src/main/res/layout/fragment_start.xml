@@ -17,10 +17,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="100dp"
         android:letterSpacing="0.1"
+        android:text="@string/quiz_intro"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:text="MZ가 좋아하는\n비싼 아이스크림" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/tv_quiz_start_title"
