@@ -50,21 +50,6 @@
         app:layout_constraintStart_toEndOf="@id/iv_thumb_image"
         app:layout_constraintTop_toBottomOf="@id/tv_result_title" />
 
-<!--    <TextView-->
-<!--        android:id="@+id/tv_video_views"-->
-<!--        style="@style/description_e"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="10dp"-->
-<!--        android:layout_marginTop="5dp"-->
-<!--        android:ellipsize="end"-->
-<!--        android:maxLines="1"-->
-<!--        android:text="조회수 1.4천회"-->
-<!--        android:textColor="@color/light_gray"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toEndOf="@id/iv_thumb_image"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/tv_channel_name" />-->
-
     <TextView
         android:id="@+id/tv_video_time"
         style="@style/description_e"
