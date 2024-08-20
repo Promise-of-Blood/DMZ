@@ -49,6 +49,9 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
     private lateinit var sharedPreferences: SharedPreferences
     private var previousRegionCode : String? = null
 
+    private var isPopcornAnimationRunning = false
+    private val popcornAnimatorSets = mutableListOf<AnimatorSet>()
+
     private var _binding : FragmentMovieBinding? = null
     private val binding get() = _binding!!
 
@@ -75,6 +78,41 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
         initBrowseViewModel()
 
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+
+        val currentRegionCode = sharedPreferences.getString("current_selected_country", "KR")
+        if (currentRegionCode != previousRegionCode) {
+            initSpinner(binding,sharedPreferences)
+            fetchBrowseData(channelViewModel, "/m/0bzvm2", currentRegionCode)
+            previousRegionCode = currentRegionCode
+        }
+
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
+        if(key == "current_selected_country"){
+            initSpinner(binding,sharedPreferences)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
+    private fun initBrowseView() = with(binding) {
+
+        //애니메이션
         rotateAnimation(binding.introLayout.movieCamera,15f,30f,3000)
         rotateAnimation(binding.introLayout.movieFilm,15f,30f,2000)
         rotateAnimation(binding.introLayout.moviePopcornCase,0f,15f,250)
@@ -89,19 +127,6 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
             binding.introLayout.movieLetterI,
             binding.introLayout.movieLetterE
         )
-        val motionLayout = binding.mlMovieFragment
-
-        motionLayout.setTransitionListener(object : MotionLayout.TransitionListener{
-            override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
-
-            override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-
-            override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-
-            }
-
-            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
-        })
 
         val introMotionLayout = binding.introLayout.mlMovieIntro
 
@@ -116,8 +141,6 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                         val duration = Random.nextLong(1000, 3000)
                         val delay = index * 100L
                         wiggle(view,duration,delay)
-
-
                     }
 
                 }
@@ -125,40 +148,6 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
             }
         })
 
-
-    }
-
-    override fun onResume() {
-        super.onResume()
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
-
-        val currentRegionCode = sharedPreferences.getString("current_selected_country", "KR")
-        if (currentRegionCode != previousRegionCode) {
-            initSpinner(binding,sharedPreferences)
-            fetchBrowseData(channelViewModel, "/m/0bzvm2", currentRegionCode)
-            previousRegionCode = currentRegionCode
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
-    }
-
-    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
-        if(key == "current_selected_country"){
-            initSpinner(binding,sharedPreferences)
-            val regionCode = sharedPreferences.getString(key, "KR")
-            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        _binding = null
-    }
-
-    private fun initBrowseView() = with(binding) {
 
         previousRegionCode = loadLastRegion(sharedPreferences)
 
@@ -244,8 +233,9 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
     }
 
     private fun startPopcornAnimation() {
-        val parentLayout = binding.root
+        val parentLayout = binding.introLayout.root
         val popcornBox = binding.introLayout.moviePopcornCase // 팝콘 상자 뷰
+
 
         parentLayout.viewTreeObserver.addOnGlobalLayoutListener(object : ViewTreeObserver.OnGlobalLayoutListener{
             override fun onGlobalLayout() {
@@ -253,7 +243,7 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
 
                 if(context == null || !isAdded)return
 
-                for (i in 1..15) { // 튀어오르는 팝콘 개수
+                for (i in 1..4) { // 튀어오르는 팝콘 개수
                     // 팝콘 뷰 생성
                     val popcorn = ImageView(context).apply {
                         val popcornImages = listOf(
@@ -280,80 +270,77 @@ class MovieFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeList
                     // 각 팝콘에 대해 랜덤 방향과 속도 설정
                     animatePopcorn(popcorn)
                 }
-
             }
         })
 
 
     }
 
+
     private fun animatePopcorn(popcorn: ImageView) {
-        val randomX = Random.nextInt(-200, 850).toFloat() // 좌우로 퍼지는 범위
-        val randomY = Random.nextInt(-800, 100).toFloat() // 위로 튀어오르는 범위
-        val randomRotation = Random.nextInt(0, 360).toFloat() // 회전 각도
-        val randomDuration = Random.nextLong(2000, 3000) // 애니메이션 지속 시간
+        val randomX = Random.nextInt(-200, 850).toFloat()
+        val randomY = Random.nextInt(-800, 100).toFloat()
+        val randomRotation = Random.nextInt(0, 360).toFloat()
+        val randomDuration = Random.nextLong(2000, 3000)
 
-        // X축으로 퍼지는 애니메이션
         val translateX = ObjectAnimator.ofFloat(popcorn, "translationX", popcorn.translationX, popcorn.translationX + randomX).apply {
+            interpolator = DecelerateInterpolator()
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.RESTART
-            interpolator = DecelerateInterpolator()
         }
 
-        // Y축으로 퍼지는 애니메이션
         val translateY = ObjectAnimator.ofFloat(popcorn, "translationY", popcorn.translationY, popcorn.translationY + randomY).apply {
+            interpolator = DecelerateInterpolator()
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.RESTART
-            interpolator = DecelerateInterpolator()
         }
 
-        // 회전 애니메이션
         val rotate = ObjectAnimator.ofFloat(popcorn, "rotation", 0f, randomRotation).apply {
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.RESTART
         }
 
-        // 크기 변화 애니메이션 (팝콘이 작아지거나 커지면서 튀어오르도록)
-
-        val randomScale = Random.nextFloat()*(2.0f-0.5f) +0.5f
+        val randomScale = Random.nextFloat() * (2.0f - 0.5f) + 0.5f
         val scaleX = ObjectAnimator.ofFloat(popcorn, "scaleX", 1f, randomScale).apply {
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.RESTART
         }
         val scaleY = ObjectAnimator.ofFloat(popcorn, "scaleY", 1f, randomScale).apply {
             repeatCount = ObjectAnimator.INFINITE
-            repeatMode = ObjectAnimator.RESTART }
+            repeatMode = ObjectAnimator.RESTART
+        }
 
-
-//        // 투명도 변화 애니메이션 (팝콘이 사라지도록)
-        val key0 = Keyframe.ofFloat(0.8f,1f)
-        val key1 = Keyframe.ofFloat(1f,0f)
-
+        val key0 = Keyframe.ofFloat(0.8f, 1f)
+        val key1 = Keyframe.ofFloat(1f, 0f)
         val alphaValue = PropertyValuesHolder.ofKeyframe("alpha", key0, key1)
         val alpha = ObjectAnimator.ofPropertyValuesHolder(popcorn, alphaValue).apply {
-            duration = 10000
+            duration = 1000
             repeatCount = ObjectAnimator.INFINITE
             repeatMode = ObjectAnimator.RESTART
         }
 
-        // 애니메이션을 동시에 실행
         val animatorSet = AnimatorSet().apply {
-            playTogether(translateX, translateY, rotate, scaleX,scaleY,alpha)
+            playTogether(translateX, translateY, rotate, scaleX, scaleY, alpha)
             duration = randomDuration
-            addListener(object : android.animation.Animator.AnimatorListener {
+            addListener(object : Animator.AnimatorListener {
                 override fun onAnimationStart(animation: Animator) {}
 
-                override fun onAnimationCancel(animation: Animator) {}
+                override fun onAnimationCancel(animation: Animator) {
+                    val parentViewGroup = popcorn.parent as? ViewGroup
+                    parentViewGroup?.removeView(popcorn) // 애니메이션이 취소될 때도 팝콘 제거
+                }
 
                 override fun onAnimationRepeat(animation: Animator) {}
 
-                override fun onAnimationEnd(animation: android.animation.Animator) {
-                    (popcorn.parent as ViewGroup).removeView(popcorn) // 애니메이션 끝나면 팝콘 제거
+                override fun onAnimationEnd(animation: Animator) {
+                    val parentViewGroup = popcorn.parent as? ViewGroup
+                    parentViewGroup?.removeView(popcorn) // 애니메이션 끝나면 팝콘 제거
                 }
             })
         }
 
-        // 애니메이션 시작
+        // 애니메이션 시작 및 트래킹
+        popcornAnimatorSets.add(animatorSet)
         animatorSet.start()
     }
 }

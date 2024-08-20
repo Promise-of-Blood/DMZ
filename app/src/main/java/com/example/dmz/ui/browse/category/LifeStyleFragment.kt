@@ -94,7 +94,7 @@ class LifeStyleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         wiggle(binding.introLayout.lifestyle3dFlower,2000,0)
 
         initBrowseView()
-        initBrowseViewModel(binding.mlLifeStyleFragment)
+        initBrowseViewModel()
 
     }
 
@@ -189,7 +189,7 @@ class LifeStyleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         }
     }
 
-    private fun initBrowseViewModel(motionLayout:MotionLayout) {
+    private fun initBrowseViewModel() {
         channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
             browseChannelAdapter.submitList(channels)
         }
@@ -197,8 +197,6 @@ class LifeStyleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChange
         channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
             browseVideoAdapter.submitList(videos)
         }
-
-
 
         val lastRegionCode = loadLastRegion(sharedPreferences)
         fetchBrowseData(channelViewModel,"/m/019_rr",lastRegionCode)

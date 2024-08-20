@@ -139,8 +139,6 @@ class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeLis
     override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
         if(key == "current_selected_country"){
             initSpinner(binding,sharedPreferences)
-//            val regionCode = sharedPreferences.getString(key, "KR")
-//            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
         }
     }
 
