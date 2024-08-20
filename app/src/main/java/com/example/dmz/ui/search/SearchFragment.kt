@@ -61,23 +61,61 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setSpinners()
+        setSearchButton()
+        setRecentSearchList()
+
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
+    }
+
+    private fun setRecentSearchList() {
+        searchViewModel.recentSearchedList.observe(viewLifecycleOwner) { searchedItem ->
+            binding.vpRecentSearch.apply {
+                searchRecentAdapter = SearchRecentAdapter(searchedItem)
+                adapter = searchRecentAdapter
+                offscreenPageLimit = 4
+                setPageTransformer(SliderTransformer(4))
+            }
+
+            setRecentClick()
+
+        }
+    }
+
+    private fun setRecentClick() {
+        searchRecentAdapter.setItemClickListener(object :
+            SearchRecentAdapter.OnItemClickListener {
+            override fun onClick(v: View, position: Int) {
+                val searchItem = searchViewModel.recentSearchedList.value?.get(position)
+                if (searchItem == null) {
+                    Log.d("SearchItemError", "searchItem is null")
+                }
+                searchItem?.let {
+                    binding.run {
+                        etSearch.setText(it.query)
+                        val region = koreanToRegionCode(it.region)
+                        searchRegion = it.region
+                        spinnerRegion.setText(region)
+
+                        val sort = koreanToSortData(it.sort)
+                        searchSort = it.sort
+                        spinnerSort.setText(sort)
+
+                        searchDateSet = it.date
+                        spinnerDate.setText(it.date)
+                    }
+                }
+            }
+
+        })
+    }
+
+    private fun setSearchButton() {
         binding.run {
-            spinnerRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
-                val regionArrayResource = resources.getStringArray(R.array.region_array)
-                setRegion(text, regionArrayResource)
-            }
-            spinnerSort.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
-                val regionArrayResource = resources.getStringArray(R.array.sort_array)
-                setSort(text, regionArrayResource)
-            }
-
-            spinnerDate.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
-                val regionArrayResource = resources.getStringArray(R.array.date_array)
-                searchDateSet = text
-                searchBeforeDate = setDate(text, regionArrayResource)
-                Log.d("setDate", searchBeforeDate!!)
-            }
-
             btnSearch.setOnClickListener {
                 val query = etSearch.text.toString().trim()
 
@@ -101,9 +139,6 @@ class SearchFragment : Fragment() {
                     )
 
                 doVideoSearch(query)
-//                    saveSearchItem(query)
-//                    Util.addPrefItem(mContext, searchItem)
-
 
                 searchViewModel.addRecentSearch(searchItem)
                 searchViewModel.saveRecentSearchList(mContext)
@@ -111,47 +146,26 @@ class SearchFragment : Fragment() {
 
             }
         }
-
-        searchViewModel.recentSearchedList.observe(viewLifecycleOwner) { searchedItem ->
-            binding.vpRecentSearch.apply {
-                searchRecentAdapter = SearchRecentAdapter(searchedItem)
-                adapter = searchRecentAdapter
-                offscreenPageLimit = 4
-                setPageTransformer(SliderTransformer(4))
-            }
-
-            searchRecentAdapter.setItemClickListener(object :
-                SearchRecentAdapter.OnItemClickListener {
-                override fun onClick(v: View, position: Int) {
-                    val searchItem = searchViewModel.recentSearchedList.value?.get(position)
-                    if (searchItem == null) {
-                        Log.d("SearchItemError", "searchItem is null")
-                    }
-                    searchItem?.let {
-                        binding.run {
-                            etSearch.setText(it.query)
-                            val region = koreanToRegionCode(it.region)
-                            searchRegion = it.region
-                            spinnerRegion.setText(region)
-
-                            val sort = koreanToSortData(it.sort)
-                            searchSort = it.sort
-                            spinnerSort.setText(sort)
-
-                            searchDateSet = it.date
-                            spinnerDate.setText(it.date)
-                        }
-                    }
-                }
-
-            })
-        }
-
     }
 
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
+    private fun setSpinners() {
+        binding.run {
+            spinnerRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
+                val regionArrayResource = resources.getStringArray(R.array.region_array)
+                setRegion(text, regionArrayResource)
+            }
+            spinnerSort.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
+                val regionArrayResource = resources.getStringArray(R.array.sort_array)
+                setSort(text, regionArrayResource)
+            }
+
+            spinnerDate.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
+                val regionArrayResource = resources.getStringArray(R.array.date_array)
+                searchDateSet = text
+                searchBeforeDate = setDate(text, regionArrayResource)
+                Log.d("setDate", searchBeforeDate!!)
+            }
+        }
     }
 
     private fun doVideoSearch(query: String) {
@@ -205,6 +219,5 @@ class SearchFragment : Fragment() {
         }
 
     }
-
 
 }

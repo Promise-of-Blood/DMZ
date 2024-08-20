@@ -58,8 +58,15 @@ class SearchResultFragment : Fragment() {
 
     private fun initView(inflater: LayoutInflater, container: ViewGroup?) {
         _binding = FragmentSearchResultBinding.inflate(inflater, container, false)
-        binding.rvSearchResultList.adapter = searchResultAdapter
-        binding.rvSearchResultList.layoutManager = LinearLayoutManager(mContext)
+
+        binding.run {
+            rvSearchResultList.adapter = searchResultAdapter
+            rvSearchResultList.layoutManager = LinearLayoutManager(mContext)
+
+            //todo
+//            spinnerResult
+
+        }
     }
 
     private fun observeVideoData() {
