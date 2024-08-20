@@ -108,6 +108,10 @@ class SearchFragment : Fragment() {
 
                         searchDateSet = it.date
                         spinnerDate.setText(it.date)
+
+                        val regionArrayResource = resources.getStringArray(R.array.date_array)
+                        searchBeforeDate = setDate(it.date, regionArrayResource)
+                        searchNowDate = getNowTimeAsIso()
                     }
                 }
             }
@@ -171,6 +175,7 @@ class SearchFragment : Fragment() {
                 val regionArrayResource = resources.getStringArray(R.array.date_array)
                 searchDateSet = text
                 searchBeforeDate = setDate(text, regionArrayResource)
+                Log.d("setDateSet", searchDateSet!!)
                 Log.d("setDate", searchBeforeDate!!)
             }
         }
@@ -212,6 +217,8 @@ class SearchFragment : Fragment() {
     private fun setDate(input: String, regionArrayResource: Array<String>): String? {
 
         searchNowDate = getNowTimeAsIso()
+
+        Log.d("searchNowDate", searchNowDate.toString())
 
         return searchNowDate?.let {
             when (input) {
