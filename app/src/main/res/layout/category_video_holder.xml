@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingHorizontal="32dp"
+    tools:background="@color/black"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <ImageView
+        android:id="@+id/iv_video_holder_thumbnail"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintDimensionRatio="1.5"
+        android:background="@drawable/shape_corner_radius_10dp_border"
+        android:clipToOutline="true"
+        tools:src="@drawable/test"
+        tools:scaleType="fitXY"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_video_holder_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="스킨의 주인 (곧 나옴) | T1 vs BRO | 2024 LCK SUMMER | 정규시즌 2R"
+        style="@style/body_p"
+        android:textColor="@color/white"
+        android:maxLines="2"
+        android:ellipsize="end"
+        android:layout_marginTop="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        app:layout_constraintTop_toBottomOf="@id/iv_video_holder_thumbnail"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"/>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

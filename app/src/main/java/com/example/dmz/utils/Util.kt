@@ -1,5 +1,6 @@
 package com.example.dmz.utils
 
+import android.animation.ObjectAnimator
 import android.content.res.Resources.getSystem
 import android.icu.text.DecimalFormat
 import android.text.Spannable
@@ -20,6 +21,7 @@ import java.time.format.DateTimeFormatterBuilder
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import kotlin.random.Random
 
 object Util {
     val Float.px get() = (this * getSystem().displayMetrics.density).toInt()
@@ -205,5 +207,16 @@ object Util {
             Spannable.SPAN_EXCLUSIVE_EXCLUSIVE
         )
         return spannableStringBuilder
+    }
+
+    fun wiggle(view: View, duration:Long, delay: Long){
+        val firstValueY = Random.nextFloat()*30-30
+        val secondValueY = Random.nextFloat()*20-0
+        val animator = ObjectAnimator.ofFloat(view, "translationY", view.translationY+0f, view.translationY+firstValueY, view.translationY+secondValueY)
+        animator.duration = duration
+        animator.startDelay = delay
+        animator.repeatCount = ObjectAnimator.INFINITE
+        animator.repeatMode = ObjectAnimator.REVERSE
+        animator.start()
     }
 }
