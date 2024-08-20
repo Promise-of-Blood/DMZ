@@ -46,6 +46,7 @@ class StartFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        handleIsCompleted()
+        quizRepository.shuffleQuizList()
         initView()
         handleIsCollected()
     }
