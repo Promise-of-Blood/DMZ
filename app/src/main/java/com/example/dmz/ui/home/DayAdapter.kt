@@ -11,7 +11,6 @@ import com.example.dmz.R
 import com.example.dmz.data.model.Keywords
 import com.example.dmz.databinding.ItemCalendarDayBinding
 
-//TODO keywordsList[X] Keywords 객체 하나만 받아오기
 class DayAdapter(private val days: List<Date>, private val keyword: Keywords) : RecyclerView.Adapter<DayAdapter.DayViewHolder>() {
 
     class DayViewHolder(val binding: ItemCalendarDayBinding) : ViewHolder(binding.root)
