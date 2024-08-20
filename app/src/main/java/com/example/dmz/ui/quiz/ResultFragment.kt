@@ -42,6 +42,7 @@ class ResultFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
         score = getScore()
+        quizViewModel.setIsCompleted(true)
     }
 
     override fun onCreateView(

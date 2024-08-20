@@ -25,14 +25,14 @@ class StartFragment : Fragment() {
     override fun onAttach(context: Context) {
         super.onAttach(context)
 
-        val answer = quizViewModel.answer.value ?: mapOf()
-        if (answer.size == 3) {
+        val isCompleted = quizViewModel.isCompleted.value ?: false
+        if (isCompleted) {
             val action =
                 StartFragmentDirections.actionQuizStartToQuizResult(quizRepository.getTodayQuiz().keyword)
             val navOptions =
                 NavOptions.Builder().setPopUpTo(R.id.navigation_quiz_result, true).build()
             findNavController().navigate(action, navOptions)
-        }
+        } else quizViewModel.clearAnswers()
     }
 
     override fun onCreateView(

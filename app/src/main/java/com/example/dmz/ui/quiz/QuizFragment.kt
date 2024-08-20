@@ -37,7 +37,6 @@ class QuizFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        quizViewModel.clearAnswers()
         findNavController().clearBackStack(R.id.navigation_quiz)
     }
 
@@ -50,6 +49,7 @@ class QuizFragment : Fragment() {
         vpQuiz.adapter = ViewPagerAdapter(requireActivity(), 3)
         vpQuiz.isUserInputEnabled = false
         vpQuiz.offscreenPageLimit = 2
+        tvQuizNumber.text = getString(R.string.quiz_number, vpQuiz.currentItem + 1)
         tvQuizNextBtn.text =
             getString(if (vpQuiz.currentItem == 2) R.string.quiz_button_submit else R.string.quiz_button_next)
         tvQuizNextBtn.setOnClickListener { moveToNextQuestion() }
