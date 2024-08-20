@@ -143,11 +143,18 @@ class SearchFragment : Fragment() {
                         color = R.color.flou_yellow
                     )
 
-                doVideoSearch(query)
+                maxResults = 50
+                doVideoSearch(query = query, max = maxResults)
 
                 searchViewModel.addRecentSearch(searchItem)
                 searchViewModel.saveRecentSearchList(mContext)
-                findNavController().navigate(R.id.action_navigation_search_to_navigation_search_result)
+
+                val action =
+                    SearchFragmentDirections.actionNavigationSearchToNavigationSearchResult(
+                        searchItem.query, searchItem.region, searchItem.sort, searchItem.date
+                    )
+
+                findNavController().navigate(action)
 
             }
         }
@@ -173,13 +180,14 @@ class SearchFragment : Fragment() {
         }
     }
 
-    private fun doVideoSearch(query: String) {
+    private fun doVideoSearch(query: String, max: Int) {
         searchViewModel.doVideoSearch(
             q = query,
             order = searchSort,
             publishedAfter = searchBeforeDate,
             publishedBefore = searchNowDate,
-            regionCode = searchRegion
+            regionCode = searchRegion,
+            maxResults = max
         )
     }
 
