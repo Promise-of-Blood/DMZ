@@ -60,7 +60,7 @@ fun quizList(): List<Quiz> {
             )
         ),
         Quiz(
-            date = LocalDate.of(2024, 8, 21),
+            date = LocalDate.of(2024, 8, 22),
             keyword = keywordList[2],
             questions = listOf(
                 Question(
@@ -81,7 +81,7 @@ fun quizList(): List<Quiz> {
             )
         ),
         Quiz(
-            date = LocalDate.of(2024, 8, 21),
+            date = LocalDate.of(2024, 8, 23),
             keyword = keywordList[3],
             questions = listOf(
                 Question(
@@ -102,7 +102,7 @@ fun quizList(): List<Quiz> {
             )
         ),
         Quiz(
-            date = LocalDate.of(2024, 8, 21),
+            date = LocalDate.of(2024, 8, 24),
             keyword = keywordList[3],
             questions = listOf(
                 Question(
