@@ -1,5 +1,6 @@
 package com.example.dmz.ui.search
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -7,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
@@ -19,6 +21,7 @@ import com.example.dmz.utils.Util.koreanToRegionCode
 import com.example.dmz.utils.Util.koreanToSortData
 import com.example.dmz.utils.Util.setDateAgo
 import com.example.dmz.viewmodel.SearchViewModel
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 
 class SearchFragment : Fragment() {
 
@@ -39,6 +42,7 @@ class SearchFragment : Fragment() {
     private var searchNowDate: String? = null
     private var searchDateSet: String? = null
     private var maxResults: Int = 5
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         mContext = context
@@ -56,6 +60,7 @@ class SearchFragment : Fragment() {
 
         searchViewModel.loadRecentSearchItems(mContext)
 
+
         return binding.root
     }
 
@@ -65,6 +70,11 @@ class SearchFragment : Fragment() {
         setSpinners()
         setSearchButton()
         setRecentSearchList()
+
+        binding.root.setOnTouchListener { view, _ ->
+            requireActivity().hideKeyboard()
+            false
+        }
 
     }
 
@@ -202,7 +212,6 @@ class SearchFragment : Fragment() {
         searchRegion?.let { Log.d("setRegion", it) }
     }
 
-
     private fun setSort(input: String, regionArrayResource: Array<String>) {
         when (input) {
             regionArrayResource[0] -> searchSort = "relevance"
@@ -233,7 +242,14 @@ class SearchFragment : Fragment() {
                 else -> throw IllegalStateException("Invalid RegionArrayResource")
             }
         }
+    }
 
+    private fun Context.hideKeyboard() {
+        val inputManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        val currentFocus = (this as? Activity)?.currentFocus
+        currentFocus?.let {
+            inputManager.hideSoftInputFromWindow(it.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+        }
     }
 
 }
