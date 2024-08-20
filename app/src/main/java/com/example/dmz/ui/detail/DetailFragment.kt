@@ -1,18 +1,21 @@
 package com.example.dmz.ui.detail
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import androidx.navigation.fragment.navArgs
+import androidx.transition.TransitionInflater
 import com.bumptech.glide.Glide
 import com.example.dmz.DMZApplication
+import com.example.dmz.MainActivity
 import com.example.dmz.R
 import com.example.dmz.data.repository.DetailRepositoryImpl
 import com.example.dmz.data.repository.MyPageRepositoryImpl
@@ -24,29 +27,10 @@ import com.example.dmz.model.VideoDetailModel
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.utils.Util.formatDate
 import com.example.dmz.utils.Util.formatNumber
+import com.example.dmz.utils.Util.handleBottomNavigationVisibility
 import com.example.dmz.viewmodel.DetailViewModel
 import com.example.dmz.viewmodel.MyPageViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-private val dummy = listOf(
-    "8dDwuG8yqQQ",
-    "g15OJDuGDCw",
-    "pfzztJfz4fY",
-    "U25oqtQIrTM",
-    "Q13fhk-pzMc",
-)
-private val VIDEO_ID = dummy.random()
-
-/**
- * A simple [Fragment] subclass.
- * Use the [DetailFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
 class DetailFragment : Fragment() {
     private var _binding: FragmentDetailBinding? = null
     private val binding get() = _binding!!
@@ -59,16 +43,14 @@ class DetailFragment : Fragment() {
         viewModelFactory { initializer { MyPageViewModel(MyPageRepositoryImpl(requireActivity().application as DMZApplication)) } }
     }
 
-    // TODO: Rename and change types of parameters
-    private var param1: String? = null
-    private var param2: String? = null
+    private val args: DetailFragmentArgs by navArgs()
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        arguments?.let {
-            param1 = it.getString(ARG_PARAM1)
-            param2 = it.getString(ARG_PARAM2)
-        }
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        val transition =
+            TransitionInflater.from(context).inflateTransition(android.R.transition.move)
+        sharedElementEnterTransition = transition
+        sharedElementReturnTransition = transition
     }
 
     override fun onCreateView(
@@ -81,19 +63,28 @@ class DetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        handleBottomNavigationVisibility(false)
+        (activity as MainActivity).handleBottomNavigationVisibility(false)
         initView()
         initViewModel()
-        detailViewModel.fetchDetailData(VIDEO_ID)
+        detailViewModel.fetchDetailData(args.videoId)
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        handleBottomNavigationVisibility(true)
+        (activity as MainActivity).handleBottomNavigationVisibility(true)
         _binding = null
     }
 
     private fun initView() = with(binding) {
+        pbDetailLoading.visibility = View.GONE
+        svDetailContent.visibility = View.VISIBLE
+        ivDetailVideoThumbnail.transitionName = "thumbnail_${args.videoId}"
+        if (args.thumbnail != "null") {
+            Glide.with(requireContext())
+                .load(args.thumbnail)
+                .centerCrop()
+                .into(ivDetailVideoThumbnail)
+        }
         tvDetailBookmarkButton.setOnClickListener {
             if (detailData.video != null && detailData.channel != null) {
                 if (myPageViewModel.isBookmarked(detailData)) {
@@ -107,13 +98,6 @@ class DetailFragment : Fragment() {
                 }
             }
         }
-    }
-
-    private fun handleBottomNavigationVisibility(isShow: Boolean) {
-        activity?.findViewById<BottomNavigationView>(R.id.nav_view)?.visibility =
-            if (isShow) View.VISIBLE else View.GONE
-        activity?.findViewById<ImageView>(R.id.iv_home_btn)?.visibility =
-            if (isShow) View.VISIBLE else View.GONE
     }
 
     private fun initVideoDetailData(video: VideoDetailModel) =
@@ -131,11 +115,14 @@ class DetailFragment : Fragment() {
                     video.commentCount.formatNumber()
                 )
             tvDetailVideoPublishedDate.text = video.publishedAt.formatDate()
-            Glide.with(requireContext())
-                .load(video.thumbnail)
-                .into(ivDetailVideoThumbnail)
             tvDetailBookmarkButton.text =
                 if (myPageViewModel.isBookmarked(detailData)) "북마크 취소" else "북마크 저장"
+            if (args.thumbnail == "null") {
+                Glide.with(requireContext())
+                    .load(video.thumbnail)
+                    .centerCrop()
+                    .into(ivDetailVideoThumbnail)
+            }
         }
 
     private fun initChannelDetailData(channel: ChannelDetailModel) =
@@ -154,40 +141,38 @@ class DetailFragment : Fragment() {
             Glide.with(requireContext())
                 .load(channel.thumbnail)
                 .into(ivDetailChannelThumbnail)
-    }
+        }
 
     private fun initViewModel() = with(detailViewModel) {
         videoDetail.observe(viewLifecycleOwner) { video ->
-            if (video is UiState.Success) {
-                detailData = detailData.copy(video = video.data)
-                initVideoDetailData(video.data)
+            when (video) {
+                is UiState.Loading -> {}
+                is UiState.Error -> Toast.makeText(
+                    requireContext(),
+                    video.message,
+                    Toast.LENGTH_SHORT
+                ).show()
+
+                is UiState.Success -> {
+                    detailData = detailData.copy(video = video.data)
+                    initVideoDetailData(video.data)
+                }
             }
         }
         channelDetail.observe(viewLifecycleOwner) { channel ->
-            if (channel is UiState.Success) {
-                detailData = detailData.copy(channel = channel.data)
-                initChannelDetailData(channel.data)
-            }
-        }
-    }
+            when (channel) {
+                is UiState.Loading -> {}
+                is UiState.Error -> Toast.makeText(
+                    requireContext(),
+                    channel.message,
+                    Toast.LENGTH_SHORT
+                ).show()
 
-    companion object {
-        /**
-         * Use this factory method to create a new instance of
-         * this fragment using the provided parameters.
-         *
-         * @param param1 Parameter 1.
-         * @param param2 Parameter 2.
-         * @return A new instance of fragment DetailFragment.
-         */
-        // TODO: Rename and change types and number of parameters
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            DetailFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
+                is UiState.Success -> {
+                    detailData = detailData.copy(channel = channel.data)
+                    initChannelDetailData(channel.data)
                 }
             }
+        }
     }
 }

@@ -6,4 +6,4 @@ data class KeywordCard(
     val keyword: String,
 )
 
-fun List<KeywordCard>.include(item: KeywordCard) = this.count { item.id == it.id } > 0
+fun List<KeywordCard>.include(item: KeywordCard) = this.count { item.keyword == it.keyword } > 0

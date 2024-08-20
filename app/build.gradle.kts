@@ -5,6 +5,9 @@ plugins {
     alias(libs.plugins.jetbrains.kotlin.android)
     alias(libs.plugins.kotlin.parcelize)
     alias(libs.plugins.ksp)
+    id("kotlin-kapt")
+    id("androidx.navigation.safeargs")
+    id("kotlin-parcelize")
 }
 
 android {
@@ -46,6 +49,7 @@ android {
     buildFeatures {
         viewBinding = true
         buildConfig = true
+        dataBinding = true
     }
 }
 
@@ -70,8 +74,8 @@ dependencies {
     ksp(libs.room.compiler)
 
     // navigation
-    implementation (libs.androidx.navigation.fragment)
-    implementation (libs.androidx.navigation.ui)
+    implementation(libs.androidx.navigation.fragment)
+    implementation(libs.androidx.navigation.ui)
 
     //ViewPager
     implementation(libs.androidx.viewpager2)
@@ -80,8 +84,10 @@ dependencies {
     implementation(libs.glide)
 
     //search spinner
-    implementation ("com.github.skydoves:powerspinner:1.2.7")
+    implementation("com.github.skydoves:powerspinner:1.2.7")
 
+    // MPAndroidChart
+    implementation(libs.mpandroidchart)
     //코루틴
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
 
