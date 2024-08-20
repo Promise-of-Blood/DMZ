@@ -9,7 +9,7 @@
         android:id="@+id/navigation_browse"
         android:name="com.example.dmz.ui.browse.BrowseFragment"
         android:label="@string/browse"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_browse" />
 
     <fragment
         android:id="@+id/navigation_search"
@@ -24,7 +24,11 @@
         android:id="@+id/navigation_home"
         android:name="com.example.dmz.ui.home.HomeFragment"
         android:label="@string/home"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_navigation_home_to_navigation_search_result"
+            app:destination="@id/navigation_search_result" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_quiz"
         android:name="com.example.dmz.ui.quiz.StartFragment"
@@ -73,7 +77,7 @@
         tools:layout="@layout/fragment_search_result">
         <action
             android:id="@+id/action_navigation_search_result_to_navigation_detail"
-            app:destination="@id/navigation_detail"/>
+            app:destination="@id/navigation_detail" />
         <argument
             android:name="query"
             app:argType="string" />

@@ -8,9 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -19,8 +21,12 @@ import androidx.viewpager2.widget.ViewPager2
 import com.example.dmz.R
 import com.example.dmz.data.model.Keywords
 import com.example.dmz.databinding.FragmentHomeBinding
+import com.example.dmz.utils.Util
+import com.example.dmz.utils.Util.getNowTimeAsIso
+import com.example.dmz.utils.Util.setDateAgo
 import com.example.dmz.viewmodel.HomeViewModel
 import com.example.dmz.viewmodel.HomeViewModelFactory
+import com.example.dmz.viewmodel.SearchViewModel
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
@@ -36,6 +42,10 @@ class HomeFragment : Fragment() {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private var isSyncingScroll = false
+
+    private val searchViewModel: SearchViewModel by activityViewModels {
+        SearchViewModel.SearchViewModelFactory()
+    }
 
     private val homeViewModel: HomeViewModel by viewModels {
         HomeViewModelFactory()
@@ -190,6 +200,26 @@ class HomeFragment : Fragment() {
         Log.i("process test", "setupViewPager 실행중")
 
         val adapter = KeywordAdapter(keywordsList)
+        adapter.setOnItemClickListener(object : KeywordAdapter.OnItemClickListener {
+            override fun onItemClick(view: View, position: Int) {
+                val keyword = keywordsList[position].keyText
+                searchViewModel.doVideoSearch(
+                    q = keyword,
+                    order = "relevance",
+                    publishedAfter = setDateAgo(getNowTimeAsIso(), Util.DateType.YEAR, 1),
+                    publishedBefore = getNowTimeAsIso(),
+                    regionCode = "KR",
+                    maxResults = 50
+                )
+
+                val action =
+                    HomeFragmentDirections.actionNavigationHomeToNavigationSearchResult(
+                        keyword, "KR", "viewCount", "일년 전"
+                    )
+
+                findNavController().navigate(action)
+            }
+        })
 
         binding.apply {
             // 어댑터 설정
@@ -222,11 +252,12 @@ class HomeFragment : Fragment() {
                 setPadding(200, 0, 200, 0)
                 clipToPadding = false
 
-                registerOnPageChangeCallback(object: ViewPager2.OnPageChangeCallback() {
+                registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
                     override fun onPageSelected(position: Int) {
                         super.onPageSelected(position)
-                        val calendarScrollPosition = (binding.rvCalendar.layoutManager as LinearLayoutManager)
-                            .findFirstVisibleItemPosition()
+                        val calendarScrollPosition =
+                            (binding.rvCalendar.layoutManager as LinearLayoutManager)
+                                .findFirstVisibleItemPosition()
                         val chartScrollX = binding.hsvChart.scrollX
 
                         val keyword = keywordsList[position]
