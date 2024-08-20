@@ -21,7 +21,6 @@ import com.example.dmz.utils.Util.koreanToRegionCode
 import com.example.dmz.utils.Util.koreanToSortData
 import com.example.dmz.utils.Util.setDateAgo
 import com.example.dmz.viewmodel.SearchViewModel
-import com.google.android.material.internal.ViewUtils.hideKeyboard
 
 class SearchFragment : Fragment() {
 
@@ -59,7 +58,6 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         searchViewModel.loadRecentSearchItems(mContext)
-
 
         return binding.root
     }

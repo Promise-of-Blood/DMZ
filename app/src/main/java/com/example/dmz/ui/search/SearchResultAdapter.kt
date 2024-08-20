@@ -12,6 +12,7 @@ import com.example.dmz.databinding.ItemSearchResultBinding
 import com.example.dmz.model.VideoModel
 import com.example.dmz.ui.search.SearchResultAdapter.SearchResultViewHolder
 import com.example.dmz.utils.Util.formatDiffDay
+import com.example.dmz.utils.Util.formatDiffTime
 
 class SearchResultAdapter : ListAdapter<VideoModel, SearchResultViewHolder>(diffUtil) {
 
@@ -32,7 +33,12 @@ class SearchResultAdapter : ListAdapter<VideoModel, SearchResultViewHolder>(diff
                 Glide.with(itemView.context).load(item.thumbnail).into(ivThumbImage)
                 tvResultTitle.text = item.title
                 tvChannelName.text = item.channelName
-                tvVideoTime.text = String.format("%s 전",item.publishedAt.formatDiffDay())
+                if (item.publishedAt.formatDiffDay() == "0일") {
+                    tvVideoTime.text = item.publishedAt.formatDiffTime()
+                } else {
+                    tvVideoTime.text = String.format("%s 전", item.publishedAt.formatDiffDay())
+                }
+
                 Log.d("date", item.publishedAt)
                 Log.d("date", item.publishedAt.formatDiffDay())
             }
