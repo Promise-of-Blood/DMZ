@@ -16,7 +16,7 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="100dp"
         android:letterSpacing="0.1"
-        android:text="MZ가 좋아하는\n비싼 아이스크림"
+        android:text="@string/quiz_intro"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />

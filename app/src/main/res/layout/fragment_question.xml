@@ -22,8 +22,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:text="요아정은\n무슨 줄임말일까요?"
-        android:textColor="@color/white" />
+        android:textColor="@color/white"
+        tools:text="요아정은\n무슨 줄임말일까요?" />
 
     <RadioGroup
         android:id="@+id/rg_quiz_answer"
@@ -43,8 +43,8 @@
             android:drawableTint="@drawable/selector_quiz_answer"
             android:gravity="center|center_vertical"
             android:paddingVertical="16dp"
-            android:text="요구르트 아줌마 정말 좋아"
-            android:textColor="@drawable/selector_quiz_answer" />
+            android:textColor="@drawable/selector_quiz_answer"
+            tools:text="요구르트 아줌마 정말 좋아" />
 
         <RadioButton
             android:id="@+id/rb_quiz_answer2"
@@ -59,8 +59,8 @@
             android:drawableTint="@drawable/selector_quiz_answer"
             android:gravity="center|center_vertical"
             android:paddingVertical="16dp"
-            android:text="요구르트 아줌마 정말 좋아"
-            android:textColor="@drawable/selector_quiz_answer" />
+            android:textColor="@drawable/selector_quiz_answer"
+            tools:text="요구르트 아줌마 정말 좋아" />
 
         <RadioButton
             android:id="@+id/rb_quiz_answer3"
@@ -75,8 +75,8 @@
             android:drawableTint="@drawable/selector_quiz_answer"
             android:gravity="center|center_vertical"
             android:paddingVertical="16dp"
-            android:text="요구르트 아줌마 정말 좋아"
-            android:textColor="@drawable/selector_quiz_answer" />
+            android:textColor="@drawable/selector_quiz_answer"
+            tools:text="요구르트 아줌마 정말 좋아" />
 
     </RadioGroup>
 

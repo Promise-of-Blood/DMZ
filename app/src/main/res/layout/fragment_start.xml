@@ -17,10 +17,10 @@
         android:layout_marginStart="32dp"
         android:layout_marginTop="100dp"
         android:letterSpacing="0.1"
-        android:text="MZ가 좋아하는\n비싼 아이스크림"
         android:textColor="@color/white"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="MZ가 좋아하는\n비싼 아이스크림" />
 
     <TextView
         android:id="@+id/tv_quiz_start_title"
@@ -30,10 +30,10 @@
         android:layout_marginTop="20dp"
         android:letterSpacing="0.1"
         android:lineSpacingExtra="5dp"
-        android:text="요아정"
         android:textColor="@color/sky_blue"
         app:layout_constraintStart_toStartOf="@id/tv_quiz_start_description"
-        app:layout_constraintTop_toBottomOf="@id/tv_quiz_start_description" />
+        app:layout_constraintTop_toBottomOf="@id/tv_quiz_start_description"
+        tools:text="요아정" />
 
     <ImageView
         android:id="@+id/iv_quiz_start_image"

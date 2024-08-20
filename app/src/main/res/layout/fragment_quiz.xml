@@ -29,7 +29,6 @@
         android:backgroundTintMode="multiply"
         android:gravity="center|center_vertical"
         android:paddingVertical="16dp"
-        android:text="다음으로"
         android:textColor="@color/flou_yellow"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
