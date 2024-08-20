@@ -1,5 +1,6 @@
 package com.example.dmz.data
 
+import android.util.Log
 import com.example.dmz.data.model.Keywords
 
 class CacheDataSource {
@@ -17,7 +18,9 @@ class CacheDataSource {
         }
     }
 
-    fun getUserList(): List<Keywords> {
-        return keywordsList()
+    fun getKeywordsList(): List<Keywords> {
+        val data = keywordsList() // keywordsList()가 무엇을 반환하는지 확인
+        Log.d("CacheDataSource", "$data")
+        return data
     }
 }
