@@ -33,6 +33,9 @@
         <action
             android:id="@+id/action_quiz_start_to_quiz_question"
             app:destination="@id/navigation_quiz_question" />
+        <action
+            android:id="@+id/action_quiz_start_to_quiz_result"
+            app:destination="@id/navigation_quiz_result" />
     </fragment>
     <fragment
         android:id="@+id/navigation_my_profile"
@@ -101,19 +104,16 @@
             android:id="@+id/action_quiz_question_to_navigation_quiz_result"
             app:destination="@id/navigation_quiz_result">
             <argument
-                android:name="score"
-                app:argType="integer" />
-            <argument
                 android:name="keyword"
                 app:argType="com.example.dmz.data.model.Keywords" />
         </action>
+        <action
+            android:id="@+id/action_quiz_question_to_quiz_start"
+            app:destination="@id/navigation_quiz" />
     </fragment>
     <fragment
         android:id="@+id/navigation_quiz_result"
         android:name="com.example.dmz.ui.quiz.ResultFragment">
-        <argument
-            android:name="score"
-            app:argType="integer" />
         <argument
             android:name="keyword"
             app:argType="com.example.dmz.data.model.Keywords" />
@@ -121,7 +121,7 @@
             android:id="@+id/action_quiz_result_to_my_page"
             app:destination="@id/navigation_my_profile" />
         <action
-            android:id="@+id/action_quiz_result_to_quiz_start"
-            app:destination="@id/navigation_quiz" />
+            android:id="@+id/action_quiz_result_to_home"
+            app:destination="@id/navigation_home" />
     </fragment>
 </navigation>
