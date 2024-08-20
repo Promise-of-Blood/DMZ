@@ -1,12 +1,16 @@
 package com.example.dmz.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.CompositePageTransformer
@@ -16,10 +20,15 @@ import com.example.dmz.data.CacheDataSource
 import com.example.dmz.data.model.Keywords
 import com.example.dmz.data.repository.KeywordsRepositoryImpl
 import com.example.dmz.databinding.FragmentHomeBinding
+import com.example.dmz.viewmodel.HomeViewModel
+import com.example.dmz.viewmodel.HomeViewModelFactory
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.data.LineDataSet
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
+import kotlinx.coroutines.launch
 import java.time.DayOfWeek
 import java.time.LocalDate
 import kotlin.math.abs
@@ -29,8 +38,9 @@ class HomeFragment : Fragment() {
     private val binding get() = _binding!!
     private var isSyncingScroll = false
 
-    private val keywordsRepository = KeywordsRepositoryImpl(CacheDataSource.getCacheDataSource())
-    private lateinit var keywordsList : List<Keywords>
+    private val homeViewModel: HomeViewModel by viewModels {
+        HomeViewModelFactory()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,17 +51,31 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        getKeywords()
-        setupViewPager()
-        setupCalendar()
-        setupChart(binding.lineChart)
-        setupScrollSync()
+
         return binding.root
     }
 
-    private fun getKeywords(): Keywords {
-        keywordsList = keywordsRepository.getKeywordsList()
-        return keywordsRepository.getKeywordsList().first()
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        initViewModel()
+    }
+
+    private fun initViewModel() {
+        homeViewModel.getKeywordsList()
+        Log.i("process test", "initiViewModel 실행중")
+        viewLifecycleOwner.lifecycleScope.launch {
+            homeViewModel.keywordsList.flowWithLifecycle(viewLifecycleOwner.lifecycle)
+                .filter { it.isNotEmpty() }
+                .collectLatest { keywordsList ->
+                    Log.i("Keywords List", keywordsList.toString())
+
+                    setupViewPager(keywordsList)
+                    setupCalendar(keywordsList)
+                    setupChart(binding.lineChart, keywordsList)
+                    setupScrollSync()
+
+                }
+        }
     }
 
     private fun setupScrollSync() {
@@ -70,13 +94,18 @@ class HomeFragment : Fragment() {
             hsvChart.setOnScrollChangeListener { _, scrollX, _, _, _ ->
                 if (!isSyncingScroll) {
                     isSyncingScroll = true
-                    binding.rvCalendar.scrollBy(scrollX - binding.rvCalendar.computeHorizontalScrollOffset(), 0)
+                    binding.rvCalendar.scrollBy(
+                        scrollX - binding.rvCalendar.computeHorizontalScrollOffset(),
+                        0
+                    )
                     isSyncingScroll = false
                 }
             }
         }
     }
-    private fun setupCalendar() {
+
+    private fun setupCalendar(keywordsList: List<Keywords>) {
+        Log.i("process test", "setupCalendar 실행중")
         val dateSet = mutableListOf<Date>()
         val currentDate = LocalDate.now()
 
@@ -101,60 +130,66 @@ class HomeFragment : Fragment() {
             dateSet.add(date)
         }
         //TODO Keywords 객체 하나만 전달 하기
-        val adapter = DayAdapter(dateSet.reversed(), keywordsList)
+        val adapter = DayAdapter(dateSet.reversed(), keywordsList[0])
         binding.apply {
-            rvCalendar.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+            rvCalendar.layoutManager =
+                LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
             rvCalendar.adapter = adapter
             rvCalendar.overScrollMode = View.OVER_SCROLL_NEVER
         }
     }
 
-    private fun setupChart(chart: LineChart) {
-        // 화면 너비를 가져오기 위해 DisplayMetrics를 사용
-        val displayMetrics = chart.context.resources.displayMetrics
-        val deviceWidth = displayMetrics.widthPixels
+    private fun setupChart(chart: LineChart, keywordsList: List<Keywords>) {
+        Log.i("process test", "setupChart 실행중")
+        if (keywordsList.isNotEmpty()) {
+            // 화면 너비를 가져오기 위해 DisplayMetrics를 사용
+            val displayMetrics = chart.context.resources.displayMetrics
+            val deviceWidth = displayMetrics.widthPixels
 
-        // LineChart의 레이아웃 파라미터를 수정하여 가로 길이를 디바이스 너비의 두 배로 설정
-        val layoutParams = chart.layoutParams
-        layoutParams.width = deviceWidth * 2
-        chart.layoutParams = layoutParams
+            // LineChart의 레이아웃 파라미터를 수정하여 가로 길이를 디바이스 너비의 두 배로 설정
+            val layoutParams = chart.layoutParams
+            layoutParams.width = deviceWidth * 2
+            chart.layoutParams = layoutParams
 
-        chart.apply {
-            setPinchZoom(false)
-            setScaleEnabled(false)
-            setTouchEnabled(false)
-            isDoubleTapToZoomEnabled = false
-            xAxis.isEnabled = false
-            xAxis.setLabelCount(4, true)
-            axisRight.isEnabled = false
-            axisLeft.isEnabled = false
-            legend.isEnabled = false
-            description.isEnabled = false
-            animateY(500)
-        }
-
-
-        chart.apply {
-            val entryList = arrayListOf<Entry>()
-            val recentTrend = keywordsList[0].recentTrend
-            recentTrend.forEachIndexed { index, d ->
-                entryList.add(Entry(index.toFloat(), d.toFloat()))
+            chart.apply {
+                setPinchZoom(false)
+                setScaleEnabled(false)
+                setTouchEnabled(false)
+                isDoubleTapToZoomEnabled = false
+                xAxis.isEnabled = false
+                xAxis.setLabelCount(4, true)
+                axisRight.isEnabled = false
+                axisLeft.isEnabled = false
+                legend.isEnabled = false
+                description.isEnabled = false
+                animateY(500)
             }
 
-            val lineDataSet = LineDataSet(entryList, "data").apply {
-                setDrawCircles(false)
-                lineWidth = 2.0F
-                setDrawValues(false)
-                color = ContextCompat.getColor(chart.context, R.color.flou_yellow)
-                mode = LineDataSet.Mode.CUBIC_BEZIER
+
+            chart.apply {
+                val entryList = arrayListOf<Entry>()
+                val recentTrend = keywordsList[0].recentTrend
+                recentTrend.forEachIndexed { index, d ->
+                    entryList.add(Entry(index.toFloat(), d.toFloat()))
+                }
+
+                val lineDataSet = LineDataSet(entryList, "data").apply {
+                    setDrawCircles(false)
+                    lineWidth = 2.0F
+                    setDrawValues(false)
+                    color = ContextCompat.getColor(chart.context, R.color.flou_yellow)
+                    mode = LineDataSet.Mode.CUBIC_BEZIER
+                }
+                data = LineData(listOf(lineDataSet))
+                invalidate()
             }
-            data = LineData(listOf(lineDataSet))
-            invalidate()
         }
+
     }
 
 
-    private fun setupViewPager() {
+    private fun setupViewPager(keywordsList: List<Keywords>) {
+        Log.i("process test", "setupViewPager 실행중")
 
         val adapter = KeywordAdapter(keywordsList)
 
