@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,7 +30,7 @@ import com.example.dmz.ui.browse.loadLastRegion
 import com.example.dmz.ui.browse.saveSelectedRegion
 import com.example.dmz.viewmodel.SearchViewModel
 
-class MusicFragment : Fragment() {
+class MusicFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -39,7 +40,7 @@ class MusicFragment : Fragment() {
     private val browseChannelAdapter by lazy { ChannelListAdapter() }
     private val browseVideoAdapter by lazy { VideoListAdapter() }
 
-    private val channelViewModel: SearchViewModel by activityViewModels {
+    private val channelViewModel: SearchViewModel by viewModels {
         viewModelFactory { initializer { SearchViewModel(SearchRepositoryImpl(YoutubeSearchClient.youtubeApi)) } }
     }
 
@@ -57,7 +58,25 @@ class MusicFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBrowseView()
-        initBrowseViewModel()
+        //initBrowseViewModel()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
+        if(key == "current_selected_country"){
+            val regionCode = sharedPreferences.getString(key, "KR")
+            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
+        }
     }
 
     override fun onDestroyView() {

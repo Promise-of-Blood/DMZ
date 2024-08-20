@@ -8,7 +8,6 @@
             android:id="@id/intro_layout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            motion:layout_constraintHeight_percent="1"
             motion:layout_constraintTop_toTopOf="parent"
             motion:layout_constraintBottom_toBottomOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"
@@ -30,7 +29,7 @@
         <Constraint
             android:id="@id/intro_layout"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             motion:layout_constraintBottom_toTopOf="parent"
             motion:layout_constraintStart_toStartOf="parent"
             motion:layout_constraintEnd_toEndOf="parent"/>
@@ -53,12 +52,15 @@
     <Transition
         motion:constraintSetStart="@id/start"
         motion:constraintSetEnd="@id/end"
-        motion:duration="1000">
+        motion:duration="1000"
+        motion:layoutDuringTransition="callMeasure">
 
         <OnSwipe
             motion:touchAnchorId="@id/intro_layout"
             motion:touchAnchorSide="bottom"
             motion:dragDirection="dragUp"/>
     </Transition>
+
+
 
 </MotionScene>

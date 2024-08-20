@@ -37,7 +37,17 @@ class BrowseFragment : Fragment() {
 
     private fun initView()= with(binding){
         vpBrowse.adapter = browseViewPager
+        vpBrowse.isUserInputEnabled = false
 
+        previousBtn.setOnClickListener{
+            val currentItem = vpBrowse.currentItem
+            vpBrowse.currentItem = currentItem - 1
+        }
+
+        nextBtn.setOnClickListener{
+            val currentItem = vpBrowse.currentItem
+            vpBrowse.currentItem = currentItem + 1
+        }
 
     }
 

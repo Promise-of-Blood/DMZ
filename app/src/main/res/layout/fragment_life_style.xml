@@ -4,9 +4,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/ml_life_style_fragment"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     app:layoutDescription="@xml/browse_scene"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.browse.category.LifeStyleFragment">
+
+
 
 <include
     android:id="@+id/intro_layout"

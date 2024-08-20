@@ -7,38 +7,41 @@ import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
-import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.ViewModel
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.viewbinding.ViewBinding
 import com.example.dmz.R
 import com.example.dmz.data.repository.SearchRepositoryImpl
 import com.example.dmz.databinding.FragmentGameBinding
-import com.example.dmz.databinding.FragmentLifeStyleBinding
-import com.example.dmz.databinding.FragmentMovieBinding
-import com.example.dmz.databinding.FragmentMusicBinding
-import com.example.dmz.databinding.FragmentSportsBinding
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.ui.browse.ChannelListAdapter
 import com.example.dmz.ui.browse.VideoListAdapter
+import com.example.dmz.ui.browse.bottomNavControl
 import com.example.dmz.ui.browse.fetchBrowseData
 import com.example.dmz.ui.browse.initSpinner
 import com.example.dmz.ui.browse.loadLastRegion
 import com.example.dmz.ui.browse.saveSelectedRegion
+import com.example.dmz.ui.browse.setScrollSensitivity
+import com.example.dmz.viewmodel.BrowseMotionViewModel
 import com.example.dmz.viewmodel.SearchViewModel
-import com.skydoves.powerspinner.IconSpinnerAdapter
-import com.skydoves.powerspinner.createPowerSpinnerView
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class GameFragment : Fragment() {
+
+class GameFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var sharedPreferences: SharedPreferences
+    private var previousRegionCode : String? = null
+
 
     private var _binding: FragmentGameBinding? = null
     private val binding get() = _binding!!
@@ -47,8 +50,12 @@ class GameFragment : Fragment() {
     private val browseVideoAdapter by lazy { VideoListAdapter() }
 
     // ViewModel 초기화
-    private val channelViewModel: SearchViewModel by activityViewModels {
+    private val channelViewModel: SearchViewModel by viewModels {
         viewModelFactory { initializer { SearchViewModel(SearchRepositoryImpl(YoutubeSearchClient.youtubeApi)) } }
+    }
+
+    private val motionViewModel: BrowseMotionViewModel by activityViewModels {
+        viewModelFactory { initializer { BrowseMotionViewModel() } }
     }
 
 
@@ -59,6 +66,7 @@ class GameFragment : Fragment() {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
         sharedPreferences =
             requireContext().getSharedPreferences("regionCode", Context.MODE_PRIVATE)
+
         return binding.root
     }
 
@@ -66,8 +74,35 @@ class GameFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initBrowseView()
-        initBrowseViewModel()
+        initBrowseViewModel(binding.mlGameFragment)
     }
+
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        Log.d("로그", "Game on Resume")
+
+        val currentRegionCode = sharedPreferences.getString("current_selected_country", "KR")
+        if (currentRegionCode != previousRegionCode) {
+            initSpinner(binding,sharedPreferences)
+            fetchBrowseData(channelViewModel, "/m/019_rr", currentRegionCode)
+            previousRegionCode = currentRegionCode
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        Log.d("로그","Game on Pause")
+
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
+        if(key == "current_selected_country"){
+            initSpinner(binding,sharedPreferences)
+        }
+    }
+
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -76,6 +111,9 @@ class GameFragment : Fragment() {
 
     private fun initBrowseView() = with(binding) {
 
+        previousRegionCode = loadLastRegion(sharedPreferences)
+
+
         val navView: View = requireActivity().findViewById(R.id.nav_view)
         val homeBtn: View = requireActivity().findViewById(R.id.iv_home_btn)
         navView.visibility = View.GONE
@@ -83,21 +121,22 @@ class GameFragment : Fragment() {
 
         mlGameFragment.setTransitionListener(object : MotionLayout.TransitionListener{
             override fun onTransitionStarted(motionLayout: MotionLayout?, startId: Int, endId: Int) {}
-
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
-
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                if (currentId == R.id.end){
-                    navView.visibility = View.VISIBLE
-                    homeBtn.visibility = View.VISIBLE
+                Log.d("MotionLayout", "Game: {${requireActivity().resources.getResourceEntryName(currentId)}}")
+                bottomNavControl(currentId,navView,homeBtn)
+                if(currentId == R.id.end){
+                    motionViewModel.setListVisible(true)
                 }else if(currentId == R.id.start){
-                    navView.visibility = View.GONE
-                    homeBtn.visibility = View.GONE
+                    motionViewModel.setListVisible(false)
                 }
             }
-
             override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
         })
+
+        val initState = mlGameFragment.currentState
+        bottomNavControl(initState,navView,homeBtn)
+
 
 
         listLayout.tvTopbarTitle.text = getString(R.string.browse_game)
@@ -106,6 +145,7 @@ class GameFragment : Fragment() {
 
 
         initSpinner(binding,sharedPreferences)
+
         listLayout.spinnerSelectRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
             val regionCode = when (text) {
                 "한국" -> "KR"
@@ -114,8 +154,12 @@ class GameFragment : Fragment() {
                 "일본" -> "JP"
                 else -> "KR"
             }
-            saveSelectedRegion(sharedPreferences,regionCode)
-            fetchBrowseData(channelViewModel,"/m/0bzvm2",regionCode)
+            if(regionCode != previousRegionCode){
+                saveSelectedRegion(sharedPreferences,regionCode)
+//                fetchBrowseData(channelViewModel,"/m/0bzvm2",regionCode)
+                previousRegionCode = regionCode
+            }
+
         }
 
 
@@ -135,17 +179,35 @@ class GameFragment : Fragment() {
         }
     }
 
-    private fun initBrowseViewModel() {
-        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
-            browseChannelAdapter.submitList(channels)
+    private fun initBrowseViewModel(motionLayout: MotionLayout) {
+//        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
+//            browseChannelAdapter.submitList(channels)
+//        }
+//
+//        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
+//            browseVideoAdapter.submitList(videos)
+//        }
+
+        motionViewModel.isListVisible.observe(viewLifecycleOwner){isListVisible ->
+            lifecycleScope.launch{
+                repeatOnLifecycle(Lifecycle.State.STARTED){
+                    Log.d("LiveData","$isListVisible")
+                    if(isListVisible){
+                        delay(1000)
+//                        motionLayout.transitionToEnd()
+                        Log.d("라이브 데이터","게임 isListVisible 값 :${motionViewModel.isListVisible.value}")
+                    }else{
+//                        motionLayout.transitionToStart()
+                        Log.d("라이브 데이터","게임 isListVisible 값 :${motionViewModel.isListVisible.value}")
+                    }
+                }
+            }
+
         }
 
-        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
-            browseVideoAdapter.submitList(videos)
-        }
-
-        val lastRegionCode = loadLastRegion(sharedPreferences)
-        fetchBrowseData(channelViewModel,"/m/0bzvm2",lastRegionCode)
+//        val lastRegionCode = loadLastRegion(sharedPreferences)
+//        fetchBrowseData(channelViewModel,"/m/0bzvm2",lastRegionCode)
+//        previousRegionCode = lastRegionCode
 
     }
 

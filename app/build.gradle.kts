@@ -82,4 +82,7 @@ dependencies {
     //search spinner
     implementation ("com.github.skydoves:powerspinner:1.2.7")
 
+    //코루틴
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.4")
+
 }

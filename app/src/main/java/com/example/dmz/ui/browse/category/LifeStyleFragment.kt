@@ -12,6 +12,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,18 +26,24 @@ import com.example.dmz.databinding.FragmentLifeStyleBinding
 import com.example.dmz.remote.YoutubeSearchClient
 import com.example.dmz.ui.browse.ChannelListAdapter
 import com.example.dmz.ui.browse.VideoListAdapter
+import com.example.dmz.ui.browse.bottomNavControl
 import com.example.dmz.ui.browse.fetchBrowseData
 import com.example.dmz.ui.browse.initSpinner
 import com.example.dmz.ui.browse.loadLastRegion
 import com.example.dmz.ui.browse.saveSelectedRegion
+import com.example.dmz.ui.browse.setScrollSensitivity
 import com.example.dmz.utils.Util.wiggle
+import com.example.dmz.viewmodel.BrowseMotionViewModel
 import com.example.dmz.viewmodel.SearchViewModel
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 
-class LifeStyleFragment : Fragment() {
+class LifeStyleFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
 
     private lateinit var sharedPreferences: SharedPreferences
+    private var previousRegionCode : String? = null
 
     private var _binding : FragmentLifeStyleBinding? = null
     private val binding get() = _binding!!
@@ -41,16 +51,23 @@ class LifeStyleFragment : Fragment() {
     private val browseChannelAdapter by lazy { ChannelListAdapter() }
     private val browseVideoAdapter by lazy { VideoListAdapter() }
 
-    private val channelViewModel: SearchViewModel by activityViewModels {
+    private val channelViewModel: SearchViewModel by viewModels {
         viewModelFactory { initializer { SearchViewModel(SearchRepositoryImpl(YoutubeSearchClient.youtubeApi)) } }
     }
+
+    private val motionViewModel: BrowseMotionViewModel by activityViewModels {
+        viewModelFactory { initializer { BrowseMotionViewModel() } }
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         sharedPreferences = requireContext().getSharedPreferences("regionCode", Context.MODE_PRIVATE)
         _binding = FragmentLifeStyleBinding.inflate(inflater, container, false)
+
+
         return binding.root
     }
 
@@ -69,7 +86,7 @@ class LifeStyleFragment : Fragment() {
             binding.introLayout.lifestyleLetterE2
         )
 
-        letters.forEachIndexed{index, view ->
+        letters.forEachIndexed{_, view ->
             val duration = Random.nextLong(1000, 3000)
             wiggle(view,duration,0)
         }
@@ -77,11 +94,45 @@ class LifeStyleFragment : Fragment() {
         wiggle(binding.introLayout.lifestyle3dFlower,2000,0)
 
         initBrowseView()
-        initBrowseViewModel()
+        initBrowseViewModel(binding.mlLifeStyleFragment)
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        Log.d("로그","LifeStyle on Resume")
+
+        val currentRegionCode = sharedPreferences.getString("current_selected_country", "KR")
+        if (currentRegionCode != previousRegionCode) {
+            initSpinner(binding, sharedPreferences)
+            fetchBrowseData(channelViewModel, "/m/019_rr", currentRegionCode)
+            previousRegionCode = currentRegionCode
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this)
+        Log.d("로그","LifeStyle on Pause")
+
+
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
+        if(key == "current_selected_country"){
+            initSpinner(binding,sharedPreferences)
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
+
     private fun initBrowseView() = with(binding) {
+
+        previousRegionCode = loadLastRegion(sharedPreferences)
 
         val navView: View = requireActivity().findViewById(R.id.nav_view)
         val homeBtn: View = requireActivity().findViewById(R.id.iv_home_btn)
@@ -96,25 +147,31 @@ class LifeStyleFragment : Fragment() {
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {}
 
             override fun onTransitionCompleted(motionLayout: MotionLayout?, currentId: Int) {
-                Log.d("MotionLayout", "Transition Completed: $currentId")
-                if (currentId == R.id.end){
-                    navView.visibility = View.VISIBLE
-                    homeBtn.visibility = View.VISIBLE
-                }else if(currentId == R.id.start){
-                    navView.visibility = View.GONE
-                    homeBtn.visibility = View.GONE
+                Log.d("MotionLayout", "LifeStyle: {${requireActivity().resources.getResourceEntryName(currentId)}}")
+                bottomNavControl(currentId, navView, homeBtn)
+                Log.d("라이브 데이터","${motionViewModel.isListVisible.value}")
+                if(currentId == R.id.end){
+                    motionViewModel.setListVisible(true)
+                }else if(currentId == R.id.start) {
+                    motionViewModel.setListVisible(false)
                 }
+
             }
 
-            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {}
+            override fun onTransitionTrigger(motionLayout: MotionLayout?, triggerId: Int, positive: Boolean, progress: Float) {
+                Log.d("MotionLayout", "Transition Triggered: $triggerId, positive: $positive")
+            }
         })
 
+        val initState = mlLifeStyleFragment.currentState
+        bottomNavControl(initState,navView,homeBtn)
 
         listLayout.tvTopbarTitle.text = getString(browse_life_style)
         listLayout.tvChannelTitle.text = getString(browse_life_style)
-        listLayout.tvVideoTitle.text = getString(R.string.browse_life_style)
+        listLayout.tvVideoTitle.text = getString(browse_life_style)
 
         initSpinner(binding,sharedPreferences)
+
         listLayout.spinnerSelectRegion.setOnSpinnerItemSelectedListener<String> { _, _, _, text ->
             val regionCode = when (text) {
                 "한국" -> "KR"
@@ -123,8 +180,11 @@ class LifeStyleFragment : Fragment() {
                 "일본" -> "JP"
                 else -> "KR"
             }
-            saveSelectedRegion(sharedPreferences,regionCode)
-            fetchBrowseData(channelViewModel,"/m/019_rr",regionCode)
+            if(regionCode != previousRegionCode){
+                saveSelectedRegion(sharedPreferences,regionCode)
+//                fetchBrowseData(channelViewModel,"/m/019_rr",regionCode)
+                previousRegionCode = regionCode
+            }
         }
 
 
@@ -144,17 +204,34 @@ class LifeStyleFragment : Fragment() {
         }
     }
 
-    private fun initBrowseViewModel() {
-        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
-            browseChannelAdapter.submitList(channels)
+    private fun initBrowseViewModel(motionLayout:MotionLayout) {
+//        channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
+//            browseChannelAdapter.submitList(channels)
+//        }
+//
+//        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
+//            browseVideoAdapter.submitList(videos)
+//        }
+
+        motionViewModel.isListVisible.observe(viewLifecycleOwner){isListVisible ->
+            lifecycleScope.launch {
+                repeatOnLifecycle(Lifecycle.State.STARTED){
+                    delay(1000)
+                    if(isListVisible){
+                        motionLayout.transitionToEnd()
+                        Log.d("라이브 데이터","라이프 isListVisible 값 :${motionViewModel.isListVisible.value}")
+                    }else{
+                        motionLayout.transitionToStart()
+                        Log.d("라이브 데이터","라이프 isListVisible 값 :${motionViewModel.isListVisible.value}")
+                    }
+                }
+            }
+
         }
 
-        channelViewModel.videoList.observe(viewLifecycleOwner) { videos ->
-            browseVideoAdapter.submitList(videos)
-        }
-
-        val lastRegionCode = loadLastRegion(sharedPreferences)
-        fetchBrowseData(channelViewModel,"/m/019_rr",lastRegionCode)
+//        val lastRegionCode = loadLastRegion(sharedPreferences)
+//        fetchBrowseData(channelViewModel,"/m/019_rr",lastRegionCode)
+//        previousRegionCode = lastRegionCode
 
     }
 

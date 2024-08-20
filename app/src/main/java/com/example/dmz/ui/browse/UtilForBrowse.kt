@@ -1,13 +1,17 @@
 package com.example.dmz.ui.browse
 
 import android.content.SharedPreferences
+import android.util.Log
+import android.view.View
 import androidx.viewbinding.ViewBinding
+import com.example.dmz.R
 import com.example.dmz.databinding.FragmentGameBinding
 import com.example.dmz.databinding.FragmentLifeStyleBinding
 import com.example.dmz.databinding.FragmentMovieBinding
 import com.example.dmz.databinding.FragmentMusicBinding
 import com.example.dmz.databinding.FragmentSportsBinding
 import com.example.dmz.viewmodel.SearchViewModel
+
 
 fun fetchBrowseData(channelViewModel: SearchViewModel,topic:String, regionCode: String?) {
     channelViewModel.getChannelList(
@@ -29,7 +33,7 @@ fun saveSelectedRegion(sharedPreferences: SharedPreferences, regionCode: String)
 }
 
 fun loadLastRegion(sharedPreferences: SharedPreferences): String? {
-    return sharedPreferences.getString("regionCode", "KR")
+    return sharedPreferences.getString("current_selected_country", "KR")
 }
 
 fun initSpinner(binding: ViewBinding, sharedPreferences: SharedPreferences) {
@@ -64,5 +68,17 @@ fun initSpinner(binding: ViewBinding, sharedPreferences: SharedPreferences) {
                 binding.listLayout.spinnerSelectRegion.selectItemByIndex(regionCode)
             }
         }
+    }
+}
+
+fun bottomNavControl(currentId: Int, navView : View, homeBtn : View){
+    if (currentId == R.id.end){
+        navView.visibility = View.VISIBLE
+        homeBtn.visibility = View.VISIBLE
+    }else if(currentId == R.id.start){
+        navView.visibility = View.GONE
+        homeBtn.visibility = View.GONE
+    }else{
+        Log.d("MotionLayout","잘못된 상태 $currentId")
     }
 }

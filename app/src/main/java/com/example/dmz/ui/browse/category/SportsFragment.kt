@@ -20,6 +20,7 @@ import android.view.animation.BounceInterpolator
 import android.view.animation.DecelerateInterpolator
 import androidx.constraintlayout.motion.widget.MotionLayout
 import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -41,7 +42,7 @@ import java.io.ObjectStreamException
 import kotlin.random.Random
 
 
-class SportsFragment : Fragment() {
+class SportsFragment : Fragment(), SharedPreferences.OnSharedPreferenceChangeListener {
     private lateinit var sharedPreferences: SharedPreferences
 
     private var _binding : FragmentSportsBinding? = null
@@ -50,7 +51,7 @@ class SportsFragment : Fragment() {
     private val browseChannelAdapter by lazy { ChannelListAdapter() }
     private val browseVideoAdapter by lazy { VideoListAdapter() }
 
-    private val channelViewModel: SearchViewModel by activityViewModels {
+    private val channelViewModel: SearchViewModel by viewModels {
         viewModelFactory { initializer { SearchViewModel(SearchRepositoryImpl(YoutubeSearchClient.youtubeApi)) } }
     }
 
@@ -68,7 +69,7 @@ class SportsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         initBrowseView()
-        initBrowseViewModel()
+        //initBrowseViewModel()
 
         val motionLayout = binding.introLayout.mlSportsIntro
 
@@ -114,6 +115,24 @@ class SportsFragment : Fragment() {
             }
         })
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+        sharedPreferences
+    }
+
+    override fun onPause() {
+        super.onPause()
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this)
+    }
+
+    override fun onSharedPreferenceChanged(sharedPreferences: SharedPreferences, key: String?){
+        if(key == "current_selected_country"){
+            val regionCode = sharedPreferences.getString(key, "KR")
+            fetchBrowseData(channelViewModel,"/m/0bzvm2", regionCode)
+        }
     }
 
     override fun onDestroyView() {
@@ -186,6 +205,11 @@ class SportsFragment : Fragment() {
     }
 
     private fun initBrowseViewModel() {
+
+        val lastRegionCode = loadLastRegion(sharedPreferences)
+        fetchBrowseData(channelViewModel,"/m/06ntj",lastRegionCode)
+
+
         channelViewModel.channelList.observe(viewLifecycleOwner) { channels ->
             browseChannelAdapter.submitList(channels)
         }
@@ -194,8 +218,6 @@ class SportsFragment : Fragment() {
             browseVideoAdapter.submitList(videos)
         }
 
-        val lastRegionCode = loadLastRegion(sharedPreferences)
-        fetchBrowseData(channelViewModel,"/m/06ntj",lastRegionCode)
 
     }
 
